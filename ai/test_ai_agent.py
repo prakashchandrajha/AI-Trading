@@ -640,3 +640,57 @@ def test_get_screener_intelligence(tmp_path, monkeypatch):
     assert rel["symbol"] == "RELIANCE"
     assert "upcoming_earnings_blackout" in rel["risk_flags"]
 
+
+def test_nse_institutional_intel():
+    """Verifies participant OI parsing, delivery percentage classification, and F&O ban detection."""
+    from nse_institutional_intel import parse_participant_oi_csv, parse_sec_bhavdata, parse_fno_ban, get_nse_intel
+    from mcp_server import get_nse_institutional_intel
+
+    # 1. Test Participant OI Parsing
+    mock_poi_csv = (
+        '"","Future Index Long","Future Index Short","Future Stock Long","Future Stock Short","Option Index Call Long","Option Index Put Long","Option Index Call Short","Option Index Put Short","Total"\n'
+        '"Client","69839","36665","1000","1000","67627","10000","50000","430959","0"\n'
+        '"DII","15054","10950","1000","1000","7112","45907","0","0","0"\n'
+        '"FII","25000","80000","1000","1000","20000","270968","142123","0","0"\n'
+        '"Pro","337","330","1000","1000","47383","114084","0","0","0"\n'
+    )
+    poi = parse_participant_oi_csv(mock_poi_csv)
+    assert poi is not None
+    assert poi["fii_index_long_ratio"] == 23.8
+    assert poi["fii_regime"] == "HEAVILY_OVERSOLD_SHORT_COVER_FUEL"
+    assert poi["retail_trap"] == "HIGH_RETAIL_PUT_WRITER_TRAP"
+    assert poi["client_index_long_ratio"] == 65.6
+
+    # 2. Test Sec Bhavdata Parsing
+    mock_bhav_csv = (
+        "SYMBOL, SERIES, DATE1, PREV_CLOSE, OPEN_PRICE, HIGH_PRICE, LOW_PRICE, LAST_PRICE, CLOSE_PRICE, AVG_PRICE, TTL_TRD_QNTY, TURNOVER_LACS, NO_OF_TRADES, DELIV_QTY, DELIV_PER\n"
+        "HDFCBANK, EQ, 25-NOV-2026, 840.00, 842.00, 848.00, 841.00, 846.00, 846.20, 845.00, 1000000, 8450.00, 50000, 650000, 65.00\n"
+        "CHURNSTOCK, EQ, 25-NOV-2026, 100.00, 101.00, 105.00, 99.00, 102.00, 102.00, 102.00, 2000000, 2040.00, 10000, 300000, 15.00\n"
+        "IGNORE_SERIES, BE, 25-NOV-2026, 50.00, 50.00, 51.00, 49.00, 50.00, 50.00, 50.00, 10000, 5.00, 100, 10000, 100.00\n"
+    )
+    bhav = parse_sec_bhavdata(mock_bhav_csv)
+    assert "HDFCBANK" in bhav
+    assert bhav["HDFCBANK"]["delivery_pct"] == 65.0
+    assert bhav["HDFCBANK"]["delivery_quality"] == "INSTITUTIONAL_ACCUMULATION"
+    assert "CHURNSTOCK" in bhav
+    assert bhav["CHURNSTOCK"]["delivery_quality"] == "SPECULATIVE_DAY_CHURN"
+    assert "IGNORE_SERIES" not in bhav
+
+    # 3. Test Ban list parsing
+    mock_ban_text = "Securities in Ban For Trade Date 26-NOV-2026: 1,APLAPOLLO 2,MANAPPURAM"
+    bans = parse_fno_ban(mock_ban_text)
+    assert "APLAPOLLO" in bans
+    assert "MANAPPURAM" in bans
+
+    # 4. Test MCP tool call
+    summary = get_nse_institutional_intel()
+    assert summary["status"] in ("SUMMARY", "ERROR")
+
+    # 5. Test MCP tool with symbol
+    hdfc = get_nse_institutional_intel(symbol="HDFCBANK")
+    assert hdfc["status"] in ("MATCHED_SYMBOL", "ERROR")
+    if hdfc["status"] == "MATCHED_SYMBOL":
+        assert hdfc["symbol"] == "HDFCBANK"
+        assert hdfc["is_in_fno_ban"] is False
+
+

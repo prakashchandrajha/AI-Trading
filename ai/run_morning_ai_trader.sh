@@ -90,8 +90,13 @@ case "$COMMAND" in
         cd "$ROOT_DIR"
         $PYTHON extension/screener/main.py screen fno_leaders_quality
         ;;
+    nse-intel)
+        echo "🏛️ [HARVESTING NSE INSTITUTIONAL CLEARING & DELIVERY INTEL]"
+        cd "$ROOT_DIR"
+        $PYTHON ai/nse_institutional_intel.py
+        ;;
     *)
-        echo "Usage: $0 {start|cockpit|logic-test|status|stop|screener-server|screener-scan}"
+        echo "Usage: $0 {start|cockpit|logic-test|status|stop|screener-server|screener-scan|nse-intel}"
         exit 1
         ;;
 esac

@@ -9,3 +9,5 @@ __pycache__/
 ai/logs/*.log
 ai/runtime/*.json
 !ai/runtime/.gitkeep
+extension/screener/data/*/*.json
+!extension/screener/data/.gitkeep

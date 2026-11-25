@@ -244,15 +244,30 @@ def get_market_lens_breadth() -> Dict:
 def get_premarket_intelligence() -> Dict:
     """Returns NSE pre-open evidence plus verified SmartTrading delivery provenance."""
     premarket = SmartTradingBridge().read_nse_premarket_and_oi()
+    ban_list = premarket.get("fno_ban_list") or []
+    part_pos = premarket.get("participant_positioning") or {}
+
+    # Enrich from NSE institutional intel archive if local desk server was offline
+    if not ban_list or not part_pos:
+        try:
+            from nse_institutional_intel import get_nse_intel
+            cached_intel = get_nse_intel()
+            if not ban_list:
+                ban_list = cached_intel.get("fno_ban_list", [])
+            if not part_pos:
+                part_pos = cached_intel.get("participant_positioning", {})
+        except Exception:
+            pass
+
     return {
         "status": "FRESH" if premarket.get("is_today_fresh") else "STALE_OR_INCOMPLETE",
         "trading_date": premarket.get("trading_date"),
         "raw_delivery": premarket.get("raw_premarket"),
         "analysis_source": premarket.get("premarket_source"),
         "auction_breadth": premarket.get("auction_breadth"),
-        "participant_positioning": premarket.get("participant_positioning"),
+        "participant_positioning": part_pos,
         "session_bias": premarket.get("premarket_bias"),
-        "fno_ban_list": premarket.get("fno_ban_list"),
+        "fno_ban_list": ban_list,
         "guardrail": "Pre-open evidence sets hypotheses only; the external CIO must wait for live price/flow confirmation before any entry.",
     }
 
@@ -551,6 +566,21 @@ def get_screener_intelligence(symbol: Optional[str] = None) -> Dict:
             for c in candidates[:5]
         ],
     }
+
+
+@mcp.tool()
+def get_nse_institutional_intel(symbol: Optional[str] = None) -> Dict:
+    """
+    Returns official clearing & settlement intelligence from NSE Archives:
+    - Participant-wise Open Interest: FII Index Long Ratio, Client vs FII option trap matrix.
+    - Cash Market Delivery Data: Deliverable quantity, delivery percentage, and institutional accumulation quality.
+    - F&O Ban Tracker: Checks whether a symbol is legally banned by NSE from opening new derivative positions.
+    """
+    try:
+        from nse_institutional_intel import get_nse_intel
+        return get_nse_intel(symbol=symbol)
+    except Exception as exc:
+        return {"status": "ERROR", "error": str(exc)}
 
 
 if __name__ == "__main__":
