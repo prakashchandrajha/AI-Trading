@@ -8,6 +8,7 @@ ungated order path.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from typing import Dict, List, Optional
 from fastmcp import FastMCP
 
@@ -461,5 +462,97 @@ def run_regime_logic_test(days: int = 25) -> Dict:
     return run_logic_validation(days=days)
 
 
+@mcp.tool()
+def get_screener_intelligence(symbol: Optional[str] = None) -> Dict:
+    """
+    Returns fundamental risk scoring, ROCE, debt flags, and quarterly results context
+    harvested from Screener.in via the Screener Bot Bridge extension.
+    """
+    p = Path(__file__).resolve().parent / "runtime" / "screener_intelligence.json"
+    if not p.exists():
+        data_dir = Path(__file__).resolve().parent.parent / "extension" / "screener" / "data"
+        candidates = sorted(data_dir.glob("*/*.json"), key=lambda x: x.stat().st_mtime, reverse=True)
+        if candidates:
+            p = candidates[0]
+        else:
+            return {
+                "status": "NO_DATA",
+                "message": "No Screener.in data captured yet. Run 'screener' in the extension or execute python3 extension/screener/main.py",
+                "safe_universe": [],
+                "avoid_list": [],
+            }
+
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return {"status": "PARSE_ERROR", "error": str(exc)}
+
+    candidates = data.get("screen_candidates") or []
+    comp_snap = data.get("company_snapshot")
+
+    if symbol:
+        target = symbol.upper().strip()
+        matched = None
+        if comp_snap and comp_snap.get("symbol") == target:
+            matched = comp_snap
+            return {
+                "status": "MATCHED_COMPANY",
+                "symbol": target,
+                "name": matched.get("name"),
+                "bot_score": matched.get("bot_score"),
+                "risk_bucket": matched.get("risk_bucket"),
+                "position_size_hint": matched.get("position_size_hint"),
+                "risk_flags": matched.get("risk_flags", []),
+                "blocked_reasons": matched.get("blocked_reasons", []),
+                "ratios": matched.get("ratios", {}),
+            }
+        for c in candidates:
+            c_sym = (c.get("symbol") or c.get("name") or "").upper().strip()
+            if target in c_sym or c_sym in target:
+                matched = c
+                break
+        if matched:
+            return {
+                "status": "MATCHED_CANDIDATE",
+                "symbol": target,
+                "name": matched.get("name"),
+                "bot_score": matched.get("bot_score"),
+                "risk_bucket": matched.get("risk_bucket"),
+                "intraday_use": matched.get("intraday_use"),
+                "position_size_multiplier": matched.get("position_size_multiplier"),
+                "reasons": matched.get("reasons", []),
+                "warnings": matched.get("warnings", []),
+                "blocked_reasons": matched.get("blocked_reasons", []),
+                "metrics": matched.get("metrics", {}),
+            }
+        return {
+            "status": "SYMBOL_NOT_IN_SCREEN",
+            "symbol": target,
+            "message": f"{target} not found in latest Screener run ({data.get('timestamp')}).",
+        }
+
+    safe_list = [c.get("symbol") or c.get("name") for c in candidates if c.get("intraday_use") in ("watch", "normal_trade")]
+    avoid_list = [c.get("symbol") or c.get("name") for c in candidates if c.get("intraday_use") == "avoid" or c.get("blocked_reasons")]
+    
+    return {
+        "status": "ACTIVE_SUMMARY",
+        "phase": data.get("phase"),
+        "timestamp": data.get("timestamp"),
+        "total_screened": len(candidates),
+        "safe_fno_universe": [s for s in safe_list if s][:15],
+        "avoid_list": [s for s in avoid_list if s][:10],
+        "top_candidates": [
+            {
+                "symbol": c.get("symbol") or c.get("name"),
+                "score": c.get("bot_score"),
+                "intraday_use": c.get("intraday_use"),
+                "reasons": c.get("reasons", [])[:2],
+            }
+            for c in candidates[:5]
+        ],
+    }
+
+
 if __name__ == "__main__":
     mcp.run()
+

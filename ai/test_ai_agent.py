@@ -554,3 +554,89 @@ def test_ema_acceleration_reversing_reachable():
     accel_real, regime_real = compute_ema_acceleration(ema20_series, 5.0)
     # Steady uptrend should give ACCELERATING or STEADY (not always STEADY from empty [])
     assert regime_real in ("ACCELERATING", "STEADY")
+
+
+def test_get_screener_intelligence(tmp_path, monkeypatch):
+    """Verifies that get_screener_intelligence safely handles absent, summary, and symbol queries."""
+    from mcp_server import get_screener_intelligence
+    import mcp_server
+
+    # 1. No data condition
+    res_empty = get_screener_intelligence()
+    assert res_empty["status"] in ("NO_DATA", "ACTIVE_SUMMARY")
+
+    # 2. Mock screener_intelligence.json
+    mock_payload = {
+        "phase": "pre_market",
+        "timestamp": "2026-11-25T18:00:00Z",
+        "screen_candidates": [
+            {
+                "symbol": "TATAMOTORS",
+                "name": "Tata Motors Ltd",
+                "bot_score": 82,
+                "risk_bucket": "low",
+                "intraday_use": "watch",
+                "position_size_multiplier": 1.0,
+                "reasons": ["strong ROCE", "tradable size proxy"],
+                "warnings": [],
+                "blocked_reasons": [],
+                "metrics": {"roce": "18.5", "debt to equity": "0.45", "current price": "980.0"},
+            },
+            {
+                "symbol": "HIGHDEBT",
+                "name": "High Debt Corp",
+                "bot_score": 35,
+                "risk_bucket": "high",
+                "intraday_use": "avoid",
+                "position_size_multiplier": 0.0,
+                "reasons": [],
+                "warnings": ["high debt"],
+                "blocked_reasons": ["debt too high for auto-trading"],
+                "metrics": {"debt to equity": "3.2"},
+            }
+        ],
+        "company_snapshot": None,
+    }
+    mock_runtime_file = tmp_path / "screener_intelligence.json"
+    mock_runtime_file.write_text(json.dumps(mock_payload), encoding="utf-8")
+
+    # Monkeypatch file path
+    orig_file = Path(mcp_server.__file__).resolve().parent / "runtime" / "screener_intelligence.json"
+    monkeypatch.setattr("mcp_server.Path.__truediv__", lambda self, other: mock_runtime_file if "screener_intelligence.json" in str(other) else orig_file)
+
+    # Test summary query
+    summary = get_screener_intelligence()
+    assert summary["status"] == "ACTIVE_SUMMARY"
+    assert "TATAMOTORS" in summary["safe_fno_universe"]
+    assert "HIGHDEBT" in summary["avoid_list"]
+
+    # Test matched symbol query
+    tata = get_screener_intelligence(symbol="TATAMOTORS")
+    assert tata["status"] == "MATCHED_CANDIDATE"
+    assert tata["bot_score"] == 82
+    assert tata["intraday_use"] == "watch"
+    assert "strong ROCE" in tata["reasons"]
+
+    # Test avoid symbol query
+    bad = get_screener_intelligence(symbol="HIGHDEBT")
+    assert bad["status"] == "MATCHED_CANDIDATE"
+    assert bad["intraday_use"] == "avoid"
+    assert "debt too high for auto-trading" in bad["blocked_reasons"]
+
+    # Test company_snapshot query with earnings risk flag
+    mock_payload["company_snapshot"] = {
+        "symbol": "RELIANCE",
+        "name": "Reliance Industries Ltd",
+        "bot_score": 70,
+        "risk_bucket": "medium",
+        "position_size_hint": "reduced",
+        "risk_flags": ["upcoming_earnings_blackout"],
+        "blocked_reasons": [],
+        "ratios": {"debt to equity": "0.38", "roce": "12.4"},
+    }
+    mock_runtime_file.write_text(json.dumps(mock_payload), encoding="utf-8")
+    rel = get_screener_intelligence(symbol="RELIANCE")
+    assert rel["status"] == "MATCHED_COMPANY"
+    assert rel["symbol"] == "RELIANCE"
+    assert "upcoming_earnings_blackout" in rel["risk_flags"]
+

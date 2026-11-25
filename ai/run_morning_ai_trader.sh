@@ -80,8 +80,18 @@ case "$COMMAND" in
         $PYTHON ai/agent_trader.py square-off
         echo "✅ [GUARDIAN] Fully stopped and squared off."
         ;;
+    screener-server)
+        echo "📊 [SCREENER EXTENSION SERVER (Port 8776)]"
+        cd "$ROOT_DIR"
+        $PYTHON extension/screener/server/extension_server.py
+        ;;
+    screener-scan)
+        echo "🔍 [RUNNING F&O SCREENER SCAN]"
+        cd "$ROOT_DIR"
+        $PYTHON extension/screener/main.py screen fno_leaders_quality
+        ;;
     *)
-        echo "Usage: $0 {start|cockpit|logic-test|status|stop}"
+        echo "Usage: $0 {start|cockpit|logic-test|status|stop|screener-server|screener-scan}"
         exit 1
         ;;
 esac
