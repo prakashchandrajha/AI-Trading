@@ -95,8 +95,14 @@ case "$COMMAND" in
         cd "$ROOT_DIR"
         $PYTHON ai/nse_institutional_intel.py
         ;;
+    clean)
+        echo "🧹 [CLEANING VOLATILE RUNTIME MARKERS & LOGS]"
+        rm -f ai/runtime/cockpit_briefing.json
+        rm -f ai/logs/agent_trader.log
+        echo "✅ [AI-TRADING] Cleaned volatile runtime markers and logs."
+        ;;
     *)
-        echo "Usage: $0 {start|cockpit|logic-test|status|stop|screener-server|screener-scan|nse-intel}"
+        echo "Usage: $0 {start|cockpit|logic-test|status|stop|screener-server|screener-scan|nse-intel|clean}"
         exit 1
         ;;
 esac
