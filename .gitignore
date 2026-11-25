@@ -6,8 +6,14 @@ __pycache__/
 .ruff_cache/
 *.db
 *.sqlite3
-ai/logs/*.log
-ai/runtime/*.json
+
+# Logs & Runtime coordination
+ai/logs/*
+!ai/logs/.gitkeep
+ai/runtime/*
 !ai/runtime/.gitkeep
+
+# Local Screener extraction cache & SQLite databases
 extension/screener/data/*/*.json
 !extension/screener/data/.gitkeep
+database/
