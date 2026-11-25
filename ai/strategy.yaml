@@ -1,0 +1,126 @@
+# SmartTrading V3.0-APEX Master Operational Configuration
+# Single Source of Truth for the Autonomous AI Agent CIO
+# Governs: Entry, Exit, Sizing, Profit Booking, Trailing, and EOD Liquidation
+
+system:
+  name: "SmartTrading AI CIO"
+  version: "V3.0-APEX"
+  regime_governance: "DETERMINISTIC_HOT_PATH_AUTONOMOUS_OVERSIGHT"
+  market: "NSE_FNO_DERIVATIVES"
+  next_live_session: "2026-11-25" # Wednesday (Day 1 of Dec 2026 Series)
+  market_calendar:
+    recent_holiday: "2026-11-24" # Guru Nanak Jayanti (Market Closed)
+    expiry_weekly_nifty: "Tuesday"
+    expiry_weekly_sensex_bse: "Thursday"
+    expiry_monthly_fno: "Last Thursday of Month (or preceding trading day if holiday)"
+
+macro_the_6_generals:
+  description: "Composite weighting covering 40.44% of NIFTY 50 index"
+  constituents:
+    HDFCBANK: 0.0995
+    ICICIBANK: 0.0939
+    RELIANCE: 0.0730
+    BHARTIARTL: 0.0563
+    LT: 0.0425
+    INFY: 0.0392
+  thresholds:
+    green_light_score: 0.25 # Confluent bullish accumulation (+25% weighted)
+    red_light_score: -0.25  # Confluent bearish liquidation (-25% weighted)
+    caution_band: [-0.25, 0.25]
+
+microstructure_physics:
+  z_ofi_lookback_seconds: 300
+  z_ofi_entry_threshold: 2.2 # |Z_OFI| > 2.2 for institutional order book queue sweep
+  depth_decay_weights: [0.40, 0.25, 0.15, 0.12, 0.08] # 5-level L2 depth
+  vpin_proxy_threshold: 0.35 # |VPIN| >= 0.35 confirms executed aggressive prints crossing spread
+  clamped_greeks_min_dte_days: 0.15 # Floored at ~1 hour to prevent Black-Scholes asymptotic explosion
+
+regime_and_payoff_router:
+  regime_a_bullish_gamma:
+    condition: "Generals > +0.25, A/D >= 1.3, RV/IV > 1.2, IVR < 60%"
+    structure: "NAKED_LONG_CALL"
+    delta_target: { "0_1_dte": 0.65, "multi_dte": 0.50 } # ITM-1 on 0-DTE, ATM on swing
+  regime_b_bullish_high_iv:
+    condition: "Generals > +0.25, A/D >= 1.2, IVR >= 60% or VIX dropping"
+    structure: "BULL_CALL_DEBIT_SPREAD" # Long ATM / Short OTM (+1 to +2 strikes)
+  regime_c_bearish_short_gamma:
+    condition: "Generals < -0.25, A/D <= 0.7, RV/IV > 1.2, VIX rising"
+    structure: "NAKED_LONG_PUT" # Long ATM / ITM-1 Put (or Bear Put Spread if IVR > 75%)
+  regime_d_rangebound_pin:
+    condition: "Generals flat [-0.25, +0.25], A/D 0.8-1.2, near Peak Positive GEX"
+    structure: "STAND_ASIDE_100_CASH"
+
+position_sizing_and_risk:
+  demat_budget_inr: 50000.0 # Dedicated ₹50k Demat Trading Account Budget
+  dynamic_lot_mode: "CONVICTION_BUDGETED_INTEGER_LOTS" # 1, 2, 3, 4 ... N lots strictly within ₹50k
+  tier_1_super_setup_budget_inr: 18000.0 # 18% stop = ₹3,240 (strictly under -₹3,500 daily circuit breaker)
+  tier_2_high_conviction_budget_inr: 14000.0 # 18% stop = ₹2,520
+  tier_3_standard_budget_inr: 9000.0 # 18% stop = ₹1,620
+  reserve_dry_powder_inr: 18000.0 # Retain 36% minimum cash buffer in ₹50k account
+  max_concurrent_positions: 2 # Max 2 concurrent positions (max deployed ₹32k, leaving ₹18k buffer)
+  daily_drawdown_hard_halt_pct: 0.070 # -7% daily halt (-₹3,500 circuit breaker)
+  weekly_drawdown_throttle_pct: 0.120 # -12% cuts allocation by 50%
+  monthly_drawdown_freeze_pct: 0.200 # -20% freezes execution for review
+
+active_trade_management:
+  stop_loss:
+    underlying_atr_multiple: 1.25 # Spot invalidation = 1.25 x 15m ATR
+    slippage_buffer_multiple: 1.25 # Modeled stop slippage buffer
+    catastrophic_broker_sl_l:
+      zero_to_one_dte: -0.28 # -28% exchange stop-limit
+      five_plus_dte: -0.22   # -22% exchange stop-limit
+  momentum_time_stop:
+    max_stagnation_minutes: 45 # If trade fails to reach +15% within 45m, exit flat
+  scale_and_trail_engine:
+    trail_to_minus_5_pct_trigger: 0.25 # At +25% gain, trail stop to -5%
+    scale_out_40_pct_trigger: 0.35     # At +35% gain, sell 40% lots into cash
+    breakeven_lock_trigger: 0.35       # Lock +2% breakeven on remaining 60%
+    uncapped_runner_allocation: 0.60   # 60% runner rides uncapped
+    runner_trailing_buffer_atr: 1.5    # Trailed by Peak - 1.5 x Underlying ATR
+    runner_trailing_buffer_option: 0.18 # Or Peak - 18% option price
+  eod_square_off_schedule:
+    opening_quarantine_start: "09:15"
+    opening_quarantine_end: "09:25"
+    golden_window_1: "09:26 - 11:15"
+    midday_volatility_gate: "11:15 - 13:25" # Allow entries only if 15m vol > 1.3x median
+    golden_window_2: "13:25 - 14:55"
+    expiry_0_dte_mandatory_flat: "14:55"   # Flat by 02:55 PM on 0-DTE to avoid pin/STT
+    staged_exit_passive_walk: "15:10"      # Step 1 tick every 20 seconds
+    staged_exit_mpp_sweep: "15:13"         # Market Price Protection sweep
+    hard_eod_square_off: "15:15"           # Mandatory 100% cash
+
+three_trader_zero_collision:
+  trader_1:
+    name: "desk/"
+    role: "DMA HFT Index Scalper"
+    runtime: "desk/ (Isolated C++/Python)"
+    symbols: ["NIFTY_FUT", "BANKNIFTY_FUT"]
+    modification_policy: "100% IMMUTABLE_UNTOUCHED"
+  trader_2:
+    name: "trader/"
+    role: "Autonomous Quant Trader Daemon"
+    runtime: "trader/ (run_trader.py / brain.py / agent.py)"
+    symbols: ["Index Options via ZMQ Reactor Dispatch"]
+  trader_3:
+    name: "Antigravity AI Agent CIO"
+    role: "Quantitative Multi-Sector Rotational Options"
+    runtime: "ai/ (Autonomous Deterministic Python)"
+    symbols: ["Top 35 Liquid F&O Universe"]
+  collision_firewall:
+    symbol_mutex_enforced: true # Never trade symbols open in Trader 2's manual book
+    anti_short_lock_enforced: true # Exit Qty = min(ai_virtual_qty, broker_net_long_qty)
+    sebi_april_2026_rules:
+      static_ip_whitelisting: true
+      daily_2fa_oauth_login: "08:40 IST"
+      max_orders_per_second: 8 # Safe ceiling below SEBI 10 OPS limit
+      fut_eq_mwpl_ban_buffer: 0.85 # Block stocks >= 85% MWPL (safety buffer for 95% ban)
+      physical_delivery_t4_blackout: true # No current-month stock options within T-4 days
+
+statutory_friction_rates:
+  stt_options_sell_pct: 0.0015 # 0.15% Finance Act 2026 (rounded to nearest rupee)
+  stt_futures_sell_pct: 0.0005 # 0.05% Finance Act 2026
+  nse_options_turnover_fee_pct: 0.0003553 # 0.03553% live post-Oct 2024 / 2026 rate
+  stamp_duty_buy_pct: 0.00003 # 0.003%
+  sebi_turnover_fee_pct: 0.000001 # ₹10 / crore
+  brokerage_per_round_trip_inr: 40.0 # ₹20 buy + ₹20 sell
+  gst_pct: 0.18 # 18% on (Brokerage + Exchange fee)
