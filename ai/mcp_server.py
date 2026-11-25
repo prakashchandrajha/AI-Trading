@@ -12,7 +12,9 @@ from typing import Dict, List, Optional
 from fastmcp import FastMCP
 
 from agent_trader import AIAgentTrader
+from connector.smart_trading_bridge import SmartTradingBridge
 from greeks_gex import GreeksGexEngine
+from live_kite_feed import LiveKiteFeed
 from options_analytics import OptionsAnalyticsEngine
 from paper_ledger import AIPaperLedger
 from technical_lens import TechnicalLensEngine
@@ -221,11 +223,52 @@ def get_sector_heatmap() -> Dict:
 @mcp.tool()
 def get_market_lens_breadth() -> Dict:
     """
-    Fetches real-time NSE Market Lens exchange breadth metrics:
-    Advances/Declines ratio, Market Breadth Sentiment, Top Turnover Sectors, and Volume Shockers.
+    Compatibility status for NSE Market Lens.
+
+    Market Lens is deliberately not automated: its published terms prohibit
+    automated collection and use in virtual trading/simulation.  This tool never
+    fabricates Market Lens data; use `get_live_market_breadth` and
+    `get_premarket_intelligence` for the compliant data actually used by the
+    cockpit.
     """
-    breadth = TechnicalLensEngine.get_market_lens_breadth()
     return {
+        "status": "NOT_CONNECTED_TERMS_RESTRICTED",
+        "source": "NSE_MARKET_LENS_NOT_AUTOMATED",
+        "reason": "No Market Lens scrape, API reverse engineering, or virtual-trading use is permitted by this cockpit.",
+        "use_instead": ["get_premarket_intelligence", "get_live_market_breadth", "get_cockpit_briefing"],
+    }
+
+
+@mcp.tool()
+def get_premarket_intelligence() -> Dict:
+    """Returns NSE pre-open evidence plus verified SmartTrading delivery provenance."""
+    premarket = SmartTradingBridge().read_nse_premarket_and_oi()
+    return {
+        "status": "FRESH" if premarket.get("is_today_fresh") else "STALE_OR_INCOMPLETE",
+        "trading_date": premarket.get("trading_date"),
+        "raw_delivery": premarket.get("raw_premarket"),
+        "analysis_source": premarket.get("premarket_source"),
+        "auction_breadth": premarket.get("auction_breadth"),
+        "participant_positioning": premarket.get("participant_positioning"),
+        "session_bias": premarket.get("premarket_bias"),
+        "fno_ban_list": premarket.get("fno_ban_list"),
+        "guardrail": "Pre-open evidence sets hypotheses only; the external CIO must wait for live price/flow confirmation before any entry.",
+    }
+
+
+@mcp.tool()
+def get_live_market_breadth() -> Dict:
+    """Returns fail-closed live F&O breadth from batched Zerodha Kite quotes, never a fixture."""
+    feed = LiveKiteFeed()
+    universe = feed.get_full_fno_universe(include_indices=False)
+    raw = feed.fetch_live_market_breadth(universe) if universe else {}
+    breadth = TechnicalLensEngine.compute_live_market_lens_breadth(
+        raw, sector_map=OptionsAnalyticsEngine.SECTOR_MAP
+    )
+    return {
+        "status": "LIVE" if breadth.source == "LIVE_KITE_BATCH" else "UNAVAILABLE",
+        "source": breadth.source,
+        "universe_count": len(universe),
         "advances": breadth.advances,
         "declines": breadth.declines,
         "unchanged": breadth.unchanged,
@@ -244,7 +287,7 @@ def evaluate_super_setup(symbol: str = "TATAMOTORS") -> Dict:
     2. Nuvama Derivatives: OI velocity, Call/Put Walls, Max Pain
     3. Quantsapp: Net GEX & Gamma Squeeze score
     4. Sensibull: Macro Generals (HDFCBANK + RELIANCE)
-    5. NSE Market Lens: Advances/Declines Breadth (A/D ratio)
+    5. Live broker breadth (when available; never a fabricated Market Lens feed)
     """
     agent = AIAgentTrader(symbol)
     underlying_px, chain = agent.load_option_chain_from_tape()
@@ -254,6 +297,12 @@ def evaluate_super_setup(symbol: str = "TATAMOTORS") -> Dict:
     hdfc_res = AIAgentTrader("HDFCBANK").inspect_market()
     rel_res = AIAgentTrader("RELIANCE").inspect_market()
     generals_status = "GREEN_LIGHT" if (hdfc_res.trade_recommendation == "BUY_CE" and rel_res.trade_recommendation == "BUY_CE") else ("RED_LIGHT" if (hdfc_res.trade_recommendation == "BUY_PE" and rel_res.trade_recommendation == "BUY_PE") else "CAUTION")
+    feed = LiveKiteFeed()
+    universe = feed.get_full_fno_universe(include_indices=False)
+    raw_breadth = feed.fetch_live_market_breadth(universe) if universe else {}
+    live_breadth = TechnicalLensEngine.compute_live_market_lens_breadth(
+        raw_breadth, sector_map=OptionsAnalyticsEngine.SECTOR_MAP
+    )
 
     return TechnicalLensEngine.synthesize_super_setup(
         symbol=symbol,
@@ -263,6 +312,7 @@ def evaluate_super_setup(symbol: str = "TATAMOTORS") -> Dict:
         gex_regime=gex_res.gex_regime,
         gamma_squeeze_score=gex_res.gamma_squeeze_score,
         generals_status=generals_status,
+        market_breadth=live_breadth,
     )
 
 

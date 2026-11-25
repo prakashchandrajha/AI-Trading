@@ -878,14 +878,19 @@ def scan_super_setups():
     2. Nuvama Derivatives: OI velocity, Walls, PCR
     3. Quantsapp: Net GEX, Squeeze Telemetry
     4. Sensibull: Generals Macro Alignment
-    5. NSE Market Lens: Advances/Declines Breadth, Sector Turnover
+    5. Live broker breadth, when available (never a fixture)
     """
     universe = [
         "HAL", "TATASTEEL", "M&M", "TATAMOTORS", "HDFCBANK",
         "SBIN", "SUNPHARMA", "BHARTIARTL", "LT", "ICICIBANK",
         "RELIANCE", "INFY", "TCS", "ITC"
     ]
-    breadth = TechnicalLensEngine.get_market_lens_breadth()
+    live_feed = LiveKiteFeed()
+    live_universe = live_feed.get_full_fno_universe(include_indices=False)
+    raw_breadth = live_feed.fetch_live_market_breadth(live_universe) if live_universe else {}
+    breadth = TechnicalLensEngine.compute_live_market_lens_breadth(
+        raw_breadth, sector_map=OptionsAnalyticsEngine.SECTOR_MAP
+    )
     total_w = sum(w for _, w in GENERALS_COMPOSITE)
     w_score = 0.0
     for sym, wt in GENERALS_COMPOSITE:
@@ -910,6 +915,7 @@ def scan_super_setups():
             gex_regime=gex_res.gex_regime,
             gamma_squeeze_score=gex_res.gamma_squeeze_score,
             generals_status=generals_status,
+            market_breadth=breadth,
         )
         evaluations.append((sym, agent, opt_res, gex_res, setup))
 
@@ -918,7 +924,7 @@ def scan_super_setups():
     print("\n" + "=" * 90)
     print("      5-ENGINE INSTITUTIONAL SUPER-SETUP MATRIX (SENIOR + MACHINE SYNTHESIS)")
     print("=" * 90)
-    print(f" NSE Market Lens Breadth: {breadth.advances} Adv / {breadth.declines} Dec (A/D Ratio: {breadth.ad_ratio} -> {breadth.market_breadth_sentiment})")
+    print(f" Live Breadth [{breadth.source}]: {breadth.advances} Adv / {breadth.declines} Dec (A/D Ratio: {breadth.ad_ratio} -> {breadth.market_breadth_sentiment})")
     print(f" Macro Generals (6 Generals Composite: 40.44% NIFTY): {generals_status} (Score: {norm_w*100:+.1f}%)")
     print("-" * 90)
     print(f" {'Rank':<4} | {'Symbol':<11} | {'Spot Px':<9} | {'VWAP':<9} | {'9/40 EMA':<12} | {'OI Flow':<10} | {'Score':<8} | {'Super Decision'}")

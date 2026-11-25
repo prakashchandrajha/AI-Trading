@@ -661,6 +661,13 @@ class CockpitBuilder:
                 "nse_fii_futures": part.get("fii_net_futures"),
                 "nse_fii_bias": part.get("fii_directional_bias"),
                 "nse_premarket_source": nse_pm.get("premarket_source"),
+                "nse_premarket_fresh": nse_pm.get("is_today_fresh", False),
+                "nse_premarket_delivery": nse_pm.get("raw_premarket", {}),
+                "market_lens_integration": {
+                    "status": "NOT_CONNECTED_TERMS_RESTRICTED",
+                    "reason": "NSE Market Lens terms prohibit automated collection and use for virtual trading or simulation.",
+                    "cio_use": "Do not treat Market Lens as a machine feed; use compliant live broker data and NSE pre-open evidence instead.",
+                },
             },
             "desk_connector": {
                 "status": desk_ctx["desk_status"],
@@ -700,6 +707,7 @@ def format_briefing_text(b: Dict[str, Any]) -> str:
     dmr = dsk.get("macro_regime") or {}
     gift = dmr.get("gift_nifty") or {}
     jrnl = dmr.get("latest_journal") or {}
+    pm_delivery = mac.get("nse_premarket_delivery") or {}
 
     lines = [
         "=" * 90,
@@ -709,6 +717,7 @@ def format_briefing_text(b: Dict[str, Any]) -> str:
         f" BUDGET : Cash Left ₹{cap['available_cash_inr']:,.0f} / ₹50,000 | Today Live PnL: {_fmt_inr(cap['today_live_realized_pnl'])} | CB Room: ₹{cap['circuit_breaker_remaining']:,.0f}",
         f" MACRO  : Breadth ({mac.get('breadth_universe_count', 0)} F&O): {mac['market_lens_breadth']} [{mac['breadth_source']}] | 6-Gen {mac['generals_status']} ({mac['generals_6_score']:+.2f})",
         f" SECTORS: {', '.join(mac.get('top_sectors') or ['N/A'])} | FII Net Fut: {mac['nse_fii_futures']} ({mac['nse_fii_bias']}) | GIFT: {gift.get('gap_type', 'N/A')} ({gift.get('gap_pct', 0.0):+.2f}%)",
+        f" PREOPEN: {pm_delivery.get('status', 'MISSING')} | Source: {pm_delivery.get('source', 'UNAVAILABLE')} | Fresh: {'YES' if mac.get('nse_premarket_fresh') else 'NO'} | Symbols: {pm_delivery.get('symbol_count', 0)}",
         f" DESK   : {dsk['status']} | Mutex: {dsk['blocked_symbols'] or 'NONE'} | Regime: {dmr.get('http_regime') or dmr.get('frontier_regime') or 'N/A'} | Nifty Fut OFI: {dmr.get('nifty_fut_ofi_z')}z (Age {dmr.get('frontier_age_min')}m)",
     ]
     if jrnl.get("reason"):

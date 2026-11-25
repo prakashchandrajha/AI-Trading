@@ -1,11 +1,11 @@
 """
-Technical Microstructure & NSE Market Lens Engine
+Technical Microstructure & Live Market-Breadth Engine
 Synthesizes:
 1. VWAP (Volume Weighted Average Price) & VWAP Stretch
 2. 9 EMA (Fast Intraday Momentum)
 3. 40 EMA (Institutional Baseline Trend)
-4. NSE Market Lens Breadth (Advances/Declines ratio, Sector Volume Concentration, Momentum + Breakouts)
-5. Super-Setup Confluence Matrix (Technical + Options OI + GEX + Market Lens)
+4. Live broker breadth (Advances/Declines ratio, Sector Concentration, Momentum + Breakouts)
+5. Confluence Matrix (Technical + Options OI + GEX + live breadth)
 """
 from __future__ import annotations
 
@@ -54,7 +54,10 @@ class MarketLensBreadth:
 
 class TechnicalLensEngine:
     """
-    Computes real-time technical microstructure and exchange-level Market Lens analytics.
+    Computes real-time technical microstructure and broker-derived market breadth.
+
+    `MarketLensBreadth` remains the type name only for backward compatibility;
+    it is not a connection to NSE Market Lens.
     """
 
     @staticmethod
@@ -251,7 +254,7 @@ class TechnicalLensEngine:
         live_breadth: Optional[Dict] = None,
         sector_map: Optional[Dict[str, List[str]]] = None,
     ) -> MarketLensBreadth:
-        """Builds true exchange Market Lens breadth strictly from batched live Kite quotes."""
+        """Builds live F&O breadth strictly from batched broker quotes."""
         if not live_breadth or live_breadth.get("status") != "LIVE_KITE_BATCH":
             return MarketLensBreadth(
                 advances=0,
@@ -300,28 +303,19 @@ class TechnicalLensEngine:
     @classmethod
     def get_market_lens_breadth(cls) -> MarketLensBreadth:
         """
-        Offline fixture fallback used strictly by offline mock tests / demos.
-        Live cockpit runs use `compute_live_market_lens_breadth` instead.
+        Deprecated compatibility method.  It must never manufacture a breadth
+        signal; live callers use `compute_live_market_lens_breadth` with batched
+        broker quotes and receive UNAVAILABLE when that feed is absent.
         """
-        advances = 118
-        declines = 64
-        unchanged = 8
-        ad_ratio = round(advances / declines, 2)
-
-        sentiment = (
-            "BULLISH_EXPANSION" if ad_ratio >= 1.5
-            else ("BEARISH_LIQUIDATION" if ad_ratio <= 0.65 else "MIXED_ROTATION")
-        )
-
         return MarketLensBreadth(
-            advances=advances,
-            declines=declines,
-            unchanged=unchanged,
-            ad_ratio=ad_ratio,
-            market_breadth_sentiment=sentiment,
-            top_turnover_sectors=["BANKING", "DEFENSE_CAPGOODS", "METALS", "AUTO"],
-            volume_shockers=["HAL", "TATASTEEL", "M&M", "HDFCBANK"],
-            source="OFFLINE_FIXTURE",
+            advances=0,
+            declines=0,
+            unchanged=0,
+            ad_ratio=1.0,
+            market_breadth_sentiment="UNAVAILABLE",
+            top_turnover_sectors=[],
+            volume_shockers=[],
+            source="UNAVAILABLE",
         )
 
     @classmethod
@@ -338,6 +332,7 @@ class TechnicalLensEngine:
         volume_history: Optional[List[int]] = None,
         vwap_override: Optional[float] = None,
         require_real_history: bool = False,
+        market_breadth: Optional[MarketLensBreadth] = None,
     ) -> Dict:
         """
         Master Multi-Engine Confluence Matrix:
@@ -345,7 +340,7 @@ class TechnicalLensEngine:
         Engine 2: Institutional Options OI (Nuvama / Opstra)
         Engine 3: Net GEX & Greeks (Quantsapp)
         Engine 4: Macro Generals (Sensibull)
-        Engine 5: NSE Market Lens Breadth
+        Engine 5: Live broker breadth, only when supplied by the caller
         """
         technicals = cls.analyze_technicals(
             symbol,
@@ -355,7 +350,7 @@ class TechnicalLensEngine:
             vwap_override=vwap_override,
             require_real_history=require_real_history,
         )
-        breadth = cls.get_market_lens_breadth()
+        breadth = market_breadth or cls.get_market_lens_breadth()
 
         tech_bullish = technicals.trend_regime == "BULLISH_TREND_ALIGNMENT"
         tech_bearish = technicals.trend_regime == "BEARISH_TREND_ALIGNMENT"
@@ -392,10 +387,10 @@ class TechnicalLensEngine:
         elif gex_regime != "LONG_GAMMA_PIN":
             score += 10
 
-        # 4. Market Lens Breadth & Generals - 20 pts
+        # 4. Live breadth & Generals - 20 pts.  No data, no points.
         if breadth.market_breadth_sentiment == "BULLISH_EXPANSION" and generals_status != "RED_LIGHT":
             score += 20
-            confluence_points.append(f"NSE Market Lens A/D Ratio {breadth.ad_ratio} & Generals clear")
+            confluence_points.append(f"Live breadth A/D Ratio {breadth.ad_ratio} & Generals clear")
 
         score = min(100, score)
 
@@ -429,9 +424,10 @@ class TechnicalLensEngine:
                 "is_triple_ribbon_bull": technicals.is_triple_ribbon_bull,
                 "is_triple_ribbon_bear": technicals.is_triple_ribbon_bear,
             },
-            "market_lens_breadth": {
+            "live_market_breadth": {
                 "ad_ratio": breadth.ad_ratio,
                 "breadth_sentiment": breadth.market_breadth_sentiment,
+                "source": breadth.source,
             },
             "confluence_points": confluence_points,
         }

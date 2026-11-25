@@ -366,12 +366,28 @@ class SmartTradingBridge:
         return dirs[0] if dirs else None
 
     def read_nse_premarket_and_oi(self, target_date: Optional[str] = None) -> Dict[str, Any]:
-        """Reads NSE pre-open auction breadth, participant FII/DII/Client OI, and Desk regime files."""
+        """Reads NSE pre-open evidence and proves how today's payload reached the Desk.
+
+        The Chrome extension is intentionally *not* imported or controlled here.  It
+        posts a raw NSE payload to SmartTrading's local Desk server, and this
+        read-only bridge verifies the resulting artifact.  That distinction lets a
+        CIO see whether an analysis was made from extension-delivered data, another
+        approved Desk collector, or no current-day raw payload at all.
+        """
         today_str = target_date or datetime.datetime.now(IST).strftime("%Y-%m-%d")
         result: Dict[str, Any] = {
             "trading_date": today_str,
             "is_today_fresh": False,
             "premarket_source": "UNAVAILABLE",
+            "raw_premarket": {
+                "status": "MISSING",
+                "source": "UNAVAILABLE",
+                "extracted_at": None,
+                "payload_trading_date": None,
+                "symbol_count": 0,
+                "extension_delivery_verified": False,
+                "analysis_generated": False,
+            },
             "auction_breadth": {},
             "participant_positioning": {},
             "premarket_bias": {},
@@ -385,7 +401,47 @@ class SmartTradingBridge:
         data_dir = self.st_root / "data"
         day_dir = self._latest_by_date_dir(today_str)
 
-        # Read synthesized NSE premarket_analysis.json
+        # Read the raw payload first.  `desk/extension/background.js` sends this
+        # file through Desk `/ingest_premarket`; this bridge merely audits it.
+        raw_candidates: List[Path] = []
+        if day_dir:
+            raw_candidates.append(day_dir / "nse" / "premarket.json")
+        raw_candidates.append(data_dir / "by_date" / today_str / "nse" / "premarket.json")
+        seen_raw: Set[Path] = set()
+        raw_is_today = False
+        for raw_path in raw_candidates:
+            if raw_path in seen_raw or not raw_path.exists():
+                continue
+            seen_raw.add(raw_path)
+            try:
+                raw = json.loads(raw_path.read_text(encoding="utf-8"))
+                payload_date = str(raw.get("trading_date", ""))
+                raw_source = str(raw.get("source", "UNKNOWN"))
+                pre_open = raw.get("pre_open") if isinstance(raw.get("pre_open"), dict) else raw
+                symbols = pre_open.get("data", []) if isinstance(pre_open, dict) else []
+                from_extension = raw_source.startswith("nse.chrome_extension.")
+                raw_is_today = payload_date == today_str
+                if raw_is_today and from_extension:
+                    status = "EXTENSION_DELIVERED"
+                elif raw_is_today:
+                    status = "DESK_COLLECTOR_DELIVERED"
+                else:
+                    status = "STALE_PAYLOAD"
+                result["raw_premarket"] = {
+                    "status": status,
+                    "source": raw_source,
+                    "extracted_at": raw.get("extracted_at"),
+                    "payload_trading_date": payload_date or None,
+                    "symbol_count": len(symbols) if isinstance(symbols, list) else 0,
+                    "extension_delivery_verified": from_extension and raw_is_today,
+                    "analysis_generated": False,
+                }
+                break
+            except Exception:
+                result["raw_premarket"]["status"] = "UNREADABLE"
+
+        # Read synthesized NSE premarket_analysis.json only after its raw
+        # provenance has been established.
         pm_candidates = []
         if day_dir:
             pm_candidates.append(day_dir / "nse" / "premarket_analysis.json")
@@ -396,11 +452,12 @@ class SmartTradingBridge:
                 try:
                     pm = json.loads(pm_path.read_text(encoding="utf-8"))
                     pm_date = str(pm.get("trading_date", ""))
-                    result["is_today_fresh"] = (pm_date == today_str)
-                    result["premarket_source"] = f"NSE_PREMARKET:{pm_date or pm_path.parent.parent.name}"
+                    result["premarket_source"] = f"NSE_PREMARKET_ANALYSIS:{pm_date or pm_path.parent.parent.name}"
                     result["auction_breadth"] = pm.get("auction_breadth", {})
                     result["participant_positioning"] = pm.get("participant_positioning", {})
                     result["premarket_bias"] = pm.get("bias", {})
+                    result["raw_premarket"]["analysis_generated"] = True
+                    result["is_today_fresh"] = bool(pm_date == today_str and raw_is_today)
                     break
                 except Exception:
                     pass

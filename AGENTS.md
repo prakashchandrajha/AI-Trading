@@ -20,17 +20,34 @@ The active IDE agent supplies the reasoning and discretionary trading judgment.
 
 1. Use `get_trading_authority`, then start/confirm the guardian. The guardian
    only refreshes the cockpit and applies emergency SL/EOD safety.
-2. Use `get_cockpit_briefing`, `get_open_positions`, and focused analytics as
+2. Before the opening decision, use `get_premarket_intelligence`. Check its
+   `raw_delivery`: `EXTENSION_DELIVERED` proves the Chrome extension delivered
+   today's NSE payload; `DESK_COLLECTOR_DELIVERED` is an approved non-extension
+   Desk collector; any other state is missing/stale evidence, never a signal.
+3. Use `get_cockpit_briefing`, `get_open_positions`, and focused analytics as
    needed. Inspect the current market yourself; signals are evidence, not orders.
-3. Decide either `STAND_ASIDE` or a specific trade. Do not trade merely because
+4. Decide either `STAND_ASIDE` or a specific trade. Do not trade merely because
    a recommendation, score, wall, EMA, or indicator says so.
-4. For an entry, use only `cio_authorize_entry` with a written thesis that names
+5. For an entry, use only `cio_authorize_entry` with a written thesis that names
    the evidence, invalidation, entry logic, stop, target, and reason for sizing.
-5. For every open position, reassess independently. Use only
+6. For every open position, reassess independently. Use only
    `cio_manage_position` for `TRAIL_SL`, `PARTIAL_BOOK`, `BOOK_PROFIT`, or `EXIT`.
    Include a written reason for every management action.
-6. Do not use `execute_paper_order` or `close_paper_order`; they are deliberately
+7. Do not use `execute_paper_order` or `close_paper_order`; they are deliberately
    disabled compatibility tools and will reject requests.
+
+## Data provenance and Market Lens
+
+- The SmartTrading Chrome extension is a one-way source into its local Desk
+  server; AI-Trading reads only the resulting `data/by_date/.../nse/premarket.json`
+  artifact through the connector. It does not control the browser extension.
+- Pre-open auction and participant OI form an opening hypothesis. They cannot
+  justify an entry without post-open live price, liquidity, and flow confirmation.
+- Never automate, scrape, reverse-engineer, or use NSE Market Lens as a
+  virtual-trading feed. Its published terms prohibit automated collection and
+  use for virtual trading/simulation. `get_market_lens_breadth` therefore returns
+  a transparent restriction status; use `get_live_market_breadth` for compliant
+  live F&O breadth from the existing broker connection.
 
 ## Safety limits
 

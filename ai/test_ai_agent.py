@@ -8,6 +8,7 @@ Verifies:
 5. Paper ledger open, close, and net PnL accounting.
 6. Proves that desk/ directory has 0 touched files.
 """
+import json
 import subprocess
 from pathlib import Path
 import pytest
@@ -145,9 +146,9 @@ def test_mcp_server_tools():
     assert "total_trades" in summary
 
     from mcp_server import evaluate_super_setup, get_market_lens_breadth
-    breadth = get_market_lens_breadth()
-    assert "ad_ratio" in breadth
-    assert breadth["ad_ratio"] > 0
+    market_lens = get_market_lens_breadth()
+    assert market_lens["status"] == "NOT_CONNECTED_TERMS_RESTRICTED"
+    assert market_lens["source"] == "NSE_MARKET_LENS_NOT_AUTOMATED"
 
     super_setup = evaluate_super_setup("TATAMOTORS")
     assert "super_setup_score" in super_setup
@@ -287,6 +288,43 @@ def test_connector_bridge_and_book_telemetry():
     )
     assert live_state.source == "LIVE_L2_DEPTH"
     assert live_state.kobp > 0.3
+
+
+def test_connector_proves_extension_premarket_provenance(tmp_path):
+    """AI-Trading must distinguish an extension delivery from a generic Desk file."""
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from connector.smart_trading_bridge import SmartTradingBridge
+
+    nse_dir = tmp_path / "data" / "by_date" / "2026-11-25" / "nse"
+    nse_dir.mkdir(parents=True)
+    (nse_dir / "premarket.json").write_text(json.dumps({
+        "source": "nse.chrome_extension.v2",
+        "trading_date": "2026-11-25",
+        "extracted_at": "2026-11-25T09:12:00+05:30",
+        "pre_open": {"data": [{"metadata": {"symbol": "NIFTY"}}]},
+    }), encoding="utf-8")
+    (nse_dir / "premarket_analysis.json").write_text(json.dumps({
+        "trading_date": "2026-11-25",
+        "auction_breadth": {"advances": 1, "declines": 0},
+        "participant_positioning": {},
+        "bias": {"primary_bias": "CALL_BIAS"},
+    }), encoding="utf-8")
+
+    premarket = SmartTradingBridge(smart_trading_root=tmp_path).read_nse_premarket_and_oi("2026-11-25")
+    assert premarket["is_today_fresh"] is True
+    assert premarket["raw_premarket"]["status"] == "EXTENSION_DELIVERED"
+    assert premarket["raw_premarket"]["extension_delivery_verified"] is True
+    assert premarket["raw_premarket"]["symbol_count"] == 1
+    assert premarket["raw_premarket"]["analysis_generated"] is True
+
+
+def test_market_breadth_never_falls_back_to_a_fixture():
+    from technical_lens import TechnicalLensEngine
+
+    breadth = TechnicalLensEngine.get_market_lens_breadth()
+    assert breadth.source == "UNAVAILABLE"
+    assert breadth.advances == 0
 
 
 def test_cio_clock_enter_trail_and_partial_book(tmp_path):
