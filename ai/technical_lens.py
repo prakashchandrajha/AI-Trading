@@ -26,11 +26,18 @@ class TechnicalIndicators:
     trend_regime: str            # "BULLISH_TREND_ALIGNMENT", "BEARISH_TREND_ALIGNMENT", "CHOP_OR_DIVERGENT"
     is_above_vwap: bool
     is_golden_ema_cross: bool    # 9 EMA > 40 EMA
-    is_overextended: bool        # |vwap_distance_pct| > 2.5% (avoids chasing exhaustion tops)
+    is_overextended: bool        # |vwap_distance_pct| > 2.5% or |z_vwap| > 3.0
     technical_conviction: float  # 0.0 to 1.0
     ema_20: float = 0.0
     is_triple_ribbon_bull: bool = False  # 9 EMA > 20 EMA > 40 EMA
     is_triple_ribbon_bear: bool = False  # 9 EMA < 20 EMA < 40 EMA
+    atr_5m: float = 0.0
+    atr_pct: float = 0.0
+    realized_vol_annual: float = 0.22
+    z_vwap: float = 0.0
+    ribbon_spread_atr: float = 0.0
+    ema_20_slope_atr: float = 0.0
+    ema_20_series: List[float] = field(default_factory=list)
 
 
 @dataclass
@@ -42,6 +49,7 @@ class MarketLensBreadth:
     market_breadth_sentiment: str # "BULLISH_EXPANSION", "BEARISH_LIQUIDATION", "MIXED_ROTATION"
     top_turnover_sectors: List[str] = field(default_factory=list)
     volume_shockers: List[str] = field(default_factory=list)
+    source: str = "OFFLINE_FIXTURE"
 
 
 class TechnicalLensEngine:
@@ -58,11 +66,68 @@ class TechnicalLensEngine:
             return sum(prices) / len(prices)
 
         multiplier = 2.0 / (period + 1.0)
-        # Seed with initial simple moving average
         ema = sum(prices[:period]) / period
         for p in prices[period:]:
             ema = (p - ema) * multiplier + ema
         return round(ema, 2)
+
+    @classmethod
+    def calculate_ema_series(cls, prices: List[float], period: int) -> List[float]:
+        if not prices:
+            return []
+        if len(prices) < period:
+            avg = sum(prices) / len(prices)
+            return [round(avg, 2)] * len(prices)
+        multiplier = 2.0 / (period + 1.0)
+        seed = sum(prices[:period]) / period
+        series = [round(seed, 2)] * period
+        ema = seed
+        for p in prices[period:]:
+            ema = (p - ema) * multiplier + ema
+            series.append(round(ema, 2))
+        return series
+
+    @staticmethod
+    def calculate_atr_and_vol(
+        closes: List[float],
+        highs: Optional[List[float]] = None,
+        lows: Optional[List[float]] = None,
+        period: int = 14,
+    ) -> Tuple[float, float]:
+        """Returns `(atr_5m, annualized_realized_vol)` from 5m OHLCV bars."""
+        if not closes or len(closes) < 3:
+            return 0.0, 0.22
+
+        true_ranges: List[float] = []
+        has_hl = bool(highs and lows and len(highs) == len(closes) and len(lows) == len(closes))
+        for i in range(1, len(closes)):
+            prev_c = closes[i - 1]
+            if has_hl:
+                tr = max(
+                    highs[i] - lows[i],
+                    abs(highs[i] - prev_c),
+                    abs(lows[i] - prev_c),
+                )
+            else:
+                tr = abs(closes[i] - prev_c) * 1.35
+            true_ranges.append(max(0.0, tr))
+
+        recent_trs = true_ranges[-period:]
+        atr = sum(recent_trs) / len(recent_trs) if recent_trs else 0.0
+
+        log_rets: List[float] = []
+        for i in range(max(1, len(closes) - 45), len(closes)):
+            if closes[i - 1] > 0 and closes[i] > 0:
+                log_rets.append(math.log(closes[i] / closes[i - 1]))
+        if len(log_rets) >= 5:
+            mean_r = sum(log_rets) / len(log_rets)
+            var_r = sum((r - mean_r) ** 2 for r in log_rets) / max(1, len(log_rets) - 1)
+            realized_vol = math.sqrt(var_r) * math.sqrt(252.0 * 75.0)
+            realized_vol = max(0.08, min(1.20, realized_vol))
+        else:
+            realized_vol = 0.22
+
+        return round(atr, 2), round(realized_vol, 4)
 
     @staticmethod
     def calculate_vwap(prices: List[float], volumes: List[int]) -> float:
@@ -85,12 +150,14 @@ class TechnicalLensEngine:
         volume_history: Optional[List[int]] = None,
         vwap_override: Optional[float] = None,
         require_real_history: bool = False,
+        high_history: Optional[List[float]] = None,
+        low_history: Optional[List[float]] = None,
     ) -> TechnicalIndicators:
         """
-        Analyzes the Core Technical Setup:
-        - Price vs VWAP (Institutional Buyer Dominance)
-        - 9 EMA, 20 EMA, 40 EMA (Momentum + Triple Ribbon Alignment)
-        - VWAP Stretch Invariant (|Price - VWAP| <= 2.5% to avoid exhaustion tops)
+        Analyzes the Core Technical Setup normalized to current intraday ATR/volatility:
+        - Price vs VWAP (Z_VWAP institutional dominance)
+        - 9 EMA, 20 EMA, 40 EMA (Triple Ribbon Alignment + slope in ATRs)
+        - Overextension guard combining VWAP % and Z_VWAP
         """
         if not price_history or len(price_history) < 40:
             if require_real_history or current_price <= 0:
@@ -109,7 +176,6 @@ class TechnicalLensEngine:
                     is_overextended=False,
                     technical_conviction=0.0,
                 )
-            # Offline unit-test / demo synthetic bar fallback
             step = current_price * 0.0008
             price_history = [
                 current_price - (45 - i) * step * (0.9 if i % 2 == 0 else 1.1)
@@ -123,17 +189,26 @@ class TechnicalLensEngine:
             else cls.calculate_vwap(price_history, volume_history or [])
         )
         ema_9 = cls.calculate_ema(price_history, 9)
-        ema_20 = cls.calculate_ema(price_history, 20)
+        ema20_series = cls.calculate_ema_series(price_history, 20)
+        ema_20 = round(ema20_series[-1], 2) if ema20_series else cls.calculate_ema(price_history, 20)
         ema_40 = cls.calculate_ema(price_history, 40)
+
+        atr_5m, rv_ann = cls.calculate_atr_and_vol(price_history, high_history, low_history)
+        atr_safe = max(atr_5m, current_price * 0.001)
+        atr_pct = round((atr_5m / current_price * 100.0), 3) if current_price > 0 else 0.0
 
         vwap_dist = round(((current_price - vwap) / vwap) * 100.0, 2) if vwap > 0 else 0.0
         ema_spread = round(((ema_9 - ema_40) / ema_40) * 100.0, 2) if ema_40 > 0 else 0.0
+        session_vwap_sigma = max(atr_safe * 6.0, current_price * 0.009)
+        z_vwap = round((current_price - vwap) / session_vwap_sigma, 2) if session_vwap_sigma > 0 else 0.0
+        ribbon_spread_atr = round((ema_9 - ema_40) / atr_safe, 2) if atr_safe > 0 else 0.0
+        ema20_slope = ((ema20_series[-1] - ema20_series[-6]) / atr_safe) if len(ema20_series) >= 6 else 0.0
 
         is_above_vwap = current_price > vwap
         is_golden_cross = ema_9 > ema_40
         is_triple_bull = ema_9 > ema_20 > ema_40
         is_triple_bear = ema_9 < ema_20 < ema_40
-        is_overextended = abs(vwap_dist) > 2.5
+        is_overextended = abs(vwap_dist) > 2.5 or abs(z_vwap) > 3.2
 
         if is_above_vwap and is_golden_cross and not is_overextended:
             trend_regime = "BULLISH_TREND_ALIGNMENT"
@@ -161,17 +236,73 @@ class TechnicalLensEngine:
             ema_20=ema_20,
             is_triple_ribbon_bull=is_triple_bull,
             is_triple_ribbon_bear=is_triple_bear,
+            atr_5m=atr_5m,
+            atr_pct=atr_pct,
+            realized_vol_annual=rv_ann,
+            z_vwap=z_vwap,
+            ribbon_spread_atr=ribbon_spread_atr,
+            ema_20_slope_atr=round(ema20_slope, 2),
+            ema_20_series=ema20_series,
+        )
+
+    @classmethod
+    def compute_live_market_lens_breadth(
+        cls,
+        live_breadth: Optional[Dict] = None,
+        sector_map: Optional[Dict[str, List[str]]] = None,
+    ) -> MarketLensBreadth:
+        """Builds true exchange Market Lens breadth strictly from batched live Kite quotes."""
+        if not live_breadth or live_breadth.get("status") != "LIVE_KITE_BATCH":
+            return MarketLensBreadth(
+                advances=0,
+                declines=0,
+                unchanged=0,
+                ad_ratio=1.0,
+                market_breadth_sentiment="UNAVAILABLE",
+                top_turnover_sectors=[],
+                volume_shockers=[],
+                source="UNAVAILABLE",
+            )
+
+        adv = int(live_breadth.get("advances", 0))
+        dec = int(live_breadth.get("declines", 0))
+        unc = int(live_breadth.get("unchanged", 0))
+        ad_ratio = round(adv / max(1, dec), 2) if (adv + dec) > 0 else 1.0
+        sentiment = (
+            "BULLISH_EXPANSION" if ad_ratio >= 1.5
+            else ("BEARISH_LIQUIDATION" if ad_ratio <= 0.65 else "MIXED_ROTATION")
+        )
+
+        moves = live_breadth.get("stock_moves") or []
+        by_sym = {m["symbol"]: m for m in moves if "symbol" in m}
+        top_sectors: List[str] = []
+        if sector_map:
+            ranked_sec = []
+            for sec, syms in sector_map.items():
+                rets = [by_sym[s]["chg_pct"] for s in syms if s in by_sym]
+                if rets:
+                    ranked_sec.append((sum(abs(x) for x in rets) / len(rets), sec))
+            ranked_sec.sort(reverse=True)
+            top_sectors = [sec for _, sec in ranked_sec[:4]]
+
+        shockers = [m["symbol"] for m in sorted(moves, key=lambda x: abs(x.get("chg_pct", 0.0)), reverse=True)[:5]]
+        return MarketLensBreadth(
+            advances=adv,
+            declines=dec,
+            unchanged=unc,
+            ad_ratio=ad_ratio,
+            market_breadth_sentiment=sentiment,
+            top_turnover_sectors=top_sectors,
+            volume_shockers=shockers,
+            source="LIVE_KITE_BATCH",
         )
 
     @classmethod
     def get_market_lens_breadth(cls) -> MarketLensBreadth:
         """
-        Emulates NSE Market Lens direct exchange breadth metrics:
-        - Advances vs. Declines
-        - Sector Turnover Concentration
-        - Volume Shockers
+        Offline fixture fallback used strictly by offline mock tests / demos.
+        Live cockpit runs use `compute_live_market_lens_breadth` instead.
         """
-        # Current active afternoon session breadth (118 Advances / 64 Declines)
         advances = 118
         declines = 64
         unchanged = 8
@@ -190,6 +321,7 @@ class TechnicalLensEngine:
             market_breadth_sentiment=sentiment,
             top_turnover_sectors=["BANKING", "DEFENSE_CAPGOODS", "METALS", "AUTO"],
             volume_shockers=["HAL", "TATASTEEL", "M&M", "HDFCBANK"],
+            source="OFFLINE_FIXTURE",
         )
 
     @classmethod

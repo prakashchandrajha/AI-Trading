@@ -1,0 +1,80 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 2,
+  "filesSkipped": [
+    "ai/AI_TRADER_PLAYBOOK.md",
+    "ai/AUDIT_FINDINGS.md",
+    "ai/SYSTEM_BLUEPRINT.md"
+  ],
+  "results": [
+    {
+      "path": "ai/run_morning_ai_trader.sh",
+      "language": "shell",
+      "fileCategory": "script",
+      "totalLines": 87,
+      "nonEmptyLines": 81,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "ai/strategy.yaml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 126,
+      "nonEmptyLines": 118,
+      "sections": [
+        {
+          "heading": "system",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "macro_the_6_generals",
+          "level": 1,
+          "line": 17
+        },
+        {
+          "heading": "microstructure_physics",
+          "level": 1,
+          "line": 31
+        },
+        {
+          "heading": "regime_and_payoff_router",
+          "level": 1,
+          "line": 38
+        },
+        {
+          "heading": "position_sizing_and_risk",
+          "level": 1,
+          "line": 53
+        },
+        {
+          "heading": "active_trade_management",
+          "level": 1,
+          "line": 65
+        },
+        {
+          "heading": "three_trader_zero_collision",
+          "level": 1,
+          "line": 92
+        },
+        {
+          "heading": "statutory_friction_rates",
+          "level": 1,
+          "line": 119
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    }
+  ]
+}

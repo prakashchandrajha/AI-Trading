@@ -336,5 +336,76 @@ def get_open_positions() -> List[Dict]:
     return ledger.get_open_trades()
 
 
+@mcp.tool()
+def get_cockpit_briefing(max_candidates: int = 3) -> Dict:
+    """
+    Builds the lightweight AI CIO Cockpit Briefing synthesizing live Kite quotes/bars/depth,
+    SmartTrading Desk connector telemetry (HTTP/SHM/ZMQ/NSE OI/Collision Mutex), Sensibull walls,
+    volatility-normalized EMAs, spread-adjusted GPU Monte Carlo PoT, and active position hints.
+    """
+    from cockpit import CockpitBuilder
+    return CockpitBuilder().build_briefing(max_candidates=max_candidates)
+
+
+@mcp.tool()
+def cio_authorize_entry(
+    symbol: str,
+    direction: str,
+    contract: str,
+    sl: float,
+    target: float,
+    lots: int = 1,
+    thesis: str = "",
+) -> Dict:
+    """
+    Executes an explicit AI CIO trade decision (validates live Ask spread, Demat ₹50k budget,
+    Desk Collision Mutex, NSE F&O ban, clock window, and risk cap).
+    """
+    from agent_trader import cio_enter_trade
+    return cio_enter_trade(
+        symbol=symbol,
+        direction=direction,
+        contract=contract,
+        sl=sl,
+        target=target,
+        lots=lots,
+        thesis=thesis,
+        live_mode=True,
+    )
+
+
+@mcp.tool()
+def cio_manage_position(
+    trade_id: int,
+    action: str,
+    reason: str,
+    sl: Optional[float] = None,
+    exit_lots: Optional[int] = None,
+) -> Dict:
+    """
+    Executes an AI CIO active position decision: TRAIL_SL (stay & ride rally),
+    PARTIAL_BOOK (book part profit & trail rest), BOOK_PROFIT, or EXIT.
+    """
+    from agent_trader import cio_manage_trade
+    return cio_manage_trade(
+        trade_id=trade_id,
+        action=action,
+        reason=reason,
+        sl=sl,
+        exit_lots=exit_lots,
+        live_mode=True,
+    )
+
+
+@mcp.tool()
+def run_regime_logic_test(days: int = 25) -> Dict:
+    """
+    Runs continuous anti-curve-fit out-of-sample walk-forward Logic Testing across
+    Normal, Expiry, and High-Vol regimes using real NSE 5m bars & archived Desk tick DBs.
+    """
+    from logic_tester import run_logic_validation
+    return run_logic_validation(days=days)
+
+
 if __name__ == "__main__":
     mcp.run()

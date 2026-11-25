@@ -1,0 +1,15 @@
+{
+  "projectRoot": "/home/vvd/prakash/AI-Trading",
+  "batchFiles": [
+    {"path": "ai/cockpit.py", "language": "python", "sizeLines": 774, "fileCategory": "code"},
+    {"path": "ai/gpu_engine.py", "language": "python", "sizeLines": 258, "fileCategory": "code"},
+    {"path": "ai/quantitative_alpha.py", "language": "python", "sizeLines": 327, "fileCategory": "code"},
+    {"path": "ai/smart_edge.py", "language": "python", "sizeLines": 586, "fileCategory": "code"}
+  ],
+  "batchImportData": {
+    "ai/cockpit.py": ["ai/gpu_engine.py", "ai/greeks_gex.py", "ai/live_kite_feed.py", "ai/logic_tester.py", "ai/options_analytics.py", "ai/paper_ledger.py", "ai/quantitative_alpha.py", "ai/smart_edge.py", "ai/technical_lens.py", "connector/smart_trading_bridge.py"],
+    "ai/gpu_engine.py": [],
+    "ai/quantitative_alpha.py": [],
+    "ai/smart_edge.py": []
+  }
+}

@@ -1,0 +1,230 @@
+{
+  "scriptCompleted": true,
+  "files": [
+    {
+      "path": ".understand-anything/.understandignore",
+      "language": "unknown",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/agent_trader.py",
+      "language": "python",
+      "sizeLines": 1781,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/ai_paper_trades.db",
+      "language": "db",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/AI_TRADER_PLAYBOOK.md",
+      "language": "markdown",
+      "sizeLines": 43,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "ai/AUDIT_FINDINGS.md",
+      "language": "markdown",
+      "sizeLines": 28,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "ai/cockpit.py",
+      "language": "python",
+      "sizeLines": 774,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/gpu_engine.py",
+      "language": "python",
+      "sizeLines": 258,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/greeks_gex.py",
+      "language": "python",
+      "sizeLines": 265,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/live_kite_feed.py",
+      "language": "python",
+      "sizeLines": 609,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/logic_tester.py",
+      "language": "python",
+      "sizeLines": 467,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/mcp_server.py",
+      "language": "python",
+      "sizeLines": 411,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/options_analytics.py",
+      "language": "python",
+      "sizeLines": 489,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/paper_ledger.py",
+      "language": "python",
+      "sizeLines": 496,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/quantitative_alpha.py",
+      "language": "python",
+      "sizeLines": 327,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/run_morning_ai_trader.sh",
+      "language": "shell",
+      "sizeLines": 87,
+      "fileCategory": "script"
+    },
+    {
+      "path": "ai/runtime/cockpit_briefing.json",
+      "language": "json",
+      "sizeLines": 452,
+      "fileCategory": "config"
+    },
+    {
+      "path": "ai/runtime/history_cache/HAL_25d_2026-11-25.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "ai/runtime/history_cache/HDFCBANK_25d_2026-11-25.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "ai/runtime/history_cache/ICICIBANK_25d_2026-11-25.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "ai/runtime/history_cache/INFY_25d_2026-11-25.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "ai/runtime/history_cache/M&M_25d_2026-11-25.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "ai/runtime/history_cache/NIFTY_25d_2026-11-25.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "ai/runtime/history_cache/SBIN_25d_2026-11-25.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "ai/runtime/history_cache/TATASTEEL_25d_2026-11-25.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "ai/runtime/logic_test_report.json",
+      "language": "json",
+      "sizeLines": 163,
+      "fileCategory": "config"
+    },
+    {
+      "path": "ai/runtime/oi_baseline_2026-11-25.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "ai/runtime/paper_ledger.db",
+      "language": "db",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/smart_edge.py",
+      "language": "python",
+      "sizeLines": 586,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/strategy.yaml",
+      "language": "yaml",
+      "sizeLines": 126,
+      "fileCategory": "config"
+    },
+    {
+      "path": "ai/SYSTEM_BLUEPRINT.md",
+      "language": "markdown",
+      "sizeLines": 248,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "ai/technical_lens.py",
+      "language": "python",
+      "sizeLines": 437,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ai/test_ai_agent.py",
+      "language": "python",
+      "sizeLines": 469,
+      "fileCategory": "code"
+    },
+    {
+      "path": "connector/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "connector/smart_trading_bridge.py",
+      "language": "python",
+      "sizeLines": 638,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 34,
+  "filteredByIgnore": 0,
+  "estimatedComplexity": "moderate",
+  "stats": {
+    "filesScanned": 34,
+    "byCategory": {
+      "code": 18,
+      "docs": 3,
+      "script": 1,
+      "config": 12
+    },
+    "byLanguage": {
+      "unknown": 1,
+      "python": 15,
+      "db": 2,
+      "markdown": 3,
+      "shell": 1,
+      "json": 11,
+      "yaml": 1
+    }
+  }
+}

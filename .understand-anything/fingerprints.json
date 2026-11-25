@@ -1,0 +1,2315 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "10e3a66a31ebe04070f743d828aeb1c0bc079e44",
+  "generatedAt": "2026-11-25T14:24:52.105Z",
+  "files": {
+    ".understand-anything/.understandignore": {
+      "filePath": ".understand-anything/.understandignore",
+      "contentHash": "521c93d62efcd5219881aac585edfef9399b6eeef56a0271ec882a318ba151e2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 28,
+      "hasStructuralAnalysis": false
+    },
+    "ai/agent_trader.py": {
+      "filePath": "ai/agent_trader.py",
+      "contentHash": "da097b39b4f64f90371c6b74bfe64a3a83e2ee2ccfeb74da64c99b8d98766b0c",
+      "functions": [
+        {
+          "name": "square_off_all_positions",
+          "params": [
+            "reason",
+            "live_mode",
+            "feed"
+          ],
+          "exported": true,
+          "lineCount": 51
+        },
+        {
+          "name": "inspect_the_generals",
+          "params": [],
+          "exported": true,
+          "lineCount": 39
+        },
+        {
+          "name": "scan_sector_heatmap",
+          "params": [],
+          "exported": true,
+          "lineCount": 47
+        },
+        {
+          "name": "scan_fo_universe",
+          "params": [],
+          "exported": true,
+          "lineCount": 39
+        },
+        {
+          "name": "scan_machine_radar",
+          "params": [],
+          "exported": true,
+          "lineCount": 65
+        },
+        {
+          "name": "scan_super_setups",
+          "params": [],
+          "exported": true,
+          "lineCount": 69
+        },
+        {
+          "name": "scan_quant_physics",
+          "params": [],
+          "exported": true,
+          "lineCount": 62
+        },
+        {
+          "name": "run_autonomous_loop",
+          "params": [
+            "poll_interval_sec",
+            "max_cycles",
+            "live_mode"
+          ],
+          "exported": true,
+          "lineCount": 157
+        },
+        {
+          "name": "_format_inr",
+          "params": [
+            "val"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "cio_enter_trade",
+          "params": [
+            "symbol",
+            "direction",
+            "contract",
+            "sl",
+            "target",
+            "lots",
+            "thesis",
+            "entry_price",
+            "live_mode",
+            "ledger",
+            "feed",
+            "bridge",
+            "enforce_market_clock"
+          ],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 126
+        },
+        {
+          "name": "cio_manage_trade",
+          "params": [
+            "trade_id",
+            "action",
+            "reason",
+            "sl",
+            "exit_lots",
+            "exit_price",
+            "live_mode",
+            "ledger",
+            "feed"
+          ],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 75
+        },
+        {
+          "name": "run_guardian_loop",
+          "params": [
+            "poll_interval_sec",
+            "cockpit_refresh_sec",
+            "max_cycles",
+            "live_mode"
+          ],
+          "exported": true,
+          "lineCount": 100
+        },
+        {
+          "name": "print_session_status",
+          "params": [],
+          "exported": true,
+          "lineCount": 48
+        },
+        {
+          "name": "main",
+          "params": [],
+          "exported": true,
+          "lineCount": 131
+        }
+      ],
+      "classes": [
+        {
+          "name": "AIAgentTrader",
+          "methods": [
+            "__init__",
+            "_fetch_live_snapshot",
+            "load_option_chain_from_tape",
+            "inspect_market",
+            "print_dashboard",
+            "inspect_live_setup",
+            "_compute_generals_score",
+            "run_cycle"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 672
+        },
+        {
+          "name": "_TeeStream",
+          "methods": [
+            "__init__",
+            "write",
+            "flush"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sqlite3",
+          "specifiers": [
+            "sqlite3"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Dict",
+            "List",
+            "Optional",
+            "Tuple"
+          ]
+        },
+        {
+          "source": "cockpit",
+          "specifiers": [
+            "CockpitBuilder",
+            "evaluate_session_clock",
+            "format_briefing_text"
+          ]
+        },
+        {
+          "source": "connector.smart_trading_bridge",
+          "specifiers": [
+            "SmartTradingBridge"
+          ]
+        },
+        {
+          "source": "greeks_gex",
+          "specifiers": [
+            "GreeksGexEngine",
+            "GexAnalysisResult"
+          ]
+        },
+        {
+          "source": "live_kite_feed",
+          "specifiers": [
+            "LiveKiteFeed",
+            "LiveMarketSnapshot"
+          ]
+        },
+        {
+          "source": "logic_tester",
+          "specifiers": [
+            "format_logic_report",
+            "run_logic_validation"
+          ]
+        },
+        {
+          "source": "options_analytics",
+          "specifiers": [
+            "OptionsAnalyticsEngine",
+            "OptionsAnalyticsResult",
+            "OptionStrikeData"
+          ]
+        },
+        {
+          "source": "paper_ledger",
+          "specifiers": [
+            "AIPaperLedger"
+          ]
+        },
+        {
+          "source": "technical_lens",
+          "specifiers": [
+            "TechnicalLensEngine",
+            "TechnicalIndicators",
+            "MarketLensBreadth"
+          ]
+        },
+        {
+          "source": "quantitative_alpha",
+          "specifiers": [
+            "QuantitativeAlphaEngine",
+            "QuantitativeAlphaState"
+          ]
+        },
+        {
+          "source": "gpu_engine",
+          "specifiers": [
+            "GPUQuantitativeEngine"
+          ]
+        }
+      ],
+      "exports": [
+        "AIAgentTrader",
+        "square_off_all_positions",
+        "inspect_the_generals",
+        "scan_sector_heatmap",
+        "scan_fo_universe",
+        "scan_machine_radar",
+        "scan_super_setups",
+        "scan_quant_physics",
+        "_TeeStream",
+        "run_autonomous_loop",
+        "_format_inr",
+        "cio_enter_trade",
+        "cio_manage_trade",
+        "run_guardian_loop",
+        "print_session_status",
+        "main"
+      ],
+      "totalLines": 1782,
+      "hasStructuralAnalysis": true
+    },
+    "ai/ai_paper_trades.db": {
+      "filePath": "ai/ai_paper_trades.db",
+      "contentHash": "d10eabdc3a37ae7a22a5c73a63e203d46806c7060d52ba2d42d4e47e60dcf7a4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 38,
+      "hasStructuralAnalysis": false
+    },
+    "ai/cockpit.py": {
+      "filePath": "ai/cockpit.py",
+      "contentHash": "c807fe9cc553745d0b40e3b228e8d0f7fe2f7d1f8afde601fc9d21e40c7041b7",
+      "functions": [
+        {
+          "name": "evaluate_session_clock",
+          "params": [
+            "now_ist"
+          ],
+          "returnType": "Dict[str, Any]",
+          "exported": true,
+          "lineCount": 43
+        },
+        {
+          "name": "_fmt_inr",
+          "params": [
+            "val"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "format_briefing_text",
+          "params": [
+            "b"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 84
+        }
+      ],
+      "classes": [
+        {
+          "name": "CockpitBuilder",
+          "methods": [
+            "__init__",
+            "_compute_generals_from_breadth",
+            "_inspect_open_positions",
+            "build_briefing"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 573
+        }
+      ],
+      "imports": [
+        {
+          "source": "calendar",
+          "specifiers": [
+            "calendar"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "math",
+          "specifiers": [
+            "math"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "Dict",
+            "List",
+            "Optional"
+          ]
+        },
+        {
+          "source": "zoneinfo",
+          "specifiers": [
+            "ZoneInfo"
+          ]
+        },
+        {
+          "source": "connector.smart_trading_bridge",
+          "specifiers": [
+            "SmartTradingBridge",
+            "compute_book_telemetry"
+          ]
+        },
+        {
+          "source": "gpu_engine",
+          "specifiers": [
+            "GPUQuantitativeEngine"
+          ]
+        },
+        {
+          "source": "greeks_gex",
+          "specifiers": [
+            "GreeksGexEngine"
+          ]
+        },
+        {
+          "source": "live_kite_feed",
+          "specifiers": [
+            "LiveKiteFeed"
+          ]
+        },
+        {
+          "source": "logic_tester",
+          "specifiers": [
+            "load_cached_logic_report"
+          ]
+        },
+        {
+          "source": "options_analytics",
+          "specifiers": [
+            "OptionsAnalyticsEngine"
+          ]
+        },
+        {
+          "source": "paper_ledger",
+          "specifiers": [
+            "AIPaperLedger"
+          ]
+        },
+        {
+          "source": "quantitative_alpha",
+          "specifiers": [
+            "QuantitativeAlphaEngine"
+          ]
+        },
+        {
+          "source": "smart_edge",
+          "specifiers": [
+            "evaluate_smart_edge"
+          ]
+        },
+        {
+          "source": "technical_lens",
+          "specifiers": [
+            "TechnicalLensEngine"
+          ]
+        }
+      ],
+      "exports": [
+        "evaluate_session_clock",
+        "CockpitBuilder",
+        "_fmt_inr",
+        "format_briefing_text"
+      ],
+      "totalLines": 775,
+      "hasStructuralAnalysis": true
+    },
+    "ai/gpu_engine.py": {
+      "filePath": "ai/gpu_engine.py",
+      "contentHash": "27f8b124f0a690c83c4b04c952f346814b2bf6d2c5ea25c07af79c8130a9469b",
+      "functions": [],
+      "classes": [
+        {
+          "name": "GPUQuantitativeEngine",
+          "methods": [
+            "__init__",
+            "_warmup_gpu",
+            "simulate_monte_carlo_po_t",
+            "_cpu_monte_carlo_fallback",
+            "compute_vectorized_greeks",
+            "evaluate_correlation_heat_shield"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 235
+        }
+      ],
+      "imports": [
+        {
+          "source": "math",
+          "specifiers": [
+            "math"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Dict",
+            "List",
+            "Optional",
+            "Tuple"
+          ]
+        }
+      ],
+      "exports": [
+        "GPUQuantitativeEngine"
+      ],
+      "totalLines": 259,
+      "hasStructuralAnalysis": true
+    },
+    "ai/greeks_gex.py": {
+      "filePath": "ai/greeks_gex.py",
+      "contentHash": "bd109c8ad6cb027bb8c899d479ee2370df77642517024bc5f2dd42cf56e65924",
+      "functions": [
+        {
+          "name": "norm_cdf",
+          "params": [
+            "x"
+          ],
+          "returnType": "float",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "norm_pdf",
+          "params": [
+            "x"
+          ],
+          "returnType": "float",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [
+        {
+          "name": "OptionGreeks",
+          "methods": [],
+          "properties": [
+            "delta_call",
+            "delta_put",
+            "gamma",
+            "theta_call",
+            "vega",
+            "gex_call",
+            "gex_put",
+            "net_gex"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "FrontierAnalysisResult",
+          "methods": [],
+          "properties": [
+            "symbol",
+            "underlying_price",
+            "net_gex_crores",
+            "gex_regime",
+            "gex_flip_strike",
+            "gamma_squeeze_score",
+            "nuvama",
+            "sector_confluence",
+            "actionable_signal",
+            "conviction_pct",
+            "execution_strategy",
+            "frontier_thesis"
+          ],
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "FrontierAnalyticsEngine",
+          "methods": [
+            "calculate_greeks",
+            "evaluate_frontier_landscape"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 204
+        }
+      ],
+      "imports": [
+        {
+          "source": "math",
+          "specifiers": [
+            "math"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Dict",
+            "List",
+            "Optional",
+            "Tuple"
+          ]
+        },
+        {
+          "source": "options_analytics",
+          "specifiers": [
+            "NuvamaAnalyticsResult",
+            "NuvamaOptionsEngine",
+            "OptionStrikeData"
+          ]
+        }
+      ],
+      "exports": [
+        "norm_cdf",
+        "norm_pdf",
+        "OptionGreeks",
+        "FrontierAnalysisResult",
+        "FrontierAnalyticsEngine"
+      ],
+      "totalLines": 266,
+      "hasStructuralAnalysis": true
+    },
+    "ai/live_kite_feed.py": {
+      "filePath": "ai/live_kite_feed.py",
+      "contentHash": "5da0f9e81acdde4a23b4b1af655d99fbd43bb4904c972af3aac1548075f26e3c",
+      "functions": [
+        {
+          "name": "_extract_5level_depth",
+          "params": [
+            "depth_dict"
+          ],
+          "returnType": "Tuple[List[Tuple[float, int]], List[Tuple[float, int]]]",
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "classes": [
+        {
+          "name": "LiveMarketSnapshot",
+          "methods": [],
+          "properties": [
+            "symbol",
+            "spot_symbol",
+            "spot_price",
+            "vwap_live",
+            "prev_close",
+            "lot_size",
+            "strike_step",
+            "expiry",
+            "chain",
+            "contract_map",
+            "price_history",
+            "volume_history",
+            "fetched_at",
+            "high_history",
+            "low_history",
+            "spot_bid_depth",
+            "spot_ask_depth",
+            "prev_spot_bid_depth",
+            "prev_spot_ask_depth",
+            "spot_volume_today",
+            "spot_buy_qty",
+            "spot_sell_qty"
+          ],
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "LiveKiteFeed",
+          "methods": [
+            "__init__",
+            "_baseline_oi_path",
+            "_load_baseline_oi",
+            "_save_baseline_oi",
+            "_load_credentials",
+            "_ensure_kite",
+            "_ensure_instruments",
+            "get_symbol_meta",
+            "get_available_universe",
+            "get_full_fno_universe",
+            "_fetch_spot_5m_ohlcv",
+            "_fetch_spot_5m_bars",
+            "fetch_historical_5m_bars",
+            "fetch_live_market_breadth",
+            "fetch_spot_and_option_chain",
+            "fetch_contract_quotes"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 526
+        }
+      ],
+      "imports": [
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "Dict",
+            "List",
+            "Optional",
+            "Tuple"
+          ]
+        },
+        {
+          "source": "zoneinfo",
+          "specifiers": [
+            "ZoneInfo"
+          ]
+        },
+        {
+          "source": "connector.smart_trading_bridge",
+          "specifiers": [
+            "SmartTradingBridge"
+          ]
+        },
+        {
+          "source": "options_analytics",
+          "specifiers": [
+            "OptionStrikeData"
+          ]
+        }
+      ],
+      "exports": [
+        "LiveMarketSnapshot",
+        "_extract_5level_depth",
+        "LiveKiteFeed"
+      ],
+      "totalLines": 610,
+      "hasStructuralAnalysis": true
+    },
+    "ai/logic_tester.py": {
+      "filePath": "ai/logic_tester.py",
+      "contentHash": "2291cc9baa47657cb61e3c598a71c555dc5b983245401ff6e7acffea639b648a",
+      "functions": [
+        {
+          "name": "classify_indian_session_regime",
+          "params": [
+            "trading_date",
+            "day_range_pct"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "_parse_bar_dt",
+          "params": [
+            "date_str"
+          ],
+          "returnType": "datetime.datetime",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_simulate_logic_on_bars",
+          "params": [
+            "symbol",
+            "bars_by_day",
+            "lot_size",
+            "logic_name",
+            "atr_stop_mult",
+            "cutoff_hhmm",
+            "late_window_only",
+            "random_seed"
+          ],
+          "returnType": "List[SimTradeResult]",
+          "exported": true,
+          "lineCount": 194
+        },
+        {
+          "name": "_summarize_trades",
+          "params": [
+            "trades"
+          ],
+          "returnType": "Dict[str, Any]",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "inspect_archived_tick_spread_audit",
+          "params": [
+            "bridge",
+            "max_dbs"
+          ],
+          "returnType": "List[Dict[str, Any]]",
+          "exported": true,
+          "lineCount": 37
+        },
+        {
+          "name": "run_logic_validation",
+          "params": [
+            "symbols",
+            "days",
+            "feed"
+          ],
+          "returnType": "Dict[str, Any]",
+          "exported": true,
+          "lineCount": 84
+        },
+        {
+          "name": "load_cached_logic_report",
+          "params": [],
+          "returnType": "Dict[str, Any]",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "format_logic_report",
+          "params": [
+            "report"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 30
+        }
+      ],
+      "classes": [
+        {
+          "name": "SimTradeResult",
+          "methods": [],
+          "properties": [
+            "symbol",
+            "date",
+            "regime",
+            "logic",
+            "direction",
+            "entry_time",
+            "exit_time",
+            "spot_entry",
+            "spot_exit",
+            "option_net_pnl",
+            "friction",
+            "r_multiple",
+            "exit_reason"
+          ],
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "imports": [
+        {
+          "source": "calendar",
+          "specifiers": [
+            "calendar"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "math",
+          "specifiers": [
+            "math"
+          ]
+        },
+        {
+          "source": "random",
+          "specifiers": [
+            "random"
+          ]
+        },
+        {
+          "source": "sqlite3",
+          "specifiers": [
+            "sqlite3"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "collections",
+          "specifiers": [
+            "defaultdict"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass",
+            "asdict"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "Dict",
+            "List",
+            "Optional",
+            "Tuple"
+          ]
+        },
+        {
+          "source": "zoneinfo",
+          "specifiers": [
+            "ZoneInfo"
+          ]
+        },
+        {
+          "source": "connector.smart_trading_bridge",
+          "specifiers": [
+            "SmartTradingBridge",
+            "compute_book_telemetry"
+          ]
+        },
+        {
+          "source": "live_kite_feed",
+          "specifiers": [
+            "LiveKiteFeed"
+          ]
+        },
+        {
+          "source": "paper_ledger",
+          "specifiers": [
+            "AIPaperLedger"
+          ]
+        },
+        {
+          "source": "technical_lens",
+          "specifiers": [
+            "TechnicalLensEngine"
+          ]
+        }
+      ],
+      "exports": [
+        "classify_indian_session_regime",
+        "_parse_bar_dt",
+        "SimTradeResult",
+        "_simulate_logic_on_bars",
+        "_summarize_trades",
+        "inspect_archived_tick_spread_audit",
+        "run_logic_validation",
+        "load_cached_logic_report",
+        "format_logic_report"
+      ],
+      "totalLines": 468,
+      "hasStructuralAnalysis": true
+    },
+    "ai/mcp_server.py": {
+      "filePath": "ai/mcp_server.py",
+      "contentHash": "59863002989844c4dae81acfa19069b2d1e7194559ea5958ac5d932ce73fac57",
+      "functions": [
+        {
+          "name": "analyze_options",
+          "params": [
+            "symbol",
+            "tape_db"
+          ],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 27
+        },
+        {
+          "name": "get_gex_and_greeks",
+          "params": [
+            "symbol",
+            "dte"
+          ],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 26
+        },
+        {
+          "name": "check_generals_alignment",
+          "params": [],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 54
+        },
+        {
+          "name": "scan_fo_breakouts",
+          "params": [],
+          "returnType": "List[Dict]",
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "get_sector_heatmap",
+          "params": [],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 46
+        },
+        {
+          "name": "get_market_lens_breadth",
+          "params": [],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "evaluate_super_setup",
+          "params": [
+            "symbol"
+          ],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 27
+        },
+        {
+          "name": "execute_paper_order",
+          "params": [
+            "symbol",
+            "direction",
+            "entry_price",
+            "stop_loss",
+            "target",
+            "lots",
+            "thesis"
+          ],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 38
+        },
+        {
+          "name": "close_paper_order",
+          "params": [
+            "trade_id",
+            "exit_price",
+            "exit_reason"
+          ],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "get_portfolio_summary",
+          "params": [],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "get_open_positions",
+          "params": [],
+          "returnType": "List[Dict]",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "get_cockpit_briefing",
+          "params": [
+            "max_candidates"
+          ],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "cio_authorize_entry",
+          "params": [
+            "symbol",
+            "direction",
+            "contract",
+            "sl",
+            "target",
+            "lots",
+            "thesis"
+          ],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 24
+        },
+        {
+          "name": "cio_manage_position",
+          "params": [
+            "trade_id",
+            "action",
+            "reason",
+            "sl",
+            "exit_lots"
+          ],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "run_regime_logic_test",
+          "params": [
+            "days"
+          ],
+          "returnType": "Dict",
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Dict",
+            "List",
+            "Optional"
+          ]
+        },
+        {
+          "source": "fastmcp",
+          "specifiers": [
+            "FastMCP"
+          ]
+        },
+        {
+          "source": "agent_trader",
+          "specifiers": [
+            "AIAgentTrader"
+          ]
+        },
+        {
+          "source": "greeks_gex",
+          "specifiers": [
+            "GreeksGexEngine"
+          ]
+        },
+        {
+          "source": "options_analytics",
+          "specifiers": [
+            "OptionsAnalyticsEngine"
+          ]
+        },
+        {
+          "source": "paper_ledger",
+          "specifiers": [
+            "AIPaperLedger"
+          ]
+        },
+        {
+          "source": "technical_lens",
+          "specifiers": [
+            "TechnicalLensEngine"
+          ]
+        }
+      ],
+      "exports": [
+        "analyze_options",
+        "get_gex_and_greeks",
+        "check_generals_alignment",
+        "scan_fo_breakouts",
+        "get_sector_heatmap",
+        "get_market_lens_breadth",
+        "evaluate_super_setup",
+        "execute_paper_order",
+        "close_paper_order",
+        "get_portfolio_summary",
+        "get_open_positions",
+        "get_cockpit_briefing",
+        "cio_authorize_entry",
+        "cio_manage_position",
+        "run_regime_logic_test"
+      ],
+      "totalLines": 412,
+      "hasStructuralAnalysis": true
+    },
+    "ai/options_analytics.py": {
+      "filePath": "ai/options_analytics.py",
+      "contentHash": "54e024d41fbda6850915acd526dc9994a2b576032fc9c8d0045eee5ef7084487",
+      "functions": [],
+      "classes": [
+        {
+          "name": "OptionStrikeData",
+          "methods": [],
+          "properties": [
+            "strike",
+            "call_oi",
+            "put_oi",
+            "call_ltp",
+            "put_ltp",
+            "call_change_oi",
+            "put_change_oi",
+            "call_volume",
+            "put_volume",
+            "call_bid",
+            "call_ask",
+            "put_bid",
+            "put_ask"
+          ],
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "NuvamaAnalyticsResult",
+          "methods": [],
+          "properties": [
+            "underlying_price",
+            "max_pain_strike",
+            "effective_max_pain_weight",
+            "pcr",
+            "pcr_divergence",
+            "call_wall_strike",
+            "call_wall_oi",
+            "put_wall_strike",
+            "put_wall_oi",
+            "total_call_oi",
+            "total_put_oi",
+            "near_atm_oi_velocity",
+            "sentiment",
+            "trade_recommendation",
+            "confidence",
+            "structural_stop_index",
+            "structural_target_index",
+            "atm_straddle_premium",
+            "expected_breakeven_low",
+            "expected_breakeven_high",
+            "analysis_thesis",
+            "key_strikes"
+          ],
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "NuvamaOptionsEngine",
+          "methods": [
+            "classify_buildup",
+            "calculate_max_pain",
+            "analyze"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 425
+        }
+      ],
+      "imports": [
+        {
+          "source": "math",
+          "specifiers": [
+            "math"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Dict",
+            "List",
+            "Optional",
+            "Tuple"
+          ]
+        }
+      ],
+      "exports": [
+        "OptionStrikeData",
+        "NuvamaAnalyticsResult",
+        "NuvamaOptionsEngine"
+      ],
+      "totalLines": 490,
+      "hasStructuralAnalysis": true
+    },
+    "ai/paper_ledger.py": {
+      "filePath": "ai/paper_ledger.py",
+      "contentHash": "cf001d178fbdbda04f91784d2844c8ea80fbe99afa27d18e05323e134cdcb1ef",
+      "functions": [],
+      "classes": [
+        {
+          "name": "AIPaperLedger",
+          "methods": [
+            "__init__",
+            "_get_conn",
+            "_init_db",
+            "calculate_indian_friction",
+            "open_trade",
+            "update_stop_loss",
+            "close_trade",
+            "get_open_trades",
+            "get_all_trades",
+            "get_summary",
+            "get_today_pnl",
+            "get_recent_consecutive_losses",
+            "void_synthetic_open_trades",
+            "partial_close_trade",
+            "log_cio_decision",
+            "get_recent_cio_decisions"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 475
+        }
+      ],
+      "imports": [
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime"
+          ]
+        },
+        {
+          "source": "sqlite3",
+          "specifiers": [
+            "sqlite3"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Dict",
+            "List",
+            "Optional"
+          ]
+        }
+      ],
+      "exports": [
+        "AIPaperLedger"
+      ],
+      "totalLines": 497,
+      "hasStructuralAnalysis": true
+    },
+    "ai/quantitative_alpha.py": {
+      "filePath": "ai/quantitative_alpha.py",
+      "contentHash": "b416abc7bd4ffa517860b48b204cc0e71c7f9520942dd047bc6cf6be1f8afc50",
+      "functions": [
+        {
+          "name": "norm_cdf",
+          "params": [
+            "x"
+          ],
+          "returnType": "float",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "norm_pdf",
+          "params": [
+            "x"
+          ],
+          "returnType": "float",
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [
+        {
+          "name": "QuantitativeAlphaState",
+          "methods": [],
+          "properties": [
+            "symbol",
+            "underlying_price",
+            "micro_price",
+            "micro_price_edge_pts",
+            "queue_imbalance_ratio",
+            "ofi_velocity",
+            "ofi_acceleration",
+            "vanna_dealer_flow",
+            "charm_dealer_flow",
+            "flow_toxicity_score",
+            "gamma_ignition_probability",
+            "machine_signal",
+            "execution_advantage",
+            "z_ofi",
+            "vpin_proxy",
+            "regime",
+            "kobp",
+            "ask_replenish_warning",
+            "source"
+          ],
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "QuantitativeAlphaEngine",
+          "methods": [
+            "calculate_micro_price",
+            "calculate_5level_z_ofi",
+            "calculate_vpin_proxy",
+            "calculate_second_order_greeks",
+            "evaluate_machine_alpha"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 278
+        }
+      ],
+      "imports": [
+        {
+          "source": "math",
+          "specifiers": [
+            "math"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Dict",
+            "List",
+            "Optional",
+            "Tuple"
+          ]
+        }
+      ],
+      "exports": [
+        "norm_cdf",
+        "norm_pdf",
+        "QuantitativeAlphaState",
+        "QuantitativeAlphaEngine"
+      ],
+      "totalLines": 328,
+      "hasStructuralAnalysis": true
+    },
+    "ai/run_morning_ai_trader.sh": {
+      "filePath": "ai/run_morning_ai_trader.sh",
+      "contentHash": "cf4d01ca1016808fd0744c3dd1fbd88674772e0fc99a1108dbc1807d30539c7c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 88,
+      "hasStructuralAnalysis": true
+    },
+    "ai/runtime/cockpit_briefing.json": {
+      "filePath": "ai/runtime/cockpit_briefing.json",
+      "contentHash": "429b31dc25e7f318aa20c588e3e7731b6660d9d313f612bc0d0e9156c33434b6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 453,
+      "hasStructuralAnalysis": true
+    },
+    "ai/runtime/history_cache/HAL_25d_2026-11-25.json": {
+      "filePath": "ai/runtime/history_cache/HAL_25d_2026-11-25.json",
+      "contentHash": "36f99b336d02f67dc60ceee79d9334a101f3230fcb38cff186a9cba4d5a4fbbb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "ai/runtime/history_cache/HDFCBANK_25d_2026-11-25.json": {
+      "filePath": "ai/runtime/history_cache/HDFCBANK_25d_2026-11-25.json",
+      "contentHash": "7ba71785212eded8b8322bb9f71dd3ca40f9a3c968db6e7b81e976de44a24d37",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "ai/runtime/history_cache/ICICIBANK_25d_2026-11-25.json": {
+      "filePath": "ai/runtime/history_cache/ICICIBANK_25d_2026-11-25.json",
+      "contentHash": "afd04d52a4db24395191553fe5b813686d65e6f3ab63e3344bdefb535252793d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "ai/runtime/history_cache/INFY_25d_2026-11-25.json": {
+      "filePath": "ai/runtime/history_cache/INFY_25d_2026-11-25.json",
+      "contentHash": "41d75cc6a9a631c356a2aa3ffd11dde2df281a4f0009addb41cb13a08fe07afe",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "ai/runtime/history_cache/M&M_25d_2026-11-25.json": {
+      "filePath": "ai/runtime/history_cache/M&M_25d_2026-11-25.json",
+      "contentHash": "ee9718e886bfc6e889019a1c379142078531c1a4da29606fe4171fbc4ea524ad",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "ai/runtime/history_cache/NIFTY_25d_2026-11-25.json": {
+      "filePath": "ai/runtime/history_cache/NIFTY_25d_2026-11-25.json",
+      "contentHash": "ab11c6b542df0245a7aecbf75d8b8dcaafc4417335fc7fe0f574dd4d86e7b682",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "ai/runtime/history_cache/SBIN_25d_2026-11-25.json": {
+      "filePath": "ai/runtime/history_cache/SBIN_25d_2026-11-25.json",
+      "contentHash": "635e4263c84a5a3b3daa259d66748f5eab06fd71f24322a16beca888b1f9fbb9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "ai/runtime/history_cache/TATASTEEL_25d_2026-11-25.json": {
+      "filePath": "ai/runtime/history_cache/TATASTEEL_25d_2026-11-25.json",
+      "contentHash": "d7a0f5c7ce684d636731cb863b376bb642658a08a0ea16e09527e5303b862d5c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "ai/runtime/logic_test_report.json": {
+      "filePath": "ai/runtime/logic_test_report.json",
+      "contentHash": "fb3221993829159c7460749d1fca0021cf2f9b89f15490930cc8df3c89e86c12",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 164,
+      "hasStructuralAnalysis": true
+    },
+    "ai/runtime/oi_baseline_2026-11-25.json": {
+      "filePath": "ai/runtime/oi_baseline_2026-11-25.json",
+      "contentHash": "135e4443325e2f2526c4884b01a40573e3d8d6515bcf777019702f69b309125a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "ai/runtime/paper_ledger.db": {
+      "filePath": "ai/runtime/paper_ledger.db",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "ai/smart_edge.py": {
+      "filePath": "ai/smart_edge.py",
+      "contentHash": "40ece34255967f43c5220fb7974a493f7ab2e51d6385b9e79078f8a9caaf465c",
+      "functions": [
+        {
+          "name": "compute_wall_fragility",
+          "params": [
+            "wall_strike",
+            "wall_oi",
+            "wall_oi_change",
+            "spot",
+            "atr",
+            "is_call_wall"
+          ],
+          "returnType": "WallFragility",
+          "exported": true,
+          "lineCount": 51
+        },
+        {
+          "name": "compute_oi_herfindahl",
+          "params": [
+            "chain_data"
+          ],
+          "returnType": "Tuple[float, str]",
+          "exported": true,
+          "lineCount": 42
+        },
+        {
+          "name": "compute_iv_skew",
+          "params": [
+            "chain_data",
+            "spot",
+            "strike_step",
+            "dte_days"
+          ],
+          "returnType": "IVSkewSignal",
+          "exported": true,
+          "lineCount": 76
+        },
+        {
+          "name": "compute_straddle_compression",
+          "params": [
+            "atm_straddle_premium",
+            "spot",
+            "realized_vol_annual",
+            "dte_days"
+          ],
+          "returnType": "Tuple[float, str]",
+          "exported": true,
+          "lineCount": 30
+        },
+        {
+          "name": "compute_relative_volume",
+          "params": [
+            "current_volume",
+            "avg_volume_20d"
+          ],
+          "returnType": "Tuple[float, str]",
+          "exported": true,
+          "lineCount": 26
+        },
+        {
+          "name": "compute_ema_acceleration",
+          "params": [
+            "ema_20_series",
+            "atr"
+          ],
+          "returnType": "Tuple[float, str]",
+          "exported": true,
+          "lineCount": 36
+        },
+        {
+          "name": "compute_composite_edge",
+          "params": [
+            "call_wall_frag",
+            "put_wall_frag",
+            "oi_hhi",
+            "oi_regime",
+            "iv_skew",
+            "straddle_pct",
+            "straddle_regime",
+            "rvol",
+            "vol_regime",
+            "accel",
+            "accel_regime",
+            "is_ce",
+            "z_ofi",
+            "kobp",
+            "mc_pot_pct"
+          ],
+          "returnType": "Tuple[float, str, List[str]]",
+          "exported": true,
+          "lineCount": 132
+        },
+        {
+          "name": "evaluate_smart_edge",
+          "params": [
+            "symbol",
+            "spot",
+            "chain_data",
+            "strike_step",
+            "tech_indicators",
+            "quant_alpha",
+            "opt_analytics",
+            "mc_result",
+            "is_ce",
+            "current_volume",
+            "avg_volume_20d",
+            "dte_days"
+          ],
+          "returnType": "SmartEdgeResult",
+          "exported": true,
+          "lineCount": 96
+        }
+      ],
+      "classes": [
+        {
+          "name": "WallFragility",
+          "methods": [],
+          "properties": [
+            "wall_strike",
+            "wall_oi",
+            "wall_oi_change",
+            "fragility_score",
+            "status",
+            "breakout_probability"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "IVSkewSignal",
+          "methods": [],
+          "properties": [
+            "atm_iv",
+            "otm_put_iv",
+            "otm_call_iv",
+            "put_call_iv_skew",
+            "skew_regime"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "SmartEdgeResult",
+          "methods": [],
+          "properties": [
+            "symbol",
+            "spot",
+            "call_wall_fragility",
+            "put_wall_fragility",
+            "oi_herfindahl",
+            "oi_concentration_regime",
+            "iv_skew",
+            "straddle_premium_pct",
+            "straddle_regime",
+            "relative_volume",
+            "volume_regime",
+            "ema_20_acceleration",
+            "acceleration_regime",
+            "composite_edge_score",
+            "edge_verdict",
+            "edge_factors"
+          ],
+          "exported": true,
+          "lineCount": 32
+        }
+      ],
+      "imports": [
+        {
+          "source": "math",
+          "specifiers": [
+            "math"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Dict",
+            "List",
+            "Optional",
+            "Tuple"
+          ]
+        }
+      ],
+      "exports": [
+        "WallFragility",
+        "IVSkewSignal",
+        "SmartEdgeResult",
+        "compute_wall_fragility",
+        "compute_oi_herfindahl",
+        "compute_iv_skew",
+        "compute_straddle_compression",
+        "compute_relative_volume",
+        "compute_ema_acceleration",
+        "compute_composite_edge",
+        "evaluate_smart_edge"
+      ],
+      "totalLines": 587,
+      "hasStructuralAnalysis": true
+    },
+    "ai/strategy.yaml": {
+      "filePath": "ai/strategy.yaml",
+      "contentHash": "990beece7662011a2a8ff54ac5f20f831b97c5dba7fcb856d11f8db4ecb03fd4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 127,
+      "hasStructuralAnalysis": true
+    },
+    "ai/technical_lens.py": {
+      "filePath": "ai/technical_lens.py",
+      "contentHash": "5ba92070c0681159e8ae33d76781beff1fcd3d44e1ee94580e50584040ecc46e",
+      "functions": [],
+      "classes": [
+        {
+          "name": "TechnicalIndicators",
+          "methods": [],
+          "properties": [
+            "symbol",
+            "current_price",
+            "vwap",
+            "ema_9",
+            "ema_40",
+            "vwap_distance_pct",
+            "ema_spread_pct",
+            "trend_regime",
+            "is_above_vwap",
+            "is_golden_ema_cross",
+            "is_overextended",
+            "technical_conviction",
+            "ema_20",
+            "is_triple_ribbon_bull",
+            "is_triple_ribbon_bear",
+            "atr_5m",
+            "atr_pct",
+            "realized_vol_annual",
+            "z_vwap",
+            "ribbon_spread_atr",
+            "ema_20_slope_atr",
+            "ema_20_series"
+          ],
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "MarketLensBreadth",
+          "methods": [],
+          "properties": [
+            "advances",
+            "declines",
+            "unchanged",
+            "ad_ratio",
+            "market_breadth_sentiment",
+            "top_turnover_sectors",
+            "volume_shockers",
+            "source"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "TechnicalLensEngine",
+          "methods": [
+            "calculate_ema",
+            "calculate_ema_series",
+            "calculate_atr_and_vol",
+            "calculate_vwap",
+            "analyze_technicals",
+            "compute_live_market_lens_breadth",
+            "get_market_lens_breadth",
+            "synthesize_super_setup"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 383
+        }
+      ],
+      "imports": [
+        {
+          "source": "math",
+          "specifiers": [
+            "math"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Dict",
+            "List",
+            "Optional",
+            "Tuple"
+          ]
+        }
+      ],
+      "exports": [
+        "TechnicalIndicators",
+        "MarketLensBreadth",
+        "TechnicalLensEngine"
+      ],
+      "totalLines": 438,
+      "hasStructuralAnalysis": true
+    },
+    "ai/test_ai_agent.py": {
+      "filePath": "ai/test_ai_agent.py",
+      "contentHash": "fba9c487cf8312eb73f027be5d6c9ef42bd32b521c818c02d3ef96ef1867ecc5",
+      "functions": [
+        {
+          "name": "test_max_pain_calculation",
+          "params": [],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "test_nuvama_analytics_walls_and_pcr",
+          "params": [],
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "test_indian_friction_calculation",
+          "params": [],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "test_paper_ledger_lifecycle",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 39
+        },
+        {
+          "name": "test_midcpnifty_analytics_and_sizing",
+          "params": [],
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "test_greeks_and_gex_calculation",
+          "params": [],
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "test_mcp_server_tools",
+          "params": [],
+          "exported": true,
+          "lineCount": 30
+        },
+        {
+          "name": "test_ai_is_strictly_self_contained",
+          "params": [],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "test_gpu_engine_acceleration",
+          "params": [],
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "test_20_ema_triple_ribbon_and_fail_closed_history",
+          "params": [],
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "test_live_mode_fails_closed_without_synthetic_bump",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 37
+        },
+        {
+          "name": "test_connector_bridge_and_book_telemetry",
+          "params": [],
+          "exported": true,
+          "lineCount": 35
+        },
+        {
+          "name": "test_cio_clock_enter_trail_and_partial_book",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 46
+        },
+        {
+          "name": "test_logic_tester_regimes_and_simulation",
+          "params": [],
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "test_smart_edge_wall_fragility_and_composite",
+          "params": [],
+          "exported": true,
+          "lineCount": 73
+        },
+        {
+          "name": "test_ema_acceleration_reversing_reachable",
+          "params": [],
+          "exported": true,
+          "lineCount": 33
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "options_analytics",
+          "specifiers": [
+            "OptionStrikeData",
+            "NuvamaOptionsEngine"
+          ]
+        },
+        {
+          "source": "greeks_gex",
+          "specifiers": [
+            "GreeksGexEngine"
+          ]
+        },
+        {
+          "source": "paper_ledger",
+          "specifiers": [
+            "AIPaperLedger"
+          ]
+        }
+      ],
+      "exports": [
+        "test_max_pain_calculation",
+        "test_nuvama_analytics_walls_and_pcr",
+        "test_indian_friction_calculation",
+        "test_paper_ledger_lifecycle",
+        "test_midcpnifty_analytics_and_sizing",
+        "test_greeks_and_gex_calculation",
+        "test_mcp_server_tools",
+        "test_ai_is_strictly_self_contained",
+        "test_gpu_engine_acceleration",
+        "test_20_ema_triple_ribbon_and_fail_closed_history",
+        "test_live_mode_fails_closed_without_synthetic_bump",
+        "test_connector_bridge_and_book_telemetry",
+        "test_cio_clock_enter_trail_and_partial_book",
+        "test_logic_tester_regimes_and_simulation",
+        "test_smart_edge_wall_fragility_and_composite",
+        "test_ema_acceleration_reversing_reachable"
+      ],
+      "totalLines": 470,
+      "hasStructuralAnalysis": true
+    },
+    "connector/__init__.py": {
+      "filePath": "connector/__init__.py",
+      "contentHash": "d4a146e2dff1993ee0cb79f70c19e99aa6c5505abc6662cc39ca04636c45744d",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": ".smart_trading_bridge",
+          "specifiers": [
+            "SmartTradingBridge"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 6,
+      "hasStructuralAnalysis": true
+    },
+    "connector/smart_trading_bridge.py": {
+      "filePath": "connector/smart_trading_bridge.py",
+      "contentHash": "9d6910e148d65c11f0b95409d12eb06949045f024deba0eb73078c2e2e99405a",
+      "functions": [
+        {
+          "name": "resolve_smart_trading_root",
+          "params": [],
+          "returnType": "Optional[Path]",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "_is_tcp_listening",
+          "params": [
+            "host",
+            "port",
+            "timeout"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "_http_get_json",
+          "params": [
+            "url",
+            "timeout"
+          ],
+          "returnType": "Optional[Dict[str, Any]]",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "compute_book_telemetry",
+          "params": [
+            "spot_or_mid",
+            "bid_depth",
+            "ask_depth",
+            "prev_bid_depth",
+            "prev_ask_depth",
+            "lot_size"
+          ],
+          "returnType": "Dict[str, Any]",
+          "exported": true,
+          "lineCount": 101
+        }
+      ],
+      "classes": [
+        {
+          "name": "SmartTradingBridge",
+          "methods": [
+            "__init__",
+            "get_session_credentials",
+            "get_instruments_path",
+            "get_http_telemetry",
+            "read_shm_ltp_cache",
+            "sample_zmq_alerts",
+            "_latest_by_date_dir",
+            "read_nse_premarket_and_oi",
+            "get_active_external_positions",
+            "extract_underlying_from_ticker",
+            "get_archived_tick_dbs",
+            "read_latest_decision_journal",
+            "get_unified_desk_context"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 472
+        }
+      ],
+      "imports": [
+        {
+          "source": "csv",
+          "specifiers": [
+            "csv"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "math",
+          "specifiers": [
+            "math"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "socket",
+          "specifiers": [
+            "socket"
+          ]
+        },
+        {
+          "source": "sqlite3",
+          "specifiers": [
+            "sqlite3"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "urllib.request",
+          "specifiers": [
+            "urllib.request"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "Dict",
+            "List",
+            "Optional",
+            "Set",
+            "Tuple"
+          ]
+        },
+        {
+          "source": "zoneinfo",
+          "specifiers": [
+            "ZoneInfo"
+          ]
+        }
+      ],
+      "exports": [
+        "resolve_smart_trading_root",
+        "_is_tcp_listening",
+        "_http_get_json",
+        "compute_book_telemetry",
+        "SmartTradingBridge"
+      ],
+      "totalLines": 639,
+      "hasStructuralAnalysis": true
+    }
+  }
+}

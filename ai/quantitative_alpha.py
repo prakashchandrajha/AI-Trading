@@ -42,6 +42,9 @@ class QuantitativeAlphaState:
     z_ofi: float = 0.0                   # Dimensionless lot-normalized 5-level rolling Z-score
     vpin_proxy: float = 0.0              # Bounded [-1, +1] executed-volume toxicity
     regime: str = "REGIME_A"             # V3.0-APEX multi-regime tag
+    kobp: float = 0.0
+    ask_replenish_warning: bool = False
+    source: str = "OFFLINE_SYNTHETIC"
 
 
 class QuantitativeAlphaEngine:
@@ -179,96 +182,127 @@ class QuantitativeAlphaEngine:
         net_oi_velocity_15m: float,
         is_bullish_bias: bool = True,
         iv_slope_pct: float = 0.02,
+        bid_depth: Optional[List[Tuple[float, int]]] = None,
+        ask_depth: Optional[List[Tuple[float, int]]] = None,
+        prev_bid_depth: Optional[List[Tuple[float, int]]] = None,
+        prev_ask_depth: Optional[List[Tuple[float, int]]] = None,
+        dte: float = 2.0,
+        require_real_depth: bool = False,
     ) -> QuantitativeAlphaState:
         """
-        Synthesizes the complete Machine-Level Alpha State for an F&O instrument
-        using V3.0-APEX dimensionless microstructure and Greek feedback loops.
+        Synthesizes Machine-Level Alpha State.
+        Uses genuine 5-level L2 depth when provided (`source='LIVE_L2_DEPTH'`),
+        fails closed (`DEPTH_UNAVAILABLE`) if `require_real_depth=True` and depth is empty,
+        or uses offline synthetic fixtures (`source='OFFLINE_SYNTHETIC'`) when `require_real_depth=False`.
         """
-        spread = max(0.05, round(spot_price * 0.0003, 2))
-        best_bid = spot_price - spread / 2.0
-        best_ask = spot_price + spread / 2.0
+        if bid_depth and ask_depth:
+            import sys
+            from pathlib import Path
+            root_dir = str(Path(__file__).resolve().parent.parent)
+            if root_dir not in sys.path:
+                sys.path.insert(0, root_dir)
+            from connector.smart_trading_bridge import compute_book_telemetry
 
-        if is_bullish_bias:
-            bid_vol = 75000
-            ask_vol = 28000
-            ofi_vel = abs(net_oi_velocity_15m) * 0.65
-            ofi_acc = 1420.0
-            toxicity = 86.5
-            ignition = 91.0
-            z_ofi = 2.85
-            vpin = 0.46
-            # 5-level mock depth
-            bid_depth = [(best_bid - i * 0.05, int(bid_vol * w)) for i, w in enumerate([0.40, 0.25, 0.15, 0.12, 0.08])]
-            ask_depth = [(best_ask + i * 0.05, int(ask_vol * w)) for i, w in enumerate([0.40, 0.25, 0.15, 0.12, 0.08])]
+            book = compute_book_telemetry(
+                spot_or_mid=spot_price,
+                bid_depth=bid_depth,
+                ask_depth=ask_depth,
+                prev_bid_depth=prev_bid_depth,
+                prev_ask_depth=prev_ask_depth,
+                lot_size=max(1, lot_size),
+            )
+            p_micro = float(book["micro_price"])
+            micro_edge = float(book["micro_lead"])
+            bid_vol = int(book["bid_vol_5l"])
+            ask_vol = int(book["ask_vol_5l"])
+            tot_v = max(1, bid_vol + ask_vol)
+            queue_ratio = round((bid_vol - ask_vol) / tot_v, 3)
+            z_ofi = float(book["z_ofi"])
+            kobp = float(book["kobp"])
+            ask_warn = bool(book["ask_replenish_warning"])
+            vpin = cls.calculate_vpin_proxy(bid_vol, ask_vol)
+            ofi_vel = round(net_oi_velocity_15m * 0.65, 2)
+            ofi_acc = round(z_ofi * 400.0, 1)
+            toxicity = round(min(100.0, max(5.0, abs(vpin) * 100.0 + abs(kobp) * 35.0)), 1)
+            ignition = round(min(100.0, max(5.0, (abs(z_ofi) / 4.0) * 70.0 + abs(kobp) * 30.0)), 1)
+            source = "LIVE_L2_DEPTH"
+        elif require_real_depth:
+            p_micro, queue_ratio, micro_edge = spot_price, 0.0, 0.0
+            bid_vol, ask_vol, z_ofi, kobp, ask_warn = 0, 0, 0.0, 0.0, False
+            vpin, ofi_vel, ofi_acc, toxicity, ignition = 0.0, 0.0, 0.0, 0.0, 0.0
+            source = "DEPTH_UNAVAILABLE"
         else:
-            bid_vol = 32000
-            ask_vol = 68000
-            ofi_vel = -abs(net_oi_velocity_15m) * 0.65
-            ofi_acc = -950.0
-            toxicity = 45.0
-            ignition = 25.0
-            z_ofi = -2.45
-            vpin = -0.38
-            bid_depth = [(best_bid - i * 0.05, int(bid_vol * w)) for i, w in enumerate([0.40, 0.25, 0.15, 0.12, 0.08])]
-            ask_depth = [(best_ask + i * 0.05, int(ask_vol * w)) for i, w in enumerate([0.40, 0.25, 0.15, 0.12, 0.08])]
+            spread = max(0.05, round(spot_price * 0.0003, 2))
+            best_bid = spot_price - spread / 2.0
+            best_ask = spot_price + spread / 2.0
+            if is_bullish_bias:
+                bid_vol, ask_vol = 75000, 28000
+                ofi_vel = abs(net_oi_velocity_15m) * 0.65
+                ofi_acc, toxicity, ignition = 1420.0, 86.5, 91.0
+                z_ofi, vpin = 2.85, 0.46
+            else:
+                bid_vol, ask_vol = 32000, 68000
+                ofi_vel = -abs(net_oi_velocity_15m) * 0.65
+                ofi_acc, toxicity, ignition = -950.0, 45.0, 25.0
+                z_ofi, vpin = -2.45, -0.38
+            p_micro, queue_ratio = cls.calculate_micro_price(best_bid, best_ask, bid_vol, ask_vol)
+            micro_edge = round(p_micro - spot_price, 2)
+            kobp = queue_ratio
+            ask_warn = False
+            source = "OFFLINE_SYNTHETIC"
 
-        p_micro, queue_ratio = cls.calculate_micro_price(best_bid, best_ask, bid_vol, ask_vol)
-        micro_edge = round(p_micro - spot_price, 2)
-
-        # 2. Second-Order Greeks (Vanna & Charm)
-        atm_strike = round(spot_price / strike_step) * strike_step
+        atm_strike = round(spot_price / max(0.5, strike_step)) * max(0.5, strike_step)
         vanna_cr, charm_cr = cls.calculate_second_order_greeks(
             spot=spot_price,
             strike=atm_strike,
-            dte=2.0,
+            dte=max(0.15, dte),
             iv=0.16,
             call_oi=call_oi_atm,
             put_oi=put_oi_atm,
             lot_size=lot_size,
         )
 
-        # 3. Machine Signal Determination (V3.0-APEX Dimensionless + IV-Disambiguated Matrix)
-        if z_ofi > 2.2 and vpin >= 0.35:
+        if ask_warn and z_ofi < 1.5:
+            signal = "CALL_WRITING_TRAP"
+            regime = "REGIME_D"
+            advantage = (
+                f"Passive Ask Iceberg/Replenishment wall detected (KOBP {kobp:+.2f}, "
+                f"Ask5L {ask_vol:,} > Bid5L {bid_vol:,}). Standing aside against absorption."
+            )
+        elif z_ofi > 2.2 and vpin >= 0.35:
             if net_oi_velocity_15m < 0:
                 signal = "SHORT_COVERING_SQUEEZE"
                 regime = "REGIME_A"
                 advantage = (
-                    f"Z_OFI ({z_ofi:+.2f}) & VPIN ({vpin:+.2f}) confirm rapid Call Writer Unwinding. "
-                    f"Micro-price leads spot by {micro_edge:+.2f} pts. Highest-conviction bullish gamma expansion."
+                    f"Z_OFI ({z_ofi:+.2f}) & VPIN ({vpin:+.2f}) confirm Call Writer Unwinding. "
+                    f"Micro-price leads spot by {micro_edge:+.2f} pts."
                 )
             elif iv_slope_pct >= 0:
                 signal = "AGGRESSIVE_CALL_ACCUMULATION"
                 regime = "REGIME_A"
                 advantage = (
-                    f"Z_OFI ({z_ofi:+.2f}) & VPIN ({vpin:+.2f}) with rising IV (+{iv_slope_pct*100:.1f}%) "
-                    f"confirm institutional sweep of ask queues. Captures entry before lagging 9/40 EMA crossover!"
+                    f"Z_OFI ({z_ofi:+.2f}) & VPIN ({vpin:+.2f}) confirm sweep of ask queues."
                 )
             else:
                 signal = "CALL_WRITING_TRAP"
                 regime = "REGIME_D"
-                advantage = (
-                    f"Spot rising into Call Wall but falling IV indicates Call Writing absorption. "
-                    f"Hard VETO on Long Calls to prevent retail bull-trap loss."
-                )
+                advantage = "Spot rising with falling IV signals passive Call writing absorption."
         elif z_ofi < -2.2 and vpin <= -0.35:
             signal = "PUT_LIQUIDATION_CASCADE"
             regime = "REGIME_C"
-            advantage = (
-                f"Negative Z_OFI ({z_ofi:+.2f}) & negative VPIN ({vpin:+.2f}) front-running breakdown. "
-                f"Symmetric Long Put / Bear Spread execution monetizes Delta drop + expanding Vega."
-            )
-        elif queue_ratio > 0.15:
+            advantage = f"Negative Z_OFI ({z_ofi:+.2f}) & VPIN ({vpin:+.2f}) driving downside expansion."
+        elif queue_ratio > 0.15 or kobp > 0.25:
             signal = "DEALER_SQUEEZE_LONG"
             regime = "REGIME_A"
-            advantage = "Dealer Charm & Vanna flows forcing automated delta replenishment."
-        elif queue_ratio < -0.35:
+            advantage = f"Bid book dominance (Queue {queue_ratio:+.2f}, KOBP {kobp:+.2f}) supporting buyers."
+        elif queue_ratio < -0.35 or kobp < -0.35:
             signal = "TOXIC_LIQUIDATION_SHORT"
             regime = "REGIME_C"
-            advantage = "Asymmetric ask pressure & negative OFI acceleration front-running price drop."
+            advantage = f"Heavy Ask overhang (Queue {queue_ratio:+.2f}, KOBP {kobp:+.2f}) pressuring price."
         else:
             signal = "NEUTRAL_STAND_ASIDE"
             regime = "REGIME_D"
-            advantage = "Order book in balanced absorption. Machine stands flat in cash to avoid friction."
+            advantage = "Order book balanced. Stand flat to avoid spread/theta bleed."
 
         return QuantitativeAlphaState(
             symbol=symbol.upper(),
@@ -287,4 +321,7 @@ class QuantitativeAlphaEngine:
             z_ofi=z_ofi,
             vpin_proxy=vpin,
             regime=regime,
+            kobp=kobp,
+            ask_replenish_warning=ask_warn,
+            source=source,
         )

@@ -1,0 +1,2980 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 3,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "ai/runtime/cockpit_briefing.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 453,
+      "nonEmptyLines": 453,
+      "sections": [
+        {
+          "heading": "clock",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "capital",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "macro",
+          "level": 1,
+          "line": 16
+        },
+        {
+          "heading": "desk_connector",
+          "level": 1,
+          "line": 49
+        },
+        {
+          "heading": "logic_test_context",
+          "level": 1,
+          "line": 89
+        },
+        {
+          "heading": "active_positions",
+          "level": 1,
+          "line": 110
+        },
+        {
+          "heading": "screened_count",
+          "level": 1,
+          "line": 111
+        },
+        {
+          "heading": "universe_scanned_stage1",
+          "level": 1,
+          "line": 112
+        },
+        {
+          "heading": "veto_summary",
+          "level": 1,
+          "line": 113
+        },
+        {
+          "heading": "top_candidates",
+          "level": 1,
+          "line": 116
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 10
+      }
+    },
+    {
+      "path": "ai/runtime/logic_test_report.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 164,
+      "nonEmptyLines": 164,
+      "sections": [
+        {
+          "heading": "generated_at_ist",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "days_tested",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "symbols_tested",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "core_ribbon_vwap",
+          "level": 1,
+          "line": 14
+        },
+        {
+          "heading": "causal_expansion_ribbon",
+          "level": 1,
+          "line": 23
+        },
+        {
+          "heading": "by_regime",
+          "level": 1,
+          "line": 32
+        },
+        {
+          "heading": "causal_by_regime",
+          "level": 1,
+          "line": 61
+        },
+        {
+          "heading": "late_entry_1445_1510_stress",
+          "level": 1,
+          "line": 90
+        },
+        {
+          "heading": "random_null_baseline",
+          "level": 1,
+          "line": 99
+        },
+        {
+          "heading": "perturbation_sensitivity",
+          "level": 1,
+          "line": 108
+        },
+        {
+          "heading": "anti_curve_fit_verdict",
+          "level": 1,
+          "line": 137
+        },
+        {
+          "heading": "archived_l2_tick_spreads",
+          "level": 1,
+          "line": 138
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 12
+      }
+    },
+    {
+      "path": "ai/runtime/oi_baseline_2026-11-25.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "sections": [
+        {
+          "heading": "HDFCBANK26DEC790CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC790PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC800CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC800PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC810CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC810PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC820CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC820PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC830CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC830PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC840CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC840PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC850CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC850PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC860CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC860PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC870CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC870PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC880CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC880PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC890CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC890PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC900CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC900PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCBANK26DEC910CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1580CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1580PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1590CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1590PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1600CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1600PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1610CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1610PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1620CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1620PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1630CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1630PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1640CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1640PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1650CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1650PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1660CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1660PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1670CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1670PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1680CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1680PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1690CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1690PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1700CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ICICIBANK26DEC1700PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4650CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4650PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4700CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4700PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4750CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4750PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4800CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4800PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4850CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4850PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4900CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4900PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4950CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC4950PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC5000CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC5000PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC5050CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC5050PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC5100CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC5100PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC5150CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC5150PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC5200CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC5200PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HAL26DEC5250CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC295CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC295PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC297.5CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC297.5PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC300CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC300PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC302.5CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC302.5PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC305CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC305PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC307.5CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC307.5PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC310CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC310PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC312.5CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC312.5PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC315CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC315PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC317.5CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC317.5PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC320CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC320PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC322.5CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC322.5PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC325CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ITC26DEC325PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1074CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1074PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1080CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1080PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1094CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1094PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1100CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1100PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1114CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1114PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1120CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1120PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1134CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1134PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1140CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1140PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1154CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1154PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1160CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1160PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1174CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1174PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1180CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1180PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1194CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "INFY26DEC1194PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1370CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1370PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1380CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1380PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1390CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1390PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1400CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1400PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1410CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1410PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1420CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1420PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1430CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1430PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1440CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1440PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1450CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1450PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1460CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1460PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1470CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1480CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1480PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "CIPLA26DEC1490CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2400CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2400PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2420CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2420PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2440CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2440PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2460CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2460PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2480CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2480PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2500CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2500PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2520CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2520PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2540CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2540PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2560CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2560PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2580CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2580PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2600CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2600PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2620CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2620PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2640CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TCS26DEC2640PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC145CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC145PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC147.5CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC147.5PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC150CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC150PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC152.5CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC152.5PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC155CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC155PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC157.5CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC157.5PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC160CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC160PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC162.5CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC162.5PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC165CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC165PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC167.5CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC167.5PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC170CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC170PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC172.5CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC172.5PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC175CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "TATASTEEL26DEC175PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1780CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1780PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1800CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1800PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1820CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1820PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1840CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1840PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1860CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1860PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1880CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1880PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1900CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1900PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1920CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1920PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1940CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1940PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1960CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1960PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1980CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC1980PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC2000CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC2000PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC2020CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "SUNPHARMA26DEC2020PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC375CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC375PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC380CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC380PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC385CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC385PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC390CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC390PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC395CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC395PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC400CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC400PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC405CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC405PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC410CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC410PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC415CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC415PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC420CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC420PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC425CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC425PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC430CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC430PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BEL26DEC435CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125500CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125500PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125550CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125550PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125600CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125600PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125650CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125650PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125700CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125700PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125750CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125750PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125800CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125800PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125850CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125850PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125900CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125900PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125950CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0125950PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0126000CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0126000PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0126050CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0126050PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0126100CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "NIFTY26D0126100PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1310CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1310PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1320CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1320PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1330CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1330PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1340CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1340PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1350CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1350PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1360CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1360PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1370CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1370PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1380CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1380PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1390CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1390PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1400CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1400PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1410CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1410PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1420CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1420PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1430CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "RELIANCE26DEC1430PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1360CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1360PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1400CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1400PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1440CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1440PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1460CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1460PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1480CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1480PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1500CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1500PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1520CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1520PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1540CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1540PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1560CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1560PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1580CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1580PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1600CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1600PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1620CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1620PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1640CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "APLAPOLLO26DEC1640PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC390CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC390PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC395CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC395PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC400CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC400PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC405CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC405PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC410CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC410PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC415CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC415PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC420CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC420PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC425CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC425PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC430CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC430PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC435CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC435PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC440CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC440PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC450CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC450PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC460CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DABUR26DEC460PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2020CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2020PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2040CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2040PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2060CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2060PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2080CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2080PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2100CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2100PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2120CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2120PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2140CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2140PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2160CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2160PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2180CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2180PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2200CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2200PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2220CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2240CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2240PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2260CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HINDUNILVR26DEC2260PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1760CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1760PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1780CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1780PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1800CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1800PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1820PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1840CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1840PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1860CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1860PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1880CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1880PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1900CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1900PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1920CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1920PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1940CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1940PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1960CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1960PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1980CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC1980PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC2000CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "ATHERENERG26DEC2000PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3300CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3300PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3350CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3350PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3400CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3400PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3450CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3450PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3500CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3500PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3550CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3550PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3600CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3600PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3650CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3650PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3700CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3700PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3750CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3800CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3800PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3850CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3850PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3900CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DMART26DEC3900PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC900CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC900PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC910CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC910PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC920CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC920PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC930CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC930PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC940CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC940PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC950CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC950PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC960CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC960PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC970CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC970PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC980CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC980PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC990CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC990PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC1000CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC1000PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC1010CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC1010PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC1020CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "GODREJCP26DEC1020PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11100CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11100PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11200CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11200PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11300CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11300PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11400CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11400PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11500CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11500PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11600CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11600PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11700CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11700PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11800CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11800PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11900CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC11900PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC12000CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC12000PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC12100CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC12100PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC12200CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC12200PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC12300CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "DIVISLAB26DEC12300PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC4800CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC4800PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC4850CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC4850PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC4900CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC4900PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC4950CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC4950PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5000CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5000PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5050CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5050PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5100CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5100PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5150CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5150PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5200CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5200PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5250CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5250PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5300CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5300PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5350CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5350PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5400CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "BRITANNIA26DEC5400PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC570CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC570PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC575CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC575PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC580CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC580PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC585CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC585PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC590CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC590PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC595CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC595PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC600CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC600PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC605CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC605PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC610CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC610PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC615CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC615PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC620CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC620PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC625CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC625PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC630CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HDFCLIFE26DEC630PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1260CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1260PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1280CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1280PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1300CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1300PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1320CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1320PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1340CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1340PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1360CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1360PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1380CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1380PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1400CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1400PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1420CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1420PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1440CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1440PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1460CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1460PE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1480CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1500CE",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "HCLTECH26DEC1500PE",
+          "level": 1,
+          "line": 1
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 563
+      }
+    }
+  ]
+}

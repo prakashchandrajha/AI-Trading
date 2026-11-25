@@ -1,0 +1,3315 @@
+{
+  "nodes": [
+    {
+      "id": "file:ai/agent_trader.py",
+      "type": "file",
+      "name": "agent_trader.py",
+      "filePath": "ai/agent_trader.py",
+      "summary": "CLI and runtime authority layer for analytics scans, CIO-authorized paper entries and management, background guardians, legacy autonomous loop, and end-of-day safety actions.",
+      "tags": [
+        "trading-workflow",
+        "paper-trading",
+        "risk-controls",
+        "cli",
+        "tested"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:ai/agent_trader.py:AIAgentTrader",
+      "type": "class",
+      "name": "AIAgentTrader",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        39,
+        710
+      ],
+      "summary": "Combines live feeds and analytics into a legacy rule-driven trading cycle that can manage existing positions and, in its automatic path, open a paper trade.",
+      "tags": [
+        "trading-agent",
+        "legacy-autonomy",
+        "market-analysis",
+        "paper-trading"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:ai/agent_trader.py:_TeeStream",
+      "type": "class",
+      "name": "_TeeStream",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        1109,
+        1124
+      ],
+      "summary": "Mirrors guardian and autonomous-loop console output to the persistent agent log.",
+      "tags": [
+        "logging",
+        "runtime",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/agent_trader.py:square_off_all_positions",
+      "type": "function",
+      "name": "square_off_all_positions",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        713,
+        763
+      ],
+      "summary": "Closes all tracked paper positions at live marks for the mandatory end-of-day cash rule.",
+      "tags": [
+        "risk-controls",
+        "position-management",
+        "eod-safety"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/agent_trader.py:inspect_the_generals",
+      "type": "function",
+      "name": "inspect_the_generals",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        776,
+        814
+      ],
+      "summary": "Reports weighted macro alignment from the major index constituents.",
+      "tags": [
+        "market-analysis",
+        "macro",
+        "decision-support"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/agent_trader.py:scan_sector_heatmap",
+      "type": "function",
+      "name": "scan_sector_heatmap",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        817,
+        863
+      ],
+      "summary": "Produces a sector-strength view for selecting possible discretionary candidates.",
+      "tags": [
+        "market-analysis",
+        "sector-rotation",
+        "decision-support"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/agent_trader.py:scan_fo_universe",
+      "type": "function",
+      "name": "scan_fo_universe",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        866,
+        904
+      ],
+      "summary": "Scans the F&O universe for liquid tradable candidates and setup evidence.",
+      "tags": [
+        "market-analysis",
+        "universe-scan",
+        "options"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/agent_trader.py:scan_machine_radar",
+      "type": "function",
+      "name": "scan_machine_radar",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        907,
+        971
+      ],
+      "summary": "Ranks symbols with machine-level market-structure telemetry for CIO review.",
+      "tags": [
+        "market-analysis",
+        "microstructure",
+        "decision-support"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/agent_trader.py:scan_super_setups",
+      "type": "function",
+      "name": "scan_super_setups",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        974,
+        1042
+      ],
+      "summary": "Aggregates technical and option evidence into a ranked setup display without requiring it to be acted upon.",
+      "tags": [
+        "market-analysis",
+        "ranking",
+        "decision-support"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/agent_trader.py:scan_quant_physics",
+      "type": "function",
+      "name": "scan_quant_physics",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        1045,
+        1106
+      ],
+      "summary": "Displays quantitative flow, volatility, and option-physics diagnostics for a candidate.",
+      "tags": [
+        "quantitative-analysis",
+        "options",
+        "decision-support"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/agent_trader.py:run_autonomous_loop",
+      "type": "function",
+      "name": "run_autonomous_loop",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        1127,
+        1283
+      ],
+      "summary": "Legacy background loop that scans the universe and can autonomously open or manage paper trades from deterministic signals.",
+      "tags": [
+        "legacy-autonomy",
+        "paper-trading",
+        "authority-boundary",
+        "risk-controls"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai/agent_trader.py:cio_enter_trade",
+      "type": "function",
+      "name": "cio_enter_trade",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        1290,
+        1415
+      ],
+      "summary": "Executes an external CIO's explicit paper-entry decision after checking thesis, clock, live quote, spread, collision, ban, capacity, cash, and risk constraints.",
+      "tags": [
+        "cio-authority",
+        "paper-trading",
+        "validation",
+        "risk-controls"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai/agent_trader.py:cio_manage_trade",
+      "type": "function",
+      "name": "cio_manage_trade",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        1418,
+        1492
+      ],
+      "summary": "Applies an external CIO's explicit trailing-stop, partial-booking, or exit decision to an open paper position.",
+      "tags": [
+        "cio-authority",
+        "position-management",
+        "paper-trading",
+        "audit-trail"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/agent_trader.py:run_guardian_loop",
+      "type": "function",
+      "name": "run_guardian_loop",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        1495,
+        1594
+      ],
+      "summary": "Refreshes the cockpit and performs only emergency stop-loss or 15:15 IST exits; it intentionally does not open or discretionarily manage trades.",
+      "tags": [
+        "guardian",
+        "risk-controls",
+        "cockpit",
+        "authority-boundary"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai/agent_trader.py:print_session_status",
+      "type": "function",
+      "name": "print_session_status",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        1597,
+        1644
+      ],
+      "summary": "Reports live and legacy ledger status, open positions, and daily paper-trading performance.",
+      "tags": [
+        "reporting",
+        "paper-trading",
+        "runtime"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/agent_trader.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "ai/agent_trader.py",
+      "lineRange": [
+        1647,
+        1777
+      ],
+      "summary": "Parses CLI commands and routes them to cockpit, CIO, guardian, logic-test, legacy autonomous, and reporting workflows.",
+      "tags": [
+        "cli",
+        "entry-point",
+        "trading-workflow",
+        "authority-boundary"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:ai/greeks_gex.py",
+      "type": "file",
+      "name": "greeks_gex.py",
+      "filePath": "ai/greeks_gex.py",
+      "summary": "Calculates option Greeks, gamma exposure, pinning and squeeze regimes that inform but do not authorize trade decisions.",
+      "tags": [
+        "options",
+        "greeks",
+        "gamma-exposure",
+        "decision-support",
+        "tested"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:ai/greeks_gex.py:OptionGreeks",
+      "type": "class",
+      "name": "OptionGreeks",
+      "filePath": "ai/greeks_gex.py",
+      "lineRange": [
+        30,
+        38
+      ],
+      "summary": "Structured option-Greeks result used by frontier analytics.",
+      "tags": [
+        "data-model",
+        "options",
+        "greeks"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ai/greeks_gex.py:FrontierAnalysisResult",
+      "type": "class",
+      "name": "FrontierAnalysisResult",
+      "filePath": "ai/greeks_gex.py",
+      "lineRange": [
+        42,
+        54
+      ],
+      "summary": "Structured gamma-landscape and volatility-regime result used by the cockpit.",
+      "tags": [
+        "data-model",
+        "gamma-exposure",
+        "market-regime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ai/greeks_gex.py:FrontierAnalyticsEngine",
+      "type": "class",
+      "name": "FrontierAnalyticsEngine",
+      "filePath": "ai/greeks_gex.py",
+      "lineRange": [
+        57,
+        260
+      ],
+      "summary": "Evaluates Black-Scholes Greeks and option-chain gamma exposure to classify pinning or short-gamma regimes.",
+      "tags": [
+        "options",
+        "greeks",
+        "gamma-exposure",
+        "analytics-engine"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:ai/mcp_server.py",
+      "type": "file",
+      "name": "mcp_server.py",
+      "filePath": "ai/mcp_server.py",
+      "summary": "MCP tool surface exposing analytics, the cockpit, portfolio state, and paper-trading actions to an external agent.",
+      "tags": [
+        "mcp",
+        "tool-api",
+        "paper-trading",
+        "decision-support"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai/mcp_server.py:analyze_options",
+      "type": "function",
+      "name": "analyze_options",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        29,
+        55
+      ],
+      "summary": "Returns option-wall, PCR, and recommendation analytics for a requested symbol.",
+      "tags": [
+        "mcp",
+        "options",
+        "market-analysis"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/mcp_server.py:get_gex_and_greeks",
+      "type": "function",
+      "name": "get_gex_and_greeks",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        59,
+        84
+      ],
+      "summary": "Returns gamma-exposure and Greeks analysis to the external CIO agent.",
+      "tags": [
+        "mcp",
+        "greeks",
+        "gamma-exposure"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/mcp_server.py:check_generals_alignment",
+      "type": "function",
+      "name": "check_generals_alignment",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        88,
+        141
+      ],
+      "summary": "Exposes major-constituent directional alignment as discretionary market context.",
+      "tags": [
+        "mcp",
+        "macro",
+        "market-analysis"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/mcp_server.py:scan_fo_breakouts",
+      "type": "function",
+      "name": "scan_fo_breakouts",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        145,
+        172
+      ],
+      "summary": "Exposes F&O breakout candidates for external review.",
+      "tags": [
+        "mcp",
+        "universe-scan",
+        "market-analysis"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/mcp_server.py:get_sector_heatmap",
+      "type": "function",
+      "name": "get_sector_heatmap",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        176,
+        221
+      ],
+      "summary": "Exposes sector leadership and rotation context.",
+      "tags": [
+        "mcp",
+        "sector-rotation",
+        "market-analysis"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/mcp_server.py:get_market_lens_breadth",
+      "type": "function",
+      "name": "get_market_lens_breadth",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        225,
+        239
+      ],
+      "summary": "Exposes market breadth and related lens metrics.",
+      "tags": [
+        "mcp",
+        "market-breadth",
+        "market-analysis"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/mcp_server.py:evaluate_super_setup",
+      "type": "function",
+      "name": "evaluate_super_setup",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        243,
+        269
+      ],
+      "summary": "Builds composite setup evidence for a symbol without making the final trade decision.",
+      "tags": [
+        "mcp",
+        "market-analysis",
+        "decision-support"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/mcp_server.py:execute_paper_order",
+      "type": "function",
+      "name": "execute_paper_order",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        273,
+        310
+      ],
+      "summary": "Legacy direct paper-order tool that writes to the ledger without the full CIO thesis and live-market safety gate.",
+      "tags": [
+        "mcp",
+        "legacy-execution",
+        "paper-trading",
+        "authority-boundary"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/mcp_server.py:close_paper_order",
+      "type": "function",
+      "name": "close_paper_order",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        314,
+        319
+      ],
+      "summary": "Closes a paper position at a supplied exit price and records realized friction and P&L.",
+      "tags": [
+        "mcp",
+        "paper-trading",
+        "position-management"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/mcp_server.py:get_portfolio_summary",
+      "type": "function",
+      "name": "get_portfolio_summary",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        323,
+        328
+      ],
+      "summary": "Returns the aggregate paper-ledger performance summary.",
+      "tags": [
+        "mcp",
+        "reporting",
+        "paper-trading"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/mcp_server.py:get_open_positions",
+      "type": "function",
+      "name": "get_open_positions",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        332,
+        336
+      ],
+      "summary": "Returns current open paper positions for CIO management.",
+      "tags": [
+        "mcp",
+        "portfolio",
+        "paper-trading"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/mcp_server.py:get_cockpit_briefing",
+      "type": "function",
+      "name": "get_cockpit_briefing",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        340,
+        347
+      ],
+      "summary": "Builds and returns the compact multi-signal CIO briefing.",
+      "tags": [
+        "mcp",
+        "cockpit",
+        "decision-support"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/mcp_server.py:cio_authorize_entry",
+      "type": "function",
+      "name": "cio_authorize_entry",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        351,
+        374
+      ],
+      "summary": "MCP entry point for an external CIO's explicit entry decision, delegating to the gated CIO authorization function.",
+      "tags": [
+        "mcp",
+        "cio-authority",
+        "paper-trading",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/mcp_server.py:cio_manage_position",
+      "type": "function",
+      "name": "cio_manage_position",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        378,
+        397
+      ],
+      "summary": "MCP entry point for an external CIO's trail, partial-book, and exit decisions.",
+      "tags": [
+        "mcp",
+        "cio-authority",
+        "position-management",
+        "paper-trading"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/mcp_server.py:run_regime_logic_test",
+      "type": "function",
+      "name": "run_regime_logic_test",
+      "filePath": "ai/mcp_server.py",
+      "lineRange": [
+        401,
+        407
+      ],
+      "summary": "Runs historical regime validation as evidence for the CIO rather than as an execution trigger.",
+      "tags": [
+        "mcp",
+        "validation",
+        "backtesting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ai/options_analytics.py",
+      "type": "file",
+      "name": "options_analytics.py",
+      "filePath": "ai/options_analytics.py",
+      "summary": "Nuvama-style option-chain analytics for OI walls, PCR, max pain, buildup classification, and trade-context recommendations.",
+      "tags": [
+        "options",
+        "open-interest",
+        "market-analysis",
+        "decision-support",
+        "tested"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:ai/options_analytics.py:OptionStrikeData",
+      "type": "class",
+      "name": "OptionStrikeData",
+      "filePath": "ai/options_analytics.py",
+      "lineRange": [
+        17,
+        30
+      ],
+      "summary": "Structured per-strike option-chain data model.",
+      "tags": [
+        "data-model",
+        "options",
+        "open-interest"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ai/options_analytics.py:NuvamaAnalyticsResult",
+      "type": "class",
+      "name": "NuvamaAnalyticsResult",
+      "filePath": "ai/options_analytics.py",
+      "lineRange": [
+        34,
+        56
+      ],
+      "summary": "Structured result containing walls, PCR, max pain, confidence, and analytical thesis.",
+      "tags": [
+        "data-model",
+        "options",
+        "decision-support"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ai/options_analytics.py:NuvamaOptionsEngine",
+      "type": "class",
+      "name": "NuvamaOptionsEngine",
+      "filePath": "ai/options_analytics.py",
+      "lineRange": [
+        59,
+        483
+      ],
+      "summary": "Computes Nuvama-style OI and price analytics from option-chain data.",
+      "tags": [
+        "options",
+        "open-interest",
+        "analytics-engine",
+        "market-analysis"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:ai/paper_ledger.py",
+      "type": "file",
+      "name": "paper_ledger.py",
+      "filePath": "ai/paper_ledger.py",
+      "summary": "Independent SQLite paper-trading ledger that calculates Indian statutory friction and records trades, adjustments, P&L, and CIO decision rationale.",
+      "tags": [
+        "database",
+        "paper-trading",
+        "audit-trail",
+        "risk-controls",
+        "tested"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:ai/paper_ledger.py:AIPaperLedger",
+      "type": "class",
+      "name": "AIPaperLedger",
+      "filePath": "ai/paper_ledger.py",
+      "lineRange": [
+        22,
+        496
+      ],
+      "summary": "Manages ACID paper-trade and CIO-decision persistence, partial closes, stop updates, performance summaries, and transaction friction.",
+      "tags": [
+        "database",
+        "paper-trading",
+        "audit-trail",
+        "risk-controls"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:ai/technical_lens.py",
+      "type": "file",
+      "name": "technical_lens.py",
+      "filePath": "ai/technical_lens.py",
+      "summary": "Builds market-breadth and price-structure context including VWAP, EMA, ATR, realized volatility, and sector breadth.",
+      "tags": [
+        "technical-analysis",
+        "market-breadth",
+        "decision-support",
+        "market-analysis"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:ai/technical_lens.py:TechnicalIndicators",
+      "type": "class",
+      "name": "TechnicalIndicators",
+      "filePath": "ai/technical_lens.py",
+      "lineRange": [
+        18,
+        40
+      ],
+      "summary": "Structured price, trend, VWAP, EMA, ATR, and volatility indicators for a symbol.",
+      "tags": [
+        "data-model",
+        "technical-analysis",
+        "market-data"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ai/technical_lens.py:MarketLensBreadth",
+      "type": "class",
+      "name": "MarketLensBreadth",
+      "filePath": "ai/technical_lens.py",
+      "lineRange": [
+        44,
+        52
+      ],
+      "summary": "Structured market-breadth and sector-leadership summary.",
+      "tags": [
+        "data-model",
+        "market-breadth",
+        "sector-rotation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ai/technical_lens.py:TechnicalLensEngine",
+      "type": "class",
+      "name": "TechnicalLensEngine",
+      "filePath": "ai/technical_lens.py",
+      "lineRange": [
+        55,
+        437
+      ],
+      "summary": "Calculates technical and breadth context for candidate assessment; its outputs are evidence, not trade authority.",
+      "tags": [
+        "technical-analysis",
+        "market-breadth",
+        "analytics-engine",
+        "decision-support"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:ai/test_ai_agent.py",
+      "type": "file",
+      "name": "test_ai_agent.py",
+      "filePath": "ai/test_ai_agent.py",
+      "summary": "Integration-style regression suite covering analytics, ledger behavior, feed fail-closed behavior, connector isolation, and CIO decision controls.",
+      "tags": [
+        "test",
+        "paper-trading",
+        "risk-controls",
+        "regression"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_max_pain_calculation",
+      "type": "function",
+      "name": "test_max_pain_calculation",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        20,
+        28
+      ],
+      "summary": "Checks option-chain max-pain calculation.",
+      "tags": [
+        "test",
+        "options",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_nuvama_analytics_walls_and_pcr",
+      "type": "function",
+      "name": "test_nuvama_analytics_walls_and_pcr",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        31,
+        42
+      ],
+      "summary": "Checks wall and PCR analytics produced from option-chain fixtures.",
+      "tags": [
+        "test",
+        "options",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_indian_friction_calculation",
+      "type": "function",
+      "name": "test_indian_friction_calculation",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        45,
+        50
+      ],
+      "summary": "Checks statutory friction calculation for paper orders.",
+      "tags": [
+        "test",
+        "paper-trading",
+        "friction"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_paper_ledger_lifecycle",
+      "type": "function",
+      "name": "test_paper_ledger_lifecycle",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        53,
+        91
+      ],
+      "summary": "Exercises opening, updating, closing, and summarizing a paper trade.",
+      "tags": [
+        "test",
+        "paper-trading",
+        "database"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_midcpnifty_analytics_and_sizing",
+      "type": "function",
+      "name": "test_midcpnifty_analytics_and_sizing",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        94,
+        107
+      ],
+      "summary": "Checks symbol-specific option analytics and lot-size configuration.",
+      "tags": [
+        "test",
+        "options",
+        "position-sizing"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_greeks_and_gex_calculation",
+      "type": "function",
+      "name": "test_greeks_and_gex_calculation",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        110,
+        124
+      ],
+      "summary": "Checks Greeks and gamma-exposure calculations.",
+      "tags": [
+        "test",
+        "greeks",
+        "gamma-exposure"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_mcp_server_tools",
+      "type": "function",
+      "name": "test_mcp_server_tools",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        127,
+        156
+      ],
+      "summary": "Checks the MCP analytics and paper-ledger tool surface.",
+      "tags": [
+        "test",
+        "mcp",
+        "paper-trading"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_ai_is_strictly_self_contained",
+      "type": "function",
+      "name": "test_ai_is_strictly_self_contained",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        159,
+        167
+      ],
+      "summary": "Checks that the AI project remains isolated from direct SmartTrading code imports.",
+      "tags": [
+        "test",
+        "isolation",
+        "connector"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_gpu_engine_acceleration",
+      "type": "function",
+      "name": "test_gpu_engine_acceleration",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        170,
+        192
+      ],
+      "summary": "Checks quantitative engine output and acceleration fallback behavior.",
+      "tags": [
+        "test",
+        "quantitative-analysis",
+        "gpu"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_20_ema_triple_ribbon_and_fail_closed_history",
+      "type": "function",
+      "name": "test_20_ema_triple_ribbon_and_fail_closed_history",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        195,
+        212
+      ],
+      "summary": "Checks technical ribbon logic and fail-closed treatment of missing history.",
+      "tags": [
+        "test",
+        "technical-analysis",
+        "fail-closed"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_live_mode_fails_closed_without_synthetic_bump",
+      "type": "function",
+      "name": "test_live_mode_fails_closed_without_synthetic_bump",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        215,
+        251
+      ],
+      "summary": "Checks that live mode does not invent prices or open a trade without genuine market data.",
+      "tags": [
+        "test",
+        "fail-closed",
+        "paper-trading",
+        "risk-controls"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_connector_bridge_and_book_telemetry",
+      "type": "function",
+      "name": "test_connector_bridge_and_book_telemetry",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        254,
+        288
+      ],
+      "summary": "Checks the read-only bridge and its order-book telemetry calculations.",
+      "tags": [
+        "test",
+        "connector",
+        "microstructure"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_cio_clock_enter_trail_and_partial_book",
+      "type": "function",
+      "name": "test_cio_clock_enter_trail_and_partial_book",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        291,
+        336
+      ],
+      "summary": "Checks explicit CIO entry validation, trailing-stop updates, and partial profit booking.",
+      "tags": [
+        "test",
+        "cio-authority",
+        "position-management",
+        "paper-trading"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_logic_tester_regimes_and_simulation",
+      "type": "function",
+      "name": "test_logic_tester_regimes_and_simulation",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        339,
+        359
+      ],
+      "summary": "Checks regime classification and logic-test simulation output.",
+      "tags": [
+        "test",
+        "backtesting",
+        "market-regime"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_smart_edge_wall_fragility_and_composite",
+      "type": "function",
+      "name": "test_smart_edge_wall_fragility_and_composite",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        362,
+        434
+      ],
+      "summary": "Checks wall fragility and composite smart-edge evidence.",
+      "tags": [
+        "test",
+        "options",
+        "market-analysis",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/test_ai_agent.py:test_ema_acceleration_reversing_reachable",
+      "type": "function",
+      "name": "test_ema_acceleration_reversing_reachable",
+      "filePath": "ai/test_ai_agent.py",
+      "lineRange": [
+        437,
+        469
+      ],
+      "summary": "Checks EMA acceleration and reversal classification.",
+      "tags": [
+        "test",
+        "technical-analysis",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ai/cockpit.py",
+      "type": "file",
+      "name": "cockpit.py",
+      "filePath": "ai/cockpit.py",
+      "summary": "Builds a compact CIO briefing from live market, SmartTrading desk, options, microstructure, risk, and validation inputs. It presents vetted candidates and position context while documenting that discretionary trading decisions remain external to the cockpit.",
+      "tags": [
+        "decision-cockpit",
+        "market-data",
+        "risk-context",
+        "integration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai/cockpit.py:evaluate_session_clock",
+      "type": "function",
+      "name": "evaluate_session_clock",
+      "filePath": "ai/cockpit.py",
+      "lineRange": [
+        65,
+        107
+      ],
+      "summary": "Classifies the NSE session window, expiry regime, entry eligibility, and time remaining until the mandatory square-off window.",
+      "tags": [
+        "market-clock",
+        "risk-gate",
+        "session-control"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:ai/cockpit.py:CockpitBuilder",
+      "type": "class",
+      "name": "CockpitBuilder",
+      "filePath": "ai/cockpit.py",
+      "lineRange": [
+        110,
+        682
+      ],
+      "summary": "Coordinates the read-only desk bridge, live feed, paper ledger, quantitative engines, and strategy analytics into a ranked human-or-agent-readable briefing.",
+      "tags": [
+        "cockpit",
+        "orchestration",
+        "market-analysis",
+        "decision-support"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai/cockpit.py:_fmt_inr",
+      "type": "function",
+      "name": "_fmt_inr",
+      "filePath": "ai/cockpit.py",
+      "lineRange": [
+        685,
+        688
+      ],
+      "summary": "Formats a signed currency amount for briefing output.",
+      "tags": [
+        "formatting",
+        "currency",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/cockpit.py:format_briefing_text",
+      "type": "function",
+      "name": "format_briefing_text",
+      "filePath": "ai/cockpit.py",
+      "lineRange": [
+        691,
+        774
+      ],
+      "summary": "Renders the structured cockpit briefing as a concise terminal view for the external CIO agent or operator.",
+      "tags": [
+        "presentation",
+        "briefing",
+        "cli-output"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ai/gpu_engine.py",
+      "type": "file",
+      "name": "gpu_engine.py",
+      "filePath": "ai/gpu_engine.py",
+      "summary": "Provides accelerated quantitative calculations with a safe NumPy CPU fallback when CUDA is unavailable, including option Greeks, probability-of-touch simulation, and correlation heat checks.",
+      "tags": [
+        "quantitative",
+        "monte-carlo",
+        "greeks",
+        "gpu"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:ai/gpu_engine.py:GPUQuantitativeEngine",
+      "type": "class",
+      "name": "GPUQuantitativeEngine",
+      "filePath": "ai/gpu_engine.py",
+      "lineRange": [
+        24,
+        258
+      ],
+      "summary": "Runs or falls back from CUDA-based intraday Monte Carlo, vectorized Black-Scholes Greeks, and correlation-risk calculations.",
+      "tags": [
+        "gpu",
+        "monte-carlo",
+        "greeks",
+        "fallback"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:ai/quantitative_alpha.py",
+      "type": "file",
+      "name": "quantitative_alpha.py",
+      "filePath": "ai/quantitative_alpha.py",
+      "summary": "Derives machine-level order-book and dealer-flow features such as micro-price, normalized OFI, VPIN proxy, vanna, charm, and gamma-feedback state.",
+      "tags": [
+        "microstructure",
+        "order-flow",
+        "quantitative-alpha",
+        "derivatives"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai/quantitative_alpha.py:norm_cdf",
+      "type": "function",
+      "name": "norm_cdf",
+      "filePath": "ai/quantitative_alpha.py",
+      "lineRange": [
+        19,
+        20
+      ],
+      "summary": "Returns the standard normal cumulative distribution value used by option calculations.",
+      "tags": [
+        "math",
+        "normal-distribution",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/quantitative_alpha.py:norm_pdf",
+      "type": "function",
+      "name": "norm_pdf",
+      "filePath": "ai/quantitative_alpha.py",
+      "lineRange": [
+        23,
+        24
+      ],
+      "summary": "Returns the standard normal probability density used by option calculations.",
+      "tags": [
+        "math",
+        "normal-distribution",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ai/quantitative_alpha.py:QuantitativeAlphaState",
+      "type": "class",
+      "name": "QuantitativeAlphaState",
+      "filePath": "ai/quantitative_alpha.py",
+      "lineRange": [
+        28,
+        47
+      ],
+      "summary": "Captures the computed market-microstructure and dealer-flow state for one instrument, including source provenance and machine signal.",
+      "tags": [
+        "data-model",
+        "microstructure",
+        "market-state",
+        "derivatives"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:ai/quantitative_alpha.py:QuantitativeAlphaEngine",
+      "type": "class",
+      "name": "QuantitativeAlphaEngine",
+      "filePath": "ai/quantitative_alpha.py",
+      "lineRange": [
+        50,
+        327
+      ],
+      "summary": "Computes micro-price, lot-normalized five-level OFI, flow toxicity, second-order Greeks, and an interpretable quantitative-alpha state.",
+      "tags": [
+        "quantitative-alpha",
+        "order-flow",
+        "greeks",
+        "signal-engine"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:ai/smart_edge.py",
+      "type": "file",
+      "name": "smart_edge.py",
+      "filePath": "ai/smart_edge.py",
+      "summary": "Computes derived options and market-structure evidence that exceeds retail dashboard views, then returns an interpretable composite edge score for the external CIO to judge.",
+      "tags": [
+        "decision-support",
+        "options-analytics",
+        "market-structure",
+        "composite-score"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:ai/smart_edge.py:WallFragility",
+      "type": "class",
+      "name": "WallFragility",
+      "filePath": "ai/smart_edge.py",
+      "lineRange": [
+        29,
+        36
+      ],
+      "summary": "Represents the strength, erosion, and breakout likelihood of an option OI wall.",
+      "tags": [
+        "data-model",
+        "open-interest",
+        "wall-analysis"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ai/smart_edge.py:IVSkewSignal",
+      "type": "class",
+      "name": "IVSkewSignal",
+      "filePath": "ai/smart_edge.py",
+      "lineRange": [
+        40,
+        46
+      ],
+      "summary": "Represents ATM and OTM implied-volatility skew with an institutional-demand regime label.",
+      "tags": [
+        "data-model",
+        "implied-volatility",
+        "skew"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ai/smart_edge.py:SmartEdgeResult",
+      "type": "class",
+      "name": "SmartEdgeResult",
+      "filePath": "ai/smart_edge.py",
+      "lineRange": [
+        50,
+        81
+      ],
+      "summary": "Packages wall, OI concentration, IV, volatility, volume, acceleration, and composite-edge evidence for a candidate.",
+      "tags": [
+        "data-model",
+        "decision-support",
+        "options-analytics",
+        "market-structure"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/smart_edge.py:compute_wall_fragility",
+      "type": "function",
+      "name": "compute_wall_fragility",
+      "filePath": "ai/smart_edge.py",
+      "lineRange": [
+        84,
+        134
+      ],
+      "summary": "Scores whether a call or put OI wall is reinforcing or eroding using OI change and ATR-normalized proximity.",
+      "tags": [
+        "open-interest",
+        "wall-analysis",
+        "risk-signal"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/smart_edge.py:compute_oi_herfindahl",
+      "type": "function",
+      "name": "compute_oi_herfindahl",
+      "filePath": "ai/smart_edge.py",
+      "lineRange": [
+        137,
+        178
+      ],
+      "summary": "Measures option OI concentration across strikes and classifies pinning versus dispersed-trend conditions.",
+      "tags": [
+        "open-interest",
+        "concentration",
+        "regime"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/smart_edge.py:compute_iv_skew",
+      "type": "function",
+      "name": "compute_iv_skew",
+      "filePath": "ai/smart_edge.py",
+      "lineRange": [
+        181,
+        256
+      ],
+      "summary": "Estimates implied-volatility skew from the option chain and labels fear, complacency, call-demand, or neutral conditions.",
+      "tags": [
+        "implied-volatility",
+        "skew",
+        "options-analytics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/smart_edge.py:compute_straddle_compression",
+      "type": "function",
+      "name": "compute_straddle_compression",
+      "filePath": "ai/smart_edge.py",
+      "lineRange": [
+        259,
+        288
+      ],
+      "summary": "Assesses ATM straddle premium relative to spot and realized volatility to identify compression or elevated-fear regimes.",
+      "tags": [
+        "volatility",
+        "straddle",
+        "regime"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/smart_edge.py:compute_relative_volume",
+      "type": "function",
+      "name": "compute_relative_volume",
+      "filePath": "ai/smart_edge.py",
+      "lineRange": [
+        291,
+        316
+      ],
+      "summary": "Classifies current volume against its average as institutional surge, normal activity, or dead tape.",
+      "tags": [
+        "volume",
+        "liquidity",
+        "regime"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/smart_edge.py:compute_ema_acceleration",
+      "type": "function",
+      "name": "compute_ema_acceleration",
+      "filePath": "ai/smart_edge.py",
+      "lineRange": [
+        319,
+        354
+      ],
+      "summary": "Calculates the second derivative of EMA slope in ATR units to classify trend acceleration or reversal.",
+      "tags": [
+        "trend",
+        "acceleration",
+        "technical-analysis"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/smart_edge.py:compute_composite_edge",
+      "type": "function",
+      "name": "compute_composite_edge",
+      "filePath": "ai/smart_edge.py",
+      "lineRange": [
+        357,
+        488
+      ],
+      "summary": "Synthesizes wall, OI, IV, volume, momentum, order-flow, and simulation evidence into a bounded, reasoned edge score.",
+      "tags": [
+        "composite-score",
+        "decision-support",
+        "market-structure",
+        "risk-signal"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai/smart_edge.py:evaluate_smart_edge",
+      "type": "function",
+      "name": "evaluate_smart_edge",
+      "filePath": "ai/smart_edge.py",
+      "lineRange": [
+        491,
+        586
+      ],
+      "summary": "Builds the complete smart-edge result for a candidate from option-chain, technical, microstructure, and Monte Carlo inputs.",
+      "tags": [
+        "entry-point",
+        "decision-support",
+        "options-analytics",
+        "composite-score"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:ai/live_kite_feed.py",
+      "type": "file",
+      "name": "live_kite_feed.py",
+      "filePath": "ai/live_kite_feed.py",
+      "summary": "Provides a fail-closed Zerodha Kite market-data adapter that resolves instruments and credentials through the read-only SmartTrading bridge. It assembles option-chain, depth, breadth, and historical-bar snapshots for the CIO cockpit without placing orders.",
+      "tags": [
+        "market-data",
+        "kite",
+        "fail-closed",
+        "read-only"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:ai/live_kite_feed.py:LiveMarketSnapshot",
+      "type": "class",
+      "name": "LiveMarketSnapshot",
+      "filePath": "ai/live_kite_feed.py",
+      "lineRange": [
+        43,
+        65
+      ],
+      "summary": "Carries one normalized live underlying and option-chain snapshot, including prices, depth, history, volume, and contract mappings.",
+      "tags": [
+        "data-model",
+        "market-data",
+        "options"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/live_kite_feed.py:_extract_5level_depth",
+      "type": "function",
+      "name": "_extract_5level_depth",
+      "filePath": "ai/live_kite_feed.py",
+      "lineRange": [
+        68,
+        81
+      ],
+      "summary": "Normalizes up to five bid and ask levels from a Kite depth payload into numeric price-quantity tuples.",
+      "tags": [
+        "utility",
+        "order-book",
+        "normalization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ai/live_kite_feed.py:LiveKiteFeed",
+      "type": "class",
+      "name": "LiveKiteFeed",
+      "filePath": "ai/live_kite_feed.py",
+      "lineRange": [
+        84,
+        609
+      ],
+      "summary": "Batches live Kite quotes, 5-minute bars, market breadth, instrument metadata, and option chains while failing closed when live data or credentials are unavailable.",
+      "tags": [
+        "market-data",
+        "kite",
+        "options",
+        "fail-closed"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:ai/logic_tester.py",
+      "type": "file",
+      "name": "logic_tester.py",
+      "filePath": "ai/logic_tester.py",
+      "summary": "Runs out-of-sample, regime-aware walk-forward validation over historical NSE bars and archived SmartTrading ticks. It models friction, random nulls, late-session stress, and parameter perturbation to test whether proposed logic is robust.",
+      "tags": [
+        "backtesting",
+        "validation",
+        "regime-analysis",
+        "anti-curve-fit"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai/logic_tester.py:classify_indian_session_regime",
+      "type": "function",
+      "name": "classify_indian_session_regime",
+      "filePath": "ai/logic_tester.py",
+      "lineRange": [
+        46,
+        60
+      ],
+      "summary": "Classifies a trading session as expiry, high-volatility trend, or normal using Indian expiry-calendar and range rules.",
+      "tags": [
+        "regime",
+        "calendar",
+        "classification"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/logic_tester.py:_parse_bar_dt",
+      "type": "function",
+      "name": "_parse_bar_dt",
+      "filePath": "ai/logic_tester.py",
+      "lineRange": [
+        63,
+        67
+      ],
+      "summary": "Converts a bar timestamp to an Asia/Kolkata-aware datetime for replay logic.",
+      "tags": [
+        "utility",
+        "time-zone",
+        "replay"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ai/logic_tester.py:SimTradeResult",
+      "type": "class",
+      "name": "SimTradeResult",
+      "filePath": "ai/logic_tester.py",
+      "lineRange": [
+        71,
+        84
+      ],
+      "summary": "Defines the simulated-trade record used to retain entry, exit, regime, friction, return, and exit-reason evidence during validation.",
+      "tags": [
+        "data-model",
+        "backtesting",
+        "audit"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/logic_tester.py:_simulate_logic_on_bars",
+      "type": "function",
+      "name": "_simulate_logic_on_bars",
+      "filePath": "ai/logic_tester.py",
+      "lineRange": [
+        87,
+        280
+      ],
+      "summary": "Replays five-minute sessions without lookahead bias, applies fixed entry and exit physics, and produces friction-adjusted simulated trade results.",
+      "tags": [
+        "backtesting",
+        "simulation",
+        "anti-curve-fit",
+        "risk"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai/logic_tester.py:_summarize_trades",
+      "type": "function",
+      "name": "_summarize_trades",
+      "filePath": "ai/logic_tester.py",
+      "lineRange": [
+        283,
+        301
+      ],
+      "summary": "Aggregates simulated trades into performance statistics for a logic and regime comparison.",
+      "tags": [
+        "analytics",
+        "backtesting",
+        "statistics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/logic_tester.py:inspect_archived_tick_spread_audit",
+      "type": "function",
+      "name": "inspect_archived_tick_spread_audit",
+      "filePath": "ai/logic_tester.py",
+      "lineRange": [
+        304,
+        340
+      ],
+      "summary": "Audits archived SmartTrading tick databases for historical depth and spread conditions that qualify replay evidence.",
+      "tags": [
+        "audit",
+        "market-microstructure",
+        "historical-data"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai/logic_tester.py:run_logic_validation",
+      "type": "function",
+      "name": "run_logic_validation",
+      "filePath": "ai/logic_tester.py",
+      "lineRange": [
+        343,
+        426
+      ],
+      "summary": "Coordinates multi-symbol walk-forward validation, null and perturbation controls, and persistence of a compact logic-test report.",
+      "tags": [
+        "validation",
+        "backtesting",
+        "reporting",
+        "anti-curve-fit"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai/logic_tester.py:load_cached_logic_report",
+      "type": "function",
+      "name": "load_cached_logic_report",
+      "filePath": "ai/logic_tester.py",
+      "lineRange": [
+        429,
+        435
+      ],
+      "summary": "Loads the most recent persisted logic-validation report when it is available.",
+      "tags": [
+        "reporting",
+        "cache",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai/logic_tester.py:format_logic_report",
+      "type": "function",
+      "name": "format_logic_report",
+      "filePath": "ai/logic_tester.py",
+      "lineRange": [
+        438,
+        467
+      ],
+      "summary": "Formats logic-validation metrics and robustness verdicts for an operator-facing report.",
+      "tags": [
+        "reporting",
+        "formatting",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:connector/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "connector/__init__.py",
+      "summary": "Exposes the SmartTrading bridge as the connector package's public read-only integration surface.",
+      "tags": [
+        "package",
+        "barrel",
+        "connector"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:connector/smart_trading_bridge.py",
+      "type": "file",
+      "name": "smart_trading_bridge.py",
+      "filePath": "connector/smart_trading_bridge.py",
+      "summary": "Implements the strict read-only boundary from AI-Trading to SmartTrading: HTTP GET telemetry, shared-memory SQLite, ZMQ subscription, data files, and position context. It supplies advisory context and collision data without importing SmartTrading modules or issuing mutations.",
+      "tags": [
+        "connector",
+        "read-only",
+        "smarttrading",
+        "market-data",
+        "tested"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:connector/smart_trading_bridge.py:resolve_smart_trading_root",
+      "type": "function",
+      "name": "resolve_smart_trading_root",
+      "filePath": "connector/smart_trading_bridge.py",
+      "lineRange": [
+        28,
+        41
+      ],
+      "summary": "Finds the SmartTrading workspace through an environment override or known sibling paths.",
+      "tags": [
+        "configuration",
+        "path-resolution",
+        "connector"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:connector/smart_trading_bridge.py:_is_tcp_listening",
+      "type": "function",
+      "name": "_is_tcp_listening",
+      "filePath": "connector/smart_trading_bridge.py",
+      "lineRange": [
+        44,
+        50
+      ],
+      "summary": "Performs a short loopback probe so unavailable Desk services fail quickly.",
+      "tags": [
+        "network",
+        "health-check",
+        "fail-closed"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:connector/smart_trading_bridge.py:_http_get_json",
+      "type": "function",
+      "name": "_http_get_json",
+      "filePath": "connector/smart_trading_bridge.py",
+      "lineRange": [
+        53,
+        61
+      ],
+      "summary": "Fetches and parses a JSON endpoint using GET only, returning no data on failure.",
+      "tags": [
+        "http",
+        "read-only",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:connector/smart_trading_bridge.py:compute_book_telemetry",
+      "type": "function",
+      "name": "compute_book_telemetry",
+      "filePath": "connector/smart_trading_bridge.py",
+      "lineRange": [
+        64,
+        164
+      ],
+      "summary": "Derives micro-price, weighted book pressure, lot-normalized order-flow imbalance, spread, and refill warnings from five-level depth.",
+      "tags": [
+        "market-microstructure",
+        "order-book",
+        "analytics",
+        "options"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:connector/smart_trading_bridge.py:SmartTradingBridge",
+      "type": "class",
+      "name": "SmartTradingBridge",
+      "filePath": "connector/smart_trading_bridge.py",
+      "lineRange": [
+        167,
+        638
+      ],
+      "summary": "Aggregates read-only SmartTrading credentials, instruments, telemetry, cache, alert, premarket, position, journal, and archived-tick context into one degraded-safe snapshot for the AI CIO.",
+      "tags": [
+        "connector",
+        "read-only",
+        "smarttrading",
+        "integration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:ai/AI_TRADER_PLAYBOOK.md",
+      "type": "document",
+      "name": "AI_TRADER_PLAYBOOK.md",
+      "filePath": "ai/AI_TRADER_PLAYBOOK.md",
+      "summary": "Defines the operating contract for the AI CIO cockpit: analytics and SmartTrading telemetry are helping hands, while an external Antigravity or Codex agent owns discretionary entries and management decisions.",
+      "tags": [
+        "documentation",
+        "trading-workflow",
+        "decision-authority",
+        "paper-trading"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:ai/AUDIT_FINDINGS.md",
+      "type": "document",
+      "name": "AUDIT_FINDINGS.md",
+      "filePath": "ai/AUDIT_FINDINGS.md",
+      "summary": "Records the live-feed, fail-closed, ledger, and risk-control audit state, including known remaining refinements.",
+      "tags": [
+        "documentation",
+        "audit",
+        "risk-controls",
+        "runtime-status"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:ai/SYSTEM_BLUEPRINT.md",
+      "type": "document",
+      "name": "SYSTEM_BLUEPRINT.md",
+      "filePath": "ai/SYSTEM_BLUEPRINT.md",
+      "summary": "Architectural specification for the isolated desk, trader, and AI CIO lanes, their market-data responsibilities, and paper-trading risk model.",
+      "tags": [
+        "documentation",
+        "architecture",
+        "risk-governance",
+        "market-structure"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:ai/run_morning_ai_trader.sh",
+      "type": "file",
+      "name": "run_morning_ai_trader.sh",
+      "filePath": "ai/run_morning_ai_trader.sh",
+      "summary": "Operational launcher for the guardian, cockpit, logic test, session status, and controlled stop workflow.",
+      "tags": [
+        "shell",
+        "operations",
+        "guardian",
+        "paper-trading"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:ai/strategy.yaml",
+      "type": "config",
+      "name": "strategy.yaml",
+      "filePath": "ai/strategy.yaml",
+      "summary": "Declarative V3.0-APEX strategy, market-regime, sizing, stop, and collision-policy specification intended to govern the AI CIO workflow.",
+      "tags": [
+        "configuration",
+        "risk-governance",
+        "strategy",
+        "paper-trading"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:ai/runtime/cockpit_briefing.json",
+      "type": "config",
+      "name": "cockpit_briefing.json",
+      "filePath": "ai/runtime/cockpit_briefing.json",
+      "summary": "Latest compact market and candidate snapshot consumed by the external CIO agent for a discretionary paper-trading decision.",
+      "tags": [
+        "runtime-data",
+        "cockpit",
+        "market-analysis",
+        "decision-support"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "config:ai/runtime/logic_test_report.json",
+      "type": "config",
+      "name": "logic_test_report.json",
+      "filePath": "ai/runtime/logic_test_report.json",
+      "summary": "Cached regime-validation report used to show historical expectancy and anti-curve-fit evidence in the CIO cockpit.",
+      "tags": [
+        "runtime-data",
+        "validation",
+        "backtesting",
+        "risk-governance"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:ai/runtime/oi_baseline_2026-11-25.json",
+      "type": "config",
+      "name": "oi_baseline_2026-11-25.json",
+      "filePath": "ai/runtime/oi_baseline_2026-11-25.json",
+      "summary": "Session baseline of option open-interest observations used to derive intraday OI changes and wall dynamics.",
+      "tags": [
+        "runtime-data",
+        "options",
+        "open-interest",
+        "market-analysis"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "config:ai/runtime/history_cache/HAL_25d_2026-11-25.json",
+      "type": "config",
+      "name": "HAL_25d_2026-11-25.json",
+      "filePath": "ai/runtime/history_cache/HAL_25d_2026-11-25.json",
+      "summary": "Cached 25-day HAL historical market series used for regime and logic validation.",
+      "tags": [
+        "runtime-data",
+        "market-history",
+        "hal",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:ai/runtime/history_cache/HDFCBANK_25d_2026-11-25.json",
+      "type": "config",
+      "name": "HDFCBANK_25d_2026-11-25.json",
+      "filePath": "ai/runtime/history_cache/HDFCBANK_25d_2026-11-25.json",
+      "summary": "Cached 25-day HDFCBANK historical market series used for regime and logic validation.",
+      "tags": [
+        "runtime-data",
+        "market-history",
+        "hdfcbank",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:ai/runtime/history_cache/ICICIBANK_25d_2026-11-25.json",
+      "type": "config",
+      "name": "ICICIBANK_25d_2026-11-25.json",
+      "filePath": "ai/runtime/history_cache/ICICIBANK_25d_2026-11-25.json",
+      "summary": "Cached 25-day ICICIBANK historical market series used for regime and logic validation.",
+      "tags": [
+        "runtime-data",
+        "market-history",
+        "icicibank",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:ai/runtime/history_cache/INFY_25d_2026-11-25.json",
+      "type": "config",
+      "name": "INFY_25d_2026-11-25.json",
+      "filePath": "ai/runtime/history_cache/INFY_25d_2026-11-25.json",
+      "summary": "Cached 25-day INFY historical market series used for regime and logic validation.",
+      "tags": [
+        "runtime-data",
+        "market-history",
+        "infy",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:ai/runtime/history_cache/M&M_25d_2026-11-25.json",
+      "type": "config",
+      "name": "M&M_25d_2026-11-25.json",
+      "filePath": "ai/runtime/history_cache/M&M_25d_2026-11-25.json",
+      "summary": "Cached 25-day M&M historical market series used for regime and logic validation.",
+      "tags": [
+        "runtime-data",
+        "market-history",
+        "auto-sector",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:ai/runtime/history_cache/NIFTY_25d_2026-11-25.json",
+      "type": "config",
+      "name": "NIFTY_25d_2026-11-25.json",
+      "filePath": "ai/runtime/history_cache/NIFTY_25d_2026-11-25.json",
+      "summary": "Cached 25-day NIFTY historical market series used for regime and logic validation.",
+      "tags": [
+        "runtime-data",
+        "market-history",
+        "nifty",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:ai/runtime/history_cache/SBIN_25d_2026-11-25.json",
+      "type": "config",
+      "name": "SBIN_25d_2026-11-25.json",
+      "filePath": "ai/runtime/history_cache/SBIN_25d_2026-11-25.json",
+      "summary": "Cached 25-day SBIN historical market series used for regime and logic validation.",
+      "tags": [
+        "runtime-data",
+        "market-history",
+        "sbin",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:ai/runtime/history_cache/TATASTEEL_25d_2026-11-25.json",
+      "type": "config",
+      "name": "TATASTEEL_25d_2026-11-25.json",
+      "filePath": "ai/runtime/history_cache/TATASTEEL_25d_2026-11-25.json",
+      "summary": "Cached 25-day TATASTEEL historical market series used for regime and logic validation.",
+      "tags": [
+        "runtime-data",
+        "market-history",
+        "tatasteel",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:.understand-anything/.understandignore",
+      "type": "config",
+      "name": ".understandignore",
+      "filePath": ".understand-anything/.understandignore",
+      "summary": "Analysis-only ignore policy defining files excluded from the repository knowledge graph.",
+      "tags": [
+        "configuration",
+        "analysis-tooling",
+        "ignore-rules"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ai/ai_paper_trades.db",
+      "type": "file",
+      "name": "ai_paper_trades.db",
+      "filePath": "ai/ai_paper_trades.db",
+      "summary": "Persistent SQLite ledger containing AI paper trades, P&L, statutory friction, and CIO decision records.",
+      "tags": [
+        "database",
+        "paper-trading",
+        "audit-trail",
+        "risk-governance"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ai/runtime/paper_ledger.db",
+      "type": "file",
+      "name": "paper_ledger.db",
+      "filePath": "ai/runtime/paper_ledger.db",
+      "summary": "Runtime SQLite artifact for paper-ledger state.",
+      "tags": [
+        "database",
+        "runtime-data",
+        "paper-trading"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:ai/agent_trader.py",
+      "target": "file:ai/cockpit.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/agent_trader.py",
+      "target": "file:ai/gpu_engine.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/agent_trader.py",
+      "target": "file:ai/greeks_gex.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/agent_trader.py",
+      "target": "file:ai/live_kite_feed.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/agent_trader.py",
+      "target": "file:ai/logic_tester.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/agent_trader.py",
+      "target": "file:ai/options_analytics.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/agent_trader.py",
+      "target": "file:ai/paper_ledger.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/agent_trader.py",
+      "target": "file:ai/quantitative_alpha.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/agent_trader.py",
+      "target": "file:ai/technical_lens.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/agent_trader.py",
+      "target": "file:connector/smart_trading_bridge.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/greeks_gex.py",
+      "target": "file:ai/options_analytics.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/mcp_server.py",
+      "target": "file:ai/agent_trader.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/mcp_server.py",
+      "target": "file:ai/greeks_gex.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/mcp_server.py",
+      "target": "file:ai/options_analytics.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/mcp_server.py",
+      "target": "file:ai/paper_ledger.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/mcp_server.py",
+      "target": "file:ai/technical_lens.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:ai/mcp_server.py:cio_authorize_entry",
+      "target": "function:ai/agent_trader.py:cio_enter_trade",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:ai/mcp_server.py:cio_manage_position",
+      "target": "function:ai/agent_trader.py:cio_manage_trade",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:ai/mcp_server.py:execute_paper_order",
+      "target": "class:ai/paper_ledger.py:AIPaperLedger",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:ai/agent_trader.py:cio_enter_trade",
+      "target": "class:ai/paper_ledger.py:AIPaperLedger",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:ai/agent_trader.py:cio_manage_trade",
+      "target": "class:ai/paper_ledger.py:AIPaperLedger",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:ai/agent_trader.py:run_guardian_loop",
+      "target": "class:ai/cockpit.py:CockpitBuilder",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:ai/agent_trader.py:run_autonomous_loop",
+      "target": "class:ai/agent_trader.py:AIAgentTrader",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:ai/agent_trader.py:main",
+      "target": "function:ai/agent_trader.py:cio_enter_trade",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:ai/agent_trader.py:main",
+      "target": "function:ai/agent_trader.py:run_guardian_loop",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:ai/agent_trader.py:main",
+      "target": "function:ai/agent_trader.py:run_autonomous_loop",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/test_ai_agent.py",
+      "target": "file:ai/greeks_gex.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/test_ai_agent.py",
+      "target": "file:ai/options_analytics.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/test_ai_agent.py",
+      "target": "file:ai/paper_ledger.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/paper_ledger.py",
+      "target": "class:ai/paper_ledger.py:AIPaperLedger",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/technical_lens.py",
+      "target": "class:ai/technical_lens.py:TechnicalIndicators",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/technical_lens.py",
+      "target": "class:ai/technical_lens.py:MarketLensBreadth",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/technical_lens.py",
+      "target": "class:ai/technical_lens.py:TechnicalLensEngine",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/test_ai_agent.py",
+      "target": "function:ai/test_ai_agent.py:test_paper_ledger_lifecycle",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/test_ai_agent.py",
+      "target": "function:ai/test_ai_agent.py:test_live_mode_fails_closed_without_synthetic_bump",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/test_ai_agent.py",
+      "target": "function:ai/test_ai_agent.py:test_cio_clock_enter_trail_and_partial_book",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/options_analytics.py",
+      "target": "file:ai/test_ai_agent.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/paper_ledger.py",
+      "target": "file:ai/test_ai_agent.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/greeks_gex.py",
+      "target": "file:ai/test_ai_agent.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/agent_trader.py",
+      "target": "file:ai/test_ai_agent.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:connector/smart_trading_bridge.py",
+      "target": "file:ai/test_ai_agent.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "file:ai/gpu_engine.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "file:ai/greeks_gex.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "file:ai/live_kite_feed.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "file:ai/logic_tester.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "file:ai/options_analytics.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "file:ai/paper_ledger.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "file:ai/quantitative_alpha.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "file:ai/smart_edge.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "file:ai/technical_lens.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "file:connector/smart_trading_bridge.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "function:ai/cockpit.py:evaluate_session_clock",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "class:ai/cockpit.py:CockpitBuilder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "function:ai/cockpit.py:_fmt_inr",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "function:ai/cockpit.py:format_briefing_text",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "function:ai/cockpit.py:evaluate_session_clock",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "class:ai/cockpit.py:CockpitBuilder",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "function:ai/cockpit.py:_fmt_inr",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "function:ai/cockpit.py:format_briefing_text",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/gpu_engine.py",
+      "target": "class:ai/gpu_engine.py:GPUQuantitativeEngine",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/gpu_engine.py",
+      "target": "class:ai/gpu_engine.py:GPUQuantitativeEngine",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/quantitative_alpha.py",
+      "target": "function:ai/quantitative_alpha.py:norm_cdf",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/quantitative_alpha.py",
+      "target": "function:ai/quantitative_alpha.py:norm_pdf",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/quantitative_alpha.py",
+      "target": "class:ai/quantitative_alpha.py:QuantitativeAlphaState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/quantitative_alpha.py",
+      "target": "class:ai/quantitative_alpha.py:QuantitativeAlphaEngine",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/quantitative_alpha.py",
+      "target": "function:ai/quantitative_alpha.py:norm_cdf",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/quantitative_alpha.py",
+      "target": "function:ai/quantitative_alpha.py:norm_pdf",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/quantitative_alpha.py",
+      "target": "class:ai/quantitative_alpha.py:QuantitativeAlphaState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/quantitative_alpha.py",
+      "target": "class:ai/quantitative_alpha.py:QuantitativeAlphaEngine",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "class:ai/smart_edge.py:WallFragility",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "class:ai/smart_edge.py:IVSkewSignal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "class:ai/smart_edge.py:SmartEdgeResult",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_wall_fragility",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_oi_herfindahl",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_iv_skew",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_straddle_compression",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_relative_volume",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_ema_acceleration",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_composite_edge",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:evaluate_smart_edge",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "class:ai/smart_edge.py:WallFragility",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "class:ai/smart_edge.py:IVSkewSignal",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "class:ai/smart_edge.py:SmartEdgeResult",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_wall_fragility",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_oi_herfindahl",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_iv_skew",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_straddle_compression",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_relative_volume",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_ema_acceleration",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:compute_composite_edge",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/smart_edge.py",
+      "target": "function:ai/smart_edge.py:evaluate_smart_edge",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:ai/cockpit.py:CockpitBuilder",
+      "target": "class:ai/gpu_engine.py:GPUQuantitativeEngine",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:ai/cockpit.py:CockpitBuilder",
+      "target": "class:ai/quantitative_alpha.py:QuantitativeAlphaEngine",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:ai/cockpit.py:CockpitBuilder",
+      "target": "function:ai/smart_edge.py:evaluate_smart_edge",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:ai/cockpit.py:CockpitBuilder",
+      "target": "class:ai/live_kite_feed.py:LiveKiteFeed",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:ai/cockpit.py:CockpitBuilder",
+      "target": "class:connector/smart_trading_bridge.py:SmartTradingBridge",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/live_kite_feed.py",
+      "target": "file:ai/options_analytics.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/live_kite_feed.py",
+      "target": "file:connector/smart_trading_bridge.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "file:ai/live_kite_feed.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "file:ai/paper_ledger.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "file:ai/technical_lens.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "file:connector/smart_trading_bridge.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:connector/__init__.py",
+      "target": "file:connector/smart_trading_bridge.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ai/live_kite_feed.py",
+      "target": "class:ai/live_kite_feed.py:LiveMarketSnapshot",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/live_kite_feed.py",
+      "target": "function:ai/live_kite_feed.py:_extract_5level_depth",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/live_kite_feed.py",
+      "target": "class:ai/live_kite_feed.py:LiveKiteFeed",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/live_kite_feed.py",
+      "target": "class:ai/live_kite_feed.py:LiveMarketSnapshot",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/live_kite_feed.py",
+      "target": "function:ai/live_kite_feed.py:_extract_5level_depth",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/live_kite_feed.py",
+      "target": "class:ai/live_kite_feed.py:LiveKiteFeed",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:classify_indian_session_regime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:_parse_bar_dt",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "class:ai/logic_tester.py:SimTradeResult",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:_simulate_logic_on_bars",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:_summarize_trades",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:inspect_archived_tick_spread_audit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:run_logic_validation",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:load_cached_logic_report",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:format_logic_report",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:classify_indian_session_regime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:_parse_bar_dt",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "class:ai/logic_tester.py:SimTradeResult",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:_simulate_logic_on_bars",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:_summarize_trades",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:inspect_archived_tick_spread_audit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:run_logic_validation",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:load_cached_logic_report",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:ai/logic_tester.py:format_logic_report",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:connector/__init__.py",
+      "target": "class:connector/smart_trading_bridge.py:SmartTradingBridge",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:connector/smart_trading_bridge.py",
+      "target": "function:connector/smart_trading_bridge.py:resolve_smart_trading_root",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:connector/smart_trading_bridge.py",
+      "target": "function:connector/smart_trading_bridge.py:_is_tcp_listening",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:connector/smart_trading_bridge.py",
+      "target": "function:connector/smart_trading_bridge.py:_http_get_json",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:connector/smart_trading_bridge.py",
+      "target": "function:connector/smart_trading_bridge.py:compute_book_telemetry",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:connector/smart_trading_bridge.py",
+      "target": "class:connector/smart_trading_bridge.py:SmartTradingBridge",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:connector/smart_trading_bridge.py",
+      "target": "function:connector/smart_trading_bridge.py:resolve_smart_trading_root",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:connector/smart_trading_bridge.py",
+      "target": "function:connector/smart_trading_bridge.py:_is_tcp_listening",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:connector/smart_trading_bridge.py",
+      "target": "function:connector/smart_trading_bridge.py:_http_get_json",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:connector/smart_trading_bridge.py",
+      "target": "function:connector/smart_trading_bridge.py:compute_book_telemetry",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:connector/smart_trading_bridge.py",
+      "target": "class:connector/smart_trading_bridge.py:SmartTradingBridge",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/live_kite_feed.py",
+      "target": "class:connector/smart_trading_bridge.py:SmartTradingBridge",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "function:connector/smart_trading_bridge.py:compute_book_telemetry",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "class:connector/smart_trading_bridge.py:SmartTradingBridge",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "document:ai/AI_TRADER_PLAYBOOK.md",
+      "target": "file:ai/agent_trader.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:ai/AI_TRADER_PLAYBOOK.md",
+      "target": "file:ai/cockpit.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:ai/SYSTEM_BLUEPRINT.md",
+      "target": "file:ai/agent_trader.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:ai/SYSTEM_BLUEPRINT.md",
+      "target": "file:connector/smart_trading_bridge.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:ai/AUDIT_FINDINGS.md",
+      "target": "file:ai/live_kite_feed.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/run_morning_ai_trader.sh",
+      "target": "file:ai/agent_trader.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:ai/strategy.yaml",
+      "target": "file:ai/agent_trader.py",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:ai/strategy.yaml",
+      "target": "file:ai/cockpit.py",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:ai/cockpit.py",
+      "target": "config:ai/runtime/cockpit_briefing.json",
+      "type": "writes_to",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "config:ai/runtime/logic_test_report.json",
+      "type": "writes_to",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/options_analytics.py",
+      "target": "config:ai/runtime/oi_baseline_2026-11-25.json",
+      "type": "reads_from",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "config:ai/runtime/history_cache/HAL_25d_2026-11-25.json",
+      "type": "reads_from",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "config:ai/runtime/history_cache/HDFCBANK_25d_2026-11-25.json",
+      "type": "reads_from",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "config:ai/runtime/history_cache/ICICIBANK_25d_2026-11-25.json",
+      "type": "reads_from",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "config:ai/runtime/history_cache/INFY_25d_2026-11-25.json",
+      "type": "reads_from",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "config:ai/runtime/history_cache/M&M_25d_2026-11-25.json",
+      "type": "reads_from",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "config:ai/runtime/history_cache/NIFTY_25d_2026-11-25.json",
+      "type": "reads_from",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "config:ai/runtime/history_cache/SBIN_25d_2026-11-25.json",
+      "type": "reads_from",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/logic_tester.py",
+      "target": "config:ai/runtime/history_cache/TATASTEEL_25d_2026-11-25.json",
+      "type": "reads_from",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/paper_ledger.py",
+      "target": "file:ai/ai_paper_trades.db",
+      "type": "writes_to",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai/agent_trader.py",
+      "target": "file:ai/ai_paper_trades.db",
+      "type": "reads_from",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ],
+  "layers": [
+    {
+      "id": "layer:external-cio-control",
+      "name": "External CIO Control",
+      "description": "The command and MCP surface through which Codex or Antigravity should independently inspect evidence, authorize entries, and make discretionary management decisions; it also contains the legacy autonomous loop that conflicts with that authority model.",
+      "nodeIds": ["file:ai/agent_trader.py", "file:ai/mcp_server.py", "file:ai/run_morning_ai_trader.sh"]
+    },
+    {
+      "id": "layer:market-data-and-smarttrading-bridge",
+      "name": "Market Data & SmartTrading Bridge",
+      "description": "Fail-closed live Kite market access and the read-only SmartTrading connector supplying telemetry, market context, and collision information without cross-project writes.",
+      "nodeIds": ["file:ai/live_kite_feed.py", "file:connector/__init__.py", "file:connector/smart_trading_bridge.py"]
+    },
+    {
+      "id": "layer:analytics-and-cockpit-evidence",
+      "name": "Analytics & Cockpit Evidence",
+      "description": "Option-chain, Greeks, microstructure, volatility, technical, and composite-edge engines that compress market data into evidence for the external CIO rather than owning the final decision.",
+      "nodeIds": ["file:ai/cockpit.py", "file:ai/gpu_engine.py", "file:ai/greeks_gex.py", "file:ai/options_analytics.py", "file:ai/quantitative_alpha.py", "file:ai/smart_edge.py", "file:ai/technical_lens.py"]
+    },
+    {
+      "id": "layer:paper-ledger-and-safety-audit",
+      "name": "Paper Ledger & Safety Audit",
+      "description": "Independent paper-trade persistence, statutory-friction accounting, decision journaling, and the SQLite artifacts that make positions and actions auditable.",
+      "nodeIds": ["file:ai/paper_ledger.py", "file:ai/ai_paper_trades.db", "file:ai/runtime/paper_ledger.db"]
+    },
+    {
+      "id": "layer:validation-and-historical-evidence",
+      "name": "Validation & Historical Evidence",
+      "description": "Logic-test workflows, regression coverage, cached market histories, and validation reports used to evaluate claims without driving a mandatory trade decision.",
+      "nodeIds": ["file:ai/logic_tester.py", "file:ai/test_ai_agent.py", "config:ai/runtime/logic_test_report.json", "config:ai/runtime/history_cache/HAL_25d_2026-11-25.json", "config:ai/runtime/history_cache/HDFCBANK_25d_2026-11-25.json", "config:ai/runtime/history_cache/ICICIBANK_25d_2026-11-25.json", "config:ai/runtime/history_cache/INFY_25d_2026-11-25.json", "config:ai/runtime/history_cache/M&M_25d_2026-11-25.json", "config:ai/runtime/history_cache/NIFTY_25d_2026-11-25.json", "config:ai/runtime/history_cache/SBIN_25d_2026-11-25.json", "config:ai/runtime/history_cache/TATASTEEL_25d_2026-11-25.json"]
+    },
+    {
+      "id": "layer:policy-documentation-and-runtime-state",
+      "name": "Policy, Documentation & Runtime State",
+      "description": "The written operating contract, intended risk configuration, analysis configuration, and generated snapshots that give the CIO operational context.",
+      "nodeIds": ["document:ai/AI_TRADER_PLAYBOOK.md", "document:ai/AUDIT_FINDINGS.md", "document:ai/SYSTEM_BLUEPRINT.md", "config:ai/strategy.yaml", "config:ai/runtime/cockpit_briefing.json", "config:ai/runtime/oi_baseline_2026-11-25.json", "config:.understand-anything/.understandignore"]
+    }
+  ],
+  "tour": [
+    {
+      "order": 1,
+      "title": "CIO Authority Contract",
+      "description": "Begin with the project’s core promise: SmartTrading, analytics, and the guardian are helping hands, while an external Codex or Antigravity agent makes the trading decision. This document is the benchmark for judging whether actual code preserves that separation.",
+      "nodeIds": ["document:ai/AI_TRADER_PLAYBOOK.md", "document:ai/SYSTEM_BLUEPRINT.md"]
+    },
+    {
+      "order": 2,
+      "title": "Read-Only Data Bridge",
+      "description": "Next inspect the boundary to SmartTrading. The bridge reads desk telemetry, positions, journals, and shared data without importing SmartTrading code or issuing writes, so the analysis project cannot interfere with the desk runtime.",
+      "nodeIds": ["file:connector/smart_trading_bridge.py", "file:ai/live_kite_feed.py"]
+    },
+    {
+      "order": 3,
+      "title": "Evidence, Not Authority",
+      "description": "The cockpit assembles breadth, OI, walls, Greeks, microstructure, volatility, technical context, and sizing suggestions into a compact briefing. Its candidate ranking is deliberately evidence for a CIO, not a self-executing mandate.",
+      "nodeIds": ["file:ai/cockpit.py", "file:ai/options_analytics.py", "file:ai/greeks_gex.py", "file:ai/smart_edge.py"]
+    },
+    {
+      "order": 4,
+      "title": "External Agent Tools",
+      "description": "The MCP server is the intended interface for Codex or Antigravity to request market evidence, inspect positions, and send a deliberate CIO decision. The authorized entry and management tools should be the only normal route from analysis to a paper-trade state change.",
+      "nodeIds": ["file:ai/mcp_server.py", "function:ai/mcp_server.py:cio_authorize_entry", "function:ai/mcp_server.py:cio_manage_position"]
+    },
+    {
+      "order": 5,
+      "title": "Gated CIO Decisions",
+      "description": "The CIO path is where an external agent’s free decision is checked for non-negotiable operational safety: live price, spread, clock, F&O ban, collision mutex, cash, and maximum loss. It records the decision thesis, but it does not decide the thesis itself.",
+      "nodeIds": ["function:ai/agent_trader.py:cio_enter_trade", "function:ai/agent_trader.py:cio_manage_trade", "file:ai/paper_ledger.py"]
+    },
+    {
+      "order": 6,
+      "title": "Guardian Safety Boundary",
+      "description": "The guardian should only maintain the briefing, enforce a hard stop, and ensure the end-of-day square-off. This is the mechanical safety boundary that lets the external CIO remain discretionary without allowing unattended risk to remain open overnight.",
+      "nodeIds": ["function:ai/agent_trader.py:run_guardian_loop", "function:ai/agent_trader.py:square_off_all_positions", "file:ai/run_morning_ai_trader.sh"]
+    },
+    {
+      "order": 7,
+      "title": "Conflicting Legacy Paths",
+      "description": "Finally, examine the two paths that do not match the authority contract: the rule-driven autonomous loop can open trades, and the direct paper-order MCP tool bypasses the complete CIO authorization gate. These should be removed, disabled, or guarded before treating the architecture as external-agent-led.",
+      "nodeIds": ["function:ai/agent_trader.py:run_autonomous_loop", "function:ai/mcp_server.py:execute_paper_order", "config:ai/strategy.yaml"]
+    },
+    {
+      "order": 8,
+      "title": "Evidence and Regression",
+      "description": "Historical logic reports, cached market series, and regression tests are used to challenge the system’s assumptions and prevent fictional marks or broken risk rules. They support the CIO’s judgment, but should never silently turn a backtest score into an order.",
+      "nodeIds": ["file:ai/logic_tester.py", "file:ai/test_ai_agent.py", "config:ai/runtime/logic_test_report.json"]
+    }
+  ]
+}

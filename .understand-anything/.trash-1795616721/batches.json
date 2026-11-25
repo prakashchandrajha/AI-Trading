@@ -1,0 +1,900 @@
+{
+  "schemaVersion": 1,
+  "algorithm": "louvain",
+  "totalFiles": 34,
+  "totalBatches": 7,
+  "exportsByPath": {
+    ".understand-anything/.understandignore": [],
+    "ai/agent_trader.py": [
+      "AIAgentTrader",
+      "square_off_all_positions",
+      "inspect_the_generals",
+      "scan_sector_heatmap",
+      "scan_fo_universe",
+      "scan_machine_radar",
+      "scan_super_setups",
+      "scan_quant_physics",
+      "_TeeStream",
+      "run_autonomous_loop",
+      "_format_inr",
+      "cio_enter_trade",
+      "cio_manage_trade",
+      "run_guardian_loop",
+      "print_session_status",
+      "main"
+    ],
+    "ai/ai_paper_trades.db": [],
+    "ai/cockpit.py": [
+      "evaluate_session_clock",
+      "CockpitBuilder",
+      "_fmt_inr",
+      "format_briefing_text"
+    ],
+    "ai/gpu_engine.py": [
+      "GPUQuantitativeEngine"
+    ],
+    "ai/greeks_gex.py": [
+      "norm_cdf",
+      "norm_pdf",
+      "OptionGreeks",
+      "FrontierAnalysisResult",
+      "FrontierAnalyticsEngine"
+    ],
+    "ai/live_kite_feed.py": [
+      "LiveMarketSnapshot",
+      "_extract_5level_depth",
+      "LiveKiteFeed"
+    ],
+    "ai/logic_tester.py": [
+      "classify_indian_session_regime",
+      "_parse_bar_dt",
+      "SimTradeResult",
+      "_simulate_logic_on_bars",
+      "_summarize_trades",
+      "inspect_archived_tick_spread_audit",
+      "run_logic_validation",
+      "load_cached_logic_report",
+      "format_logic_report"
+    ],
+    "ai/mcp_server.py": [
+      "analyze_options",
+      "get_gex_and_greeks",
+      "check_generals_alignment",
+      "scan_fo_breakouts",
+      "get_sector_heatmap",
+      "get_market_lens_breadth",
+      "evaluate_super_setup",
+      "execute_paper_order",
+      "close_paper_order",
+      "get_portfolio_summary",
+      "get_open_positions",
+      "get_cockpit_briefing",
+      "cio_authorize_entry",
+      "cio_manage_position",
+      "run_regime_logic_test"
+    ],
+    "ai/options_analytics.py": [
+      "OptionStrikeData",
+      "NuvamaAnalyticsResult",
+      "NuvamaOptionsEngine"
+    ],
+    "ai/paper_ledger.py": [
+      "AIPaperLedger"
+    ],
+    "ai/quantitative_alpha.py": [
+      "norm_cdf",
+      "norm_pdf",
+      "QuantitativeAlphaState",
+      "QuantitativeAlphaEngine"
+    ],
+    "ai/runtime/paper_ledger.db": [],
+    "ai/smart_edge.py": [
+      "WallFragility",
+      "IVSkewSignal",
+      "SmartEdgeResult",
+      "compute_wall_fragility",
+      "compute_oi_herfindahl",
+      "compute_iv_skew",
+      "compute_straddle_compression",
+      "compute_relative_volume",
+      "compute_ema_acceleration",
+      "compute_composite_edge",
+      "evaluate_smart_edge"
+    ],
+    "ai/technical_lens.py": [
+      "TechnicalIndicators",
+      "MarketLensBreadth",
+      "TechnicalLensEngine"
+    ],
+    "ai/test_ai_agent.py": [
+      "test_max_pain_calculation",
+      "test_nuvama_analytics_walls_and_pcr",
+      "test_indian_friction_calculation",
+      "test_paper_ledger_lifecycle",
+      "test_midcpnifty_analytics_and_sizing",
+      "test_greeks_and_gex_calculation",
+      "test_mcp_server_tools",
+      "test_ai_is_strictly_self_contained",
+      "test_gpu_engine_acceleration",
+      "test_20_ema_triple_ribbon_and_fail_closed_history",
+      "test_live_mode_fails_closed_without_synthetic_bump",
+      "test_connector_bridge_and_book_telemetry",
+      "test_cio_clock_enter_trail_and_partial_book",
+      "test_logic_tester_regimes_and_simulation",
+      "test_smart_edge_wall_fragility_and_composite",
+      "test_ema_acceleration_reversing_reachable"
+    ],
+    "connector/__init__.py": [],
+    "connector/smart_trading_bridge.py": [
+      "resolve_smart_trading_root",
+      "_is_tcp_listening",
+      "_http_get_json",
+      "compute_book_telemetry",
+      "SmartTradingBridge"
+    ]
+  },
+  "batches": [
+    {
+      "batchIndex": 1,
+      "files": [
+        {
+          "path": "ai/agent_trader.py",
+          "language": "python",
+          "sizeLines": 1781,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ai/greeks_gex.py",
+          "language": "python",
+          "sizeLines": 265,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ai/mcp_server.py",
+          "language": "python",
+          "sizeLines": 411,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ai/options_analytics.py",
+          "language": "python",
+          "sizeLines": 489,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ai/paper_ledger.py",
+          "language": "python",
+          "sizeLines": 496,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ai/technical_lens.py",
+          "language": "python",
+          "sizeLines": 437,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ai/test_ai_agent.py",
+          "language": "python",
+          "sizeLines": 469,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "ai/agent_trader.py": [
+          "ai/cockpit.py",
+          "ai/gpu_engine.py",
+          "ai/greeks_gex.py",
+          "ai/live_kite_feed.py",
+          "ai/logic_tester.py",
+          "ai/options_analytics.py",
+          "ai/paper_ledger.py",
+          "ai/quantitative_alpha.py",
+          "ai/technical_lens.py",
+          "connector/smart_trading_bridge.py"
+        ],
+        "ai/greeks_gex.py": [
+          "ai/options_analytics.py"
+        ],
+        "ai/mcp_server.py": [
+          "ai/agent_trader.py",
+          "ai/greeks_gex.py",
+          "ai/options_analytics.py",
+          "ai/paper_ledger.py",
+          "ai/technical_lens.py"
+        ],
+        "ai/options_analytics.py": [],
+        "ai/paper_ledger.py": [],
+        "ai/technical_lens.py": [],
+        "ai/test_ai_agent.py": [
+          "ai/greeks_gex.py",
+          "ai/options_analytics.py",
+          "ai/paper_ledger.py"
+        ]
+      },
+      "neighborMap": {
+        "ai/agent_trader.py": [
+          {
+            "path": "ai/cockpit.py",
+            "batchIndex": 2,
+            "symbols": [
+              "evaluate_session_clock",
+              "CockpitBuilder",
+              "_fmt_inr",
+              "format_briefing_text"
+            ]
+          },
+          {
+            "path": "ai/gpu_engine.py",
+            "batchIndex": 2,
+            "symbols": [
+              "GPUQuantitativeEngine"
+            ]
+          },
+          {
+            "path": "ai/live_kite_feed.py",
+            "batchIndex": 3,
+            "symbols": [
+              "LiveMarketSnapshot",
+              "_extract_5level_depth",
+              "LiveKiteFeed"
+            ]
+          },
+          {
+            "path": "ai/logic_tester.py",
+            "batchIndex": 3,
+            "symbols": [
+              "classify_indian_session_regime",
+              "_parse_bar_dt",
+              "SimTradeResult",
+              "_simulate_logic_on_bars",
+              "_summarize_trades",
+              "inspect_archived_tick_spread_audit",
+              "run_logic_validation",
+              "load_cached_logic_report",
+              "format_logic_report"
+            ]
+          },
+          {
+            "path": "ai/quantitative_alpha.py",
+            "batchIndex": 2,
+            "symbols": [
+              "norm_cdf",
+              "norm_pdf",
+              "QuantitativeAlphaState",
+              "QuantitativeAlphaEngine"
+            ]
+          },
+          {
+            "path": "connector/smart_trading_bridge.py",
+            "batchIndex": 3,
+            "symbols": [
+              "resolve_smart_trading_root",
+              "_is_tcp_listening",
+              "_http_get_json",
+              "compute_book_telemetry",
+              "SmartTradingBridge"
+            ]
+          }
+        ],
+        "ai/greeks_gex.py": [
+          {
+            "path": "ai/cockpit.py",
+            "batchIndex": 2,
+            "symbols": [
+              "evaluate_session_clock",
+              "CockpitBuilder",
+              "_fmt_inr",
+              "format_briefing_text"
+            ]
+          }
+        ],
+        "ai/options_analytics.py": [
+          {
+            "path": "ai/cockpit.py",
+            "batchIndex": 2,
+            "symbols": [
+              "evaluate_session_clock",
+              "CockpitBuilder",
+              "_fmt_inr",
+              "format_briefing_text"
+            ]
+          },
+          {
+            "path": "ai/live_kite_feed.py",
+            "batchIndex": 3,
+            "symbols": [
+              "LiveMarketSnapshot",
+              "_extract_5level_depth",
+              "LiveKiteFeed"
+            ]
+          }
+        ],
+        "ai/paper_ledger.py": [
+          {
+            "path": "ai/cockpit.py",
+            "batchIndex": 2,
+            "symbols": [
+              "evaluate_session_clock",
+              "CockpitBuilder",
+              "_fmt_inr",
+              "format_briefing_text"
+            ]
+          },
+          {
+            "path": "ai/logic_tester.py",
+            "batchIndex": 3,
+            "symbols": [
+              "classify_indian_session_regime",
+              "_parse_bar_dt",
+              "SimTradeResult",
+              "_simulate_logic_on_bars",
+              "_summarize_trades",
+              "inspect_archived_tick_spread_audit",
+              "run_logic_validation",
+              "load_cached_logic_report",
+              "format_logic_report"
+            ]
+          }
+        ],
+        "ai/technical_lens.py": [
+          {
+            "path": "ai/cockpit.py",
+            "batchIndex": 2,
+            "symbols": [
+              "evaluate_session_clock",
+              "CockpitBuilder",
+              "_fmt_inr",
+              "format_briefing_text"
+            ]
+          },
+          {
+            "path": "ai/logic_tester.py",
+            "batchIndex": 3,
+            "symbols": [
+              "classify_indian_session_regime",
+              "_parse_bar_dt",
+              "SimTradeResult",
+              "_simulate_logic_on_bars",
+              "_summarize_trades",
+              "inspect_archived_tick_spread_audit",
+              "run_logic_validation",
+              "load_cached_logic_report",
+              "format_logic_report"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 2,
+      "files": [
+        {
+          "path": "ai/cockpit.py",
+          "language": "python",
+          "sizeLines": 774,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ai/gpu_engine.py",
+          "language": "python",
+          "sizeLines": 258,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ai/quantitative_alpha.py",
+          "language": "python",
+          "sizeLines": 327,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ai/smart_edge.py",
+          "language": "python",
+          "sizeLines": 586,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "ai/cockpit.py": [
+          "ai/gpu_engine.py",
+          "ai/greeks_gex.py",
+          "ai/live_kite_feed.py",
+          "ai/logic_tester.py",
+          "ai/options_analytics.py",
+          "ai/paper_ledger.py",
+          "ai/quantitative_alpha.py",
+          "ai/smart_edge.py",
+          "ai/technical_lens.py",
+          "connector/smart_trading_bridge.py"
+        ],
+        "ai/gpu_engine.py": [],
+        "ai/quantitative_alpha.py": [],
+        "ai/smart_edge.py": []
+      },
+      "neighborMap": {
+        "ai/cockpit.py": [
+          {
+            "path": "ai/greeks_gex.py",
+            "batchIndex": 1,
+            "symbols": [
+              "norm_cdf",
+              "norm_pdf",
+              "OptionGreeks",
+              "FrontierAnalysisResult",
+              "FrontierAnalyticsEngine"
+            ]
+          },
+          {
+            "path": "ai/live_kite_feed.py",
+            "batchIndex": 3,
+            "symbols": [
+              "LiveMarketSnapshot",
+              "_extract_5level_depth",
+              "LiveKiteFeed"
+            ]
+          },
+          {
+            "path": "ai/logic_tester.py",
+            "batchIndex": 3,
+            "symbols": [
+              "classify_indian_session_regime",
+              "_parse_bar_dt",
+              "SimTradeResult",
+              "_simulate_logic_on_bars",
+              "_summarize_trades",
+              "inspect_archived_tick_spread_audit",
+              "run_logic_validation",
+              "load_cached_logic_report",
+              "format_logic_report"
+            ]
+          },
+          {
+            "path": "ai/options_analytics.py",
+            "batchIndex": 1,
+            "symbols": [
+              "OptionStrikeData",
+              "NuvamaAnalyticsResult",
+              "NuvamaOptionsEngine"
+            ]
+          },
+          {
+            "path": "ai/paper_ledger.py",
+            "batchIndex": 1,
+            "symbols": [
+              "AIPaperLedger"
+            ]
+          },
+          {
+            "path": "ai/technical_lens.py",
+            "batchIndex": 1,
+            "symbols": [
+              "TechnicalIndicators",
+              "MarketLensBreadth",
+              "TechnicalLensEngine"
+            ]
+          },
+          {
+            "path": "connector/smart_trading_bridge.py",
+            "batchIndex": 3,
+            "symbols": [
+              "resolve_smart_trading_root",
+              "_is_tcp_listening",
+              "_http_get_json",
+              "compute_book_telemetry",
+              "SmartTradingBridge"
+            ]
+          },
+          {
+            "path": "ai/agent_trader.py",
+            "batchIndex": 1,
+            "symbols": [
+              "AIAgentTrader",
+              "square_off_all_positions",
+              "inspect_the_generals",
+              "scan_sector_heatmap",
+              "scan_fo_universe",
+              "scan_machine_radar",
+              "scan_super_setups",
+              "scan_quant_physics",
+              "_TeeStream",
+              "run_autonomous_loop",
+              "_format_inr",
+              "cio_enter_trade",
+              "cio_manage_trade",
+              "run_guardian_loop",
+              "print_session_status",
+              "main"
+            ]
+          }
+        ],
+        "ai/gpu_engine.py": [
+          {
+            "path": "ai/agent_trader.py",
+            "batchIndex": 1,
+            "symbols": [
+              "AIAgentTrader",
+              "square_off_all_positions",
+              "inspect_the_generals",
+              "scan_sector_heatmap",
+              "scan_fo_universe",
+              "scan_machine_radar",
+              "scan_super_setups",
+              "scan_quant_physics",
+              "_TeeStream",
+              "run_autonomous_loop",
+              "_format_inr",
+              "cio_enter_trade",
+              "cio_manage_trade",
+              "run_guardian_loop",
+              "print_session_status",
+              "main"
+            ]
+          }
+        ],
+        "ai/quantitative_alpha.py": [
+          {
+            "path": "ai/agent_trader.py",
+            "batchIndex": 1,
+            "symbols": [
+              "AIAgentTrader",
+              "square_off_all_positions",
+              "inspect_the_generals",
+              "scan_sector_heatmap",
+              "scan_fo_universe",
+              "scan_machine_radar",
+              "scan_super_setups",
+              "scan_quant_physics",
+              "_TeeStream",
+              "run_autonomous_loop",
+              "_format_inr",
+              "cio_enter_trade",
+              "cio_manage_trade",
+              "run_guardian_loop",
+              "print_session_status",
+              "main"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 3,
+      "files": [
+        {
+          "path": "ai/live_kite_feed.py",
+          "language": "python",
+          "sizeLines": 609,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ai/logic_tester.py",
+          "language": "python",
+          "sizeLines": 467,
+          "fileCategory": "code"
+        },
+        {
+          "path": "connector/__init__.py",
+          "language": "python",
+          "sizeLines": 5,
+          "fileCategory": "code"
+        },
+        {
+          "path": "connector/smart_trading_bridge.py",
+          "language": "python",
+          "sizeLines": 638,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "ai/live_kite_feed.py": [
+          "ai/options_analytics.py",
+          "connector/smart_trading_bridge.py"
+        ],
+        "ai/logic_tester.py": [
+          "ai/live_kite_feed.py",
+          "ai/paper_ledger.py",
+          "ai/technical_lens.py",
+          "connector/smart_trading_bridge.py"
+        ],
+        "connector/__init__.py": [
+          "connector/smart_trading_bridge.py"
+        ],
+        "connector/smart_trading_bridge.py": []
+      },
+      "neighborMap": {
+        "ai/live_kite_feed.py": [
+          {
+            "path": "ai/options_analytics.py",
+            "batchIndex": 1,
+            "symbols": [
+              "OptionStrikeData",
+              "NuvamaAnalyticsResult",
+              "NuvamaOptionsEngine"
+            ]
+          },
+          {
+            "path": "ai/agent_trader.py",
+            "batchIndex": 1,
+            "symbols": [
+              "AIAgentTrader",
+              "square_off_all_positions",
+              "inspect_the_generals",
+              "scan_sector_heatmap",
+              "scan_fo_universe",
+              "scan_machine_radar",
+              "scan_super_setups",
+              "scan_quant_physics",
+              "_TeeStream",
+              "run_autonomous_loop",
+              "_format_inr",
+              "cio_enter_trade",
+              "cio_manage_trade",
+              "run_guardian_loop",
+              "print_session_status",
+              "main"
+            ]
+          },
+          {
+            "path": "ai/cockpit.py",
+            "batchIndex": 2,
+            "symbols": [
+              "evaluate_session_clock",
+              "CockpitBuilder",
+              "_fmt_inr",
+              "format_briefing_text"
+            ]
+          }
+        ],
+        "ai/logic_tester.py": [
+          {
+            "path": "ai/paper_ledger.py",
+            "batchIndex": 1,
+            "symbols": [
+              "AIPaperLedger"
+            ]
+          },
+          {
+            "path": "ai/technical_lens.py",
+            "batchIndex": 1,
+            "symbols": [
+              "TechnicalIndicators",
+              "MarketLensBreadth",
+              "TechnicalLensEngine"
+            ]
+          },
+          {
+            "path": "ai/agent_trader.py",
+            "batchIndex": 1,
+            "symbols": [
+              "AIAgentTrader",
+              "square_off_all_positions",
+              "inspect_the_generals",
+              "scan_sector_heatmap",
+              "scan_fo_universe",
+              "scan_machine_radar",
+              "scan_super_setups",
+              "scan_quant_physics",
+              "_TeeStream",
+              "run_autonomous_loop",
+              "_format_inr",
+              "cio_enter_trade",
+              "cio_manage_trade",
+              "run_guardian_loop",
+              "print_session_status",
+              "main"
+            ]
+          },
+          {
+            "path": "ai/cockpit.py",
+            "batchIndex": 2,
+            "symbols": [
+              "evaluate_session_clock",
+              "CockpitBuilder",
+              "_fmt_inr",
+              "format_briefing_text"
+            ]
+          }
+        ],
+        "connector/smart_trading_bridge.py": [
+          {
+            "path": "ai/agent_trader.py",
+            "batchIndex": 1,
+            "symbols": [
+              "AIAgentTrader",
+              "square_off_all_positions",
+              "inspect_the_generals",
+              "scan_sector_heatmap",
+              "scan_fo_universe",
+              "scan_machine_radar",
+              "scan_super_setups",
+              "scan_quant_physics",
+              "_TeeStream",
+              "run_autonomous_loop",
+              "_format_inr",
+              "cio_enter_trade",
+              "cio_manage_trade",
+              "run_guardian_loop",
+              "print_session_status",
+              "main"
+            ]
+          },
+          {
+            "path": "ai/cockpit.py",
+            "batchIndex": 2,
+            "symbols": [
+              "evaluate_session_clock",
+              "CockpitBuilder",
+              "_fmt_inr",
+              "format_briefing_text"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 4,
+      "files": [
+        {
+          "path": "ai/AI_TRADER_PLAYBOOK.md",
+          "language": "markdown",
+          "sizeLines": 43,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "ai/AUDIT_FINDINGS.md",
+          "language": "markdown",
+          "sizeLines": 28,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "ai/SYSTEM_BLUEPRINT.md",
+          "language": "markdown",
+          "sizeLines": 248,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "ai/run_morning_ai_trader.sh",
+          "language": "shell",
+          "sizeLines": 87,
+          "fileCategory": "script"
+        },
+        {
+          "path": "ai/strategy.yaml",
+          "language": "yaml",
+          "sizeLines": 126,
+          "fileCategory": "config"
+        }
+      ],
+      "batchImportData": {
+        "ai/AI_TRADER_PLAYBOOK.md": [],
+        "ai/AUDIT_FINDINGS.md": [],
+        "ai/SYSTEM_BLUEPRINT.md": [],
+        "ai/run_morning_ai_trader.sh": [],
+        "ai/strategy.yaml": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 5,
+      "files": [
+        {
+          "path": "ai/runtime/cockpit_briefing.json",
+          "language": "json",
+          "sizeLines": 452,
+          "fileCategory": "config"
+        },
+        {
+          "path": "ai/runtime/logic_test_report.json",
+          "language": "json",
+          "sizeLines": 163,
+          "fileCategory": "config"
+        },
+        {
+          "path": "ai/runtime/oi_baseline_2026-11-25.json",
+          "language": "json",
+          "sizeLines": 0,
+          "fileCategory": "config"
+        }
+      ],
+      "batchImportData": {
+        "ai/runtime/cockpit_briefing.json": [],
+        "ai/runtime/logic_test_report.json": [],
+        "ai/runtime/oi_baseline_2026-11-25.json": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 6,
+      "files": [
+        {
+          "path": "ai/runtime/history_cache/HAL_25d_2026-11-25.json",
+          "language": "json",
+          "sizeLines": 0,
+          "fileCategory": "config"
+        },
+        {
+          "path": "ai/runtime/history_cache/HDFCBANK_25d_2026-11-25.json",
+          "language": "json",
+          "sizeLines": 0,
+          "fileCategory": "config"
+        },
+        {
+          "path": "ai/runtime/history_cache/ICICIBANK_25d_2026-11-25.json",
+          "language": "json",
+          "sizeLines": 0,
+          "fileCategory": "config"
+        },
+        {
+          "path": "ai/runtime/history_cache/INFY_25d_2026-11-25.json",
+          "language": "json",
+          "sizeLines": 0,
+          "fileCategory": "config"
+        },
+        {
+          "path": "ai/runtime/history_cache/M&M_25d_2026-11-25.json",
+          "language": "json",
+          "sizeLines": 0,
+          "fileCategory": "config"
+        },
+        {
+          "path": "ai/runtime/history_cache/NIFTY_25d_2026-11-25.json",
+          "language": "json",
+          "sizeLines": 0,
+          "fileCategory": "config"
+        },
+        {
+          "path": "ai/runtime/history_cache/SBIN_25d_2026-11-25.json",
+          "language": "json",
+          "sizeLines": 0,
+          "fileCategory": "config"
+        },
+        {
+          "path": "ai/runtime/history_cache/TATASTEEL_25d_2026-11-25.json",
+          "language": "json",
+          "sizeLines": 0,
+          "fileCategory": "config"
+        }
+      ],
+      "batchImportData": {
+        "ai/runtime/history_cache/HAL_25d_2026-11-25.json": [],
+        "ai/runtime/history_cache/HDFCBANK_25d_2026-11-25.json": [],
+        "ai/runtime/history_cache/ICICIBANK_25d_2026-11-25.json": [],
+        "ai/runtime/history_cache/INFY_25d_2026-11-25.json": [],
+        "ai/runtime/history_cache/M&M_25d_2026-11-25.json": [],
+        "ai/runtime/history_cache/NIFTY_25d_2026-11-25.json": [],
+        "ai/runtime/history_cache/SBIN_25d_2026-11-25.json": [],
+        "ai/runtime/history_cache/TATASTEEL_25d_2026-11-25.json": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 7,
+      "files": [
+        {
+          "path": ".understand-anything/.understandignore",
+          "language": "unknown",
+          "sizeLines": 27,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ai/ai_paper_trades.db",
+          "language": "db",
+          "sizeLines": 37,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ai/runtime/paper_ledger.db",
+          "language": "db",
+          "sizeLines": 0,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        ".understand-anything/.understandignore": [],
+        "ai/ai_paper_trades.db": [],
+        "ai/runtime/paper_ledger.db": []
+      },
+      "neighborMap": {}
+    }
+  ]
+}

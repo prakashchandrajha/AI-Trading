@@ -1,0 +1,3503 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 4,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "ai/cockpit.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 774,
+      "nonEmptyLines": 699,
+      "functions": [
+        {
+          "name": "evaluate_session_clock",
+          "startLine": 65,
+          "endLine": 107,
+          "params": [
+            "now_ist"
+          ]
+        },
+        {
+          "name": "_fmt_inr",
+          "startLine": 685,
+          "endLine": 688,
+          "params": [
+            "val"
+          ]
+        },
+        {
+          "name": "format_briefing_text",
+          "startLine": 691,
+          "endLine": 774,
+          "params": [
+            "b"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "CockpitBuilder",
+          "startLine": 110,
+          "endLine": 682,
+          "methods": [
+            "__init__",
+            "_compute_generals_from_breadth",
+            "_inspect_open_positions",
+            "build_briefing"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "evaluate_session_clock",
+          "line": 65,
+          "isDefault": false
+        },
+        {
+          "name": "CockpitBuilder",
+          "line": 110,
+          "isDefault": false
+        },
+        {
+          "name": "_fmt_inr",
+          "line": 685,
+          "isDefault": false
+        },
+        {
+          "name": "format_briefing_text",
+          "line": 691,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "evaluate_session_clock",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 67
+        },
+        {
+          "caller": "evaluate_session_clock",
+          "callee": "now.date",
+          "lineNumber": 68
+        },
+        {
+          "caller": "evaluate_session_clock",
+          "callee": "today.weekday",
+          "lineNumber": 69
+        },
+        {
+          "caller": "evaluate_session_clock",
+          "callee": "calendar.monthrange",
+          "lineNumber": 70
+        },
+        {
+          "caller": "evaluate_session_clock",
+          "callee": "datetime.date(today.year, today.month, last_thu).weekday",
+          "lineNumber": 72
+        },
+        {
+          "caller": "evaluate_session_clock",
+          "callee": "datetime.date",
+          "lineNumber": 72
+        },
+        {
+          "caller": "evaluate_session_clock",
+          "callee": "now.replace",
+          "lineNumber": 76
+        },
+        {
+          "caller": "evaluate_session_clock",
+          "callee": "int",
+          "lineNumber": 77
+        },
+        {
+          "caller": "evaluate_session_clock",
+          "callee": "(eod_dt - now).total_seconds",
+          "lineNumber": 77
+        },
+        {
+          "caller": "evaluate_session_clock",
+          "callee": "now.weekday",
+          "lineNumber": 80
+        },
+        {
+          "caller": "evaluate_session_clock",
+          "callee": "now.strftime",
+          "lineNumber": 102
+        },
+        {
+          "caller": "evaluate_session_clock",
+          "callee": "max",
+          "lineNumber": 105
+        },
+        {
+          "caller": "__init__",
+          "callee": "SmartTradingBridge",
+          "lineNumber": 120
+        },
+        {
+          "caller": "__init__",
+          "callee": "LiveKiteFeed",
+          "lineNumber": 121
+        },
+        {
+          "caller": "__init__",
+          "callee": "AIPaperLedger",
+          "lineNumber": 122
+        },
+        {
+          "caller": "__init__",
+          "callee": "GPUQuantitativeEngine",
+          "lineNumber": 123
+        },
+        {
+          "caller": "_compute_generals_from_breadth",
+          "callee": "breadth_payload.get",
+          "lineNumber": 126
+        },
+        {
+          "caller": "_compute_generals_from_breadth",
+          "callee": "sum",
+          "lineNumber": 127
+        },
+        {
+          "caller": "_compute_generals_from_breadth",
+          "callee": "moves.get",
+          "lineNumber": 131
+        },
+        {
+          "caller": "_compute_generals_from_breadth",
+          "callee": "float",
+          "lineNumber": 134
+        },
+        {
+          "caller": "_compute_generals_from_breadth",
+          "callee": "m.get",
+          "lineNumber": 134
+        },
+        {
+          "caller": "_compute_generals_from_breadth",
+          "callee": "bool",
+          "lineNumber": 135
+        },
+        {
+          "caller": "_compute_generals_from_breadth",
+          "callee": "m.get",
+          "lineNumber": 135
+        },
+        {
+          "caller": "_compute_generals_from_breadth",
+          "callee": "round",
+          "lineNumber": 139
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "self.feed.fetch_contract_quotes",
+          "lineNumber": 150
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 151
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "float",
+          "lineNumber": 158
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "float",
+          "lineNumber": 159
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "int",
+          "lineNumber": 160
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "quotes.get",
+          "lineNumber": 164
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "float",
+          "lineNumber": 165
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "q.get",
+          "lineNumber": 165
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "q.get",
+          "lineNumber": 166
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "q.get",
+          "lineNumber": 167
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "compute_book_telemetry",
+          "lineNumber": 168
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "q.get",
+          "lineNumber": 169
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "q.get",
+          "lineNumber": 169
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "max",
+          "lineNumber": 169
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "max",
+          "lineNumber": 169
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "int",
+          "lineNumber": 169
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "self.feed.fetch_spot_and_option_chain",
+          "lineNumber": 172
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "TechnicalLensEngine.analyze_technicals",
+          "lineNumber": 175
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "OptionsAnalyticsEngine.analyze",
+          "lineNumber": 181
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "datetime.datetime.fromisoformat",
+          "lineNumber": 184
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "ed.replace",
+          "lineNumber": 186
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "round",
+          "lineNumber": 187
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "(now_utc - ed).total_seconds",
+          "lineNumber": 187
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "AIPaperLedger.calculate_indian_friction",
+          "lineNumber": 193
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "round",
+          "lineNumber": 194
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "round",
+          "lineNumber": 195
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "round",
+          "lineNumber": 206
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "out.append",
+          "lineNumber": 220
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "int",
+          "lineNumber": 225
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "float",
+          "lineNumber": 230
+        },
+        {
+          "caller": "_inspect_open_positions",
+          "callee": "round",
+          "lineNumber": 234
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "evaluate_session_clock",
+          "lineNumber": 253
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "self.bridge.get_unified_desk_context",
+          "lineNumber": 254
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "self.ledger.get_open_trades",
+          "lineNumber": 255
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "self.ledger.get_today_pnl",
+          "lineNumber": 256
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "sum",
+          "lineNumber": 257
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "float",
+          "lineNumber": 257
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "int",
+          "lineNumber": 257
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 258
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "self.feed.get_available_universe",
+          "lineNumber": 261
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "self.feed.get_full_fno_universe",
+          "lineNumber": 263
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "self.feed.get_available_universe",
+          "lineNumber": 264
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "self.feed.fetch_live_market_breadth",
+          "lineNumber": 266
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "TechnicalLensEngine.compute_live_market_lens_breadth",
+          "lineNumber": 267
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "self._compute_generals_from_breadth",
+          "lineNumber": 270
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "desk_ctx.get",
+          "lineNumber": 273
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "dict",
+          "lineNumber": 274
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "breadth_raw.get",
+          "lineNumber": 274
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "shm_macro.get",
+          "lineNumber": 276
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "shm_item.get",
+          "lineNumber": 277
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "shm_item.get",
+          "lineNumber": 277
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "float",
+          "lineNumber": 278
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "shm_item.get",
+          "lineNumber": 278
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 282
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "self._inspect_open_positions",
+          "lineNumber": 286
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "breadth_raw.get",
+          "lineNumber": 290
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "float",
+          "lineNumber": 291
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "m.get",
+          "lineNumber": 291
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "sorted",
+          "lineNumber": 292
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "abs",
+          "lineNumber": 294
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "float",
+          "lineNumber": 294
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "x.get",
+          "lineNumber": 294
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "math.log1p",
+          "lineNumber": 294
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 294
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "float",
+          "lineNumber": 294
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "x.get",
+          "lineNumber": 294
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "scan_order.append",
+          "lineNumber": 300
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "len",
+          "lineNumber": 301
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "set",
+          "lineNumber": 304
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "desk_ctx.get",
+          "lineNumber": 304
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "set",
+          "lineNumber": 305
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "desk_ctx.get(\"nse_premarket\", {}).get",
+          "lineNumber": 305
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "desk_ctx.get",
+          "lineNumber": 305
+        },
+        {
+          "caller": "_bump",
+          "callee": "veto_counts.get",
+          "lineNumber": 312
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 314
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "min",
+          "lineNumber": 314
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "_bump",
+          "lineNumber": 318
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "_bump",
+          "lineNumber": 321
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "_bump",
+          "lineNumber": 324
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "self.feed.fetch_spot_and_option_chain",
+          "lineNumber": 327
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "_bump",
+          "lineNumber": 329
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "TechnicalLensEngine.analyze_technicals",
+          "lineNumber": 333
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "OptionsAnalyticsEngine.analyze",
+          "lineNumber": 337
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "GreeksGexEngine.evaluate_frontier_landscape",
+          "lineNumber": 338
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 344
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 347
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 350
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 353
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "abs",
+          "lineNumber": 356
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 357
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 360
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 366
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 368
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 371
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 374
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "next",
+          "lineNumber": 376
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 382
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 386
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 391
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 394
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 396
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "min",
+          "lineNumber": 399
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "abs",
+          "lineNumber": 399
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "next",
+          "lineNumber": 401
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "snap.contract_map.get",
+          "lineNumber": 405
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 424
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 428
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 429
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 430
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 432
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "_bump",
+          "lineNumber": 439
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "self.feed.get_symbol_meta",
+          "lineNumber": 445
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 446
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "float",
+          "lineNumber": 446
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "meta.get",
+          "lineNumber": 446
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "self.gpu.compute_vectorized_greeks",
+          "lineNumber": 447
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 451
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 454
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "float",
+          "lineNumber": 454
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 455
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "float",
+          "lineNumber": 455
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "QuantitativeAlphaEngine.evaluate_machine_alpha",
+          "lineNumber": 457
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 475
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 478
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 479
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 480
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 480
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "abs",
+          "lineNumber": 480
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "self.gpu.simulate_monte_carlo_po_t",
+          "lineNumber": 481
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "min",
+          "lineNumber": 495
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 495
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 495
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 496
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 497
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 499
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 500
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "min",
+          "lineNumber": 501
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "int",
+          "lineNumber": 502
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "min",
+          "lineNumber": 502
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 502
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "int",
+          "lineNumber": 503
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 504
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "min",
+          "lineNumber": 504
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 504
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 505
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 506
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "flags.append",
+          "lineNumber": 508
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "AIPaperLedger.calculate_indian_friction",
+          "lineNumber": 510
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 513
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "next",
+          "lineNumber": 523
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "next",
+          "lineNumber": 524
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "TechnicalLensEngine.calculate_ema_series",
+          "lineNumber": 534
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "chosen_contract.get",
+          "lineNumber": 540
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "len",
+          "lineNumber": 544
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "len",
+          "lineNumber": 545
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 546
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "sum",
+          "lineNumber": 546
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "next",
+          "lineNumber": 549
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 550
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "int",
+          "lineNumber": 550
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "breadth_move.get",
+          "lineNumber": 550
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "evaluate_smart_edge",
+          "lineNumber": 552
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "\" \".join",
+          "lineNumber": 564
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "\" \".join",
+          "lineNumber": 564
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 566
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "min",
+          "lineNumber": 566
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "min",
+          "lineNumber": 570
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "max",
+          "lineNumber": 570
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "any",
+          "lineNumber": 572
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "f.startswith",
+          "lineNumber": 572
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "vetted_candidates.append",
+          "lineNumber": 575
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 579
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 581
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 587
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 603
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "vetted_candidates.sort",
+          "lineNumber": 627
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "load_cached_logic_report",
+          "lineNumber": 628
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "logic_rep.get",
+          "lineNumber": 633
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "(logic_rep.get(\"causal_by_regime\") or {}).get",
+          "lineNumber": 634
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "logic_rep.get",
+          "lineNumber": 634
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "(logic_rep.get(\"causal_by_regime\") or {}).get",
+          "lineNumber": 635
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "logic_rep.get",
+          "lineNumber": 635
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "desk_ctx.get",
+          "lineNumber": 638
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "nse_pm.get",
+          "lineNumber": 639
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 645
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 646
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "round",
+          "lineNumber": 648
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "len",
+          "lineNumber": 655
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "part.get",
+          "lineNumber": 658
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "part.get",
+          "lineNumber": 659
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "nse_pm.get",
+          "lineNumber": 660
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "desk_ctx.get",
+          "lineNumber": 665
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "len",
+          "lineNumber": 670
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "len",
+          "lineNumber": 671
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "BRIEFING_PATH.parent.mkdir",
+          "lineNumber": 678
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "BRIEFING_PATH.write_text",
+          "lineNumber": 679
+        },
+        {
+          "caller": "build_briefing",
+          "callee": "json.dumps",
+          "lineNumber": 679
+        },
+        {
+          "caller": "_fmt_inr",
+          "callee": "abs",
+          "lineNumber": 688
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "dsk.get",
+          "lineNumber": 697
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "dmr.get",
+          "lineNumber": 698
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "dmr.get",
+          "lineNumber": 699
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "_fmt_inr",
+          "lineNumber": 706
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "mac.get",
+          "lineNumber": 707
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "', '.join",
+          "lineNumber": 708
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "mac.get",
+          "lineNumber": 708
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "gift.get",
+          "lineNumber": 708
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "gift.get",
+          "lineNumber": 708
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "dmr.get",
+          "lineNumber": 709
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "dmr.get",
+          "lineNumber": 709
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "dmr.get",
+          "lineNumber": 709
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "dmr.get",
+          "lineNumber": 709
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "jrnl.get",
+          "lineNumber": 711
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 712
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "jrnl.get",
+          "lineNumber": 713
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "jrnl.get",
+          "lineNumber": 713
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "jrnl.get",
+          "lineNumber": 713
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "mac.get",
+          "lineNumber": 715
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "\" | \".join",
+          "lineNumber": 717
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "v.get",
+          "lineNumber": 717
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "v.get",
+          "lineNumber": 717
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "idx.items",
+          "lineNumber": 717
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "v.get",
+          "lineNumber": 717
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 719
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "b.get",
+          "lineNumber": 721
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "ltc.get",
+          "lineNumber": 722
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "ltc.get",
+          "lineNumber": 724
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 725
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "ltc.get",
+          "lineNumber": 726
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "rs.get",
+          "lineNumber": 726
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "rs.get",
+          "lineNumber": 726
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "hv.get",
+          "lineNumber": 726
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "hv.get",
+          "lineNumber": 726
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 729
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "b.get",
+          "lineNumber": 730
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 731
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "len",
+          "lineNumber": 731
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 733
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 735
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "_fmt_inr",
+          "lineNumber": 737
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 739
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 743
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "b.get",
+          "lineNumber": 744
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 745
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "len",
+          "lineNumber": 746
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "b.get",
+          "lineNumber": 746
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 749
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "enumerate",
+          "lineNumber": 750
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 752
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 753
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 754
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "\" \".join",
+          "lineNumber": 755
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 755
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 756
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 757
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 759
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 762
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 763
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 763
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 763
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 765
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "\" | \".join",
+          "lineNumber": 769
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 769
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 770
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 771
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 771
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 771
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 771
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 771
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 771
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "c.get",
+          "lineNumber": 771
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "lines.append",
+          "lineNumber": 773
+        },
+        {
+          "caller": "format_briefing_text",
+          "callee": "\"\\n\".join",
+          "lineNumber": 774
+        }
+      ],
+      "metrics": {
+        "importCount": 10,
+        "exportCount": 4,
+        "functionCount": 3,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "ai/gpu_engine.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 258,
+      "nonEmptyLines": 230,
+      "classes": [
+        {
+          "name": "GPUQuantitativeEngine",
+          "startLine": 24,
+          "endLine": 258,
+          "methods": [
+            "__init__",
+            "_warmup_gpu",
+            "simulate_monte_carlo_po_t",
+            "_cpu_monte_carlo_fallback",
+            "compute_vectorized_greeks",
+            "evaluate_correlation_heat_shield"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "GPUQuantitativeEngine",
+          "line": 24,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "__init__",
+          "callee": "torch.device",
+          "lineNumber": 27
+        },
+        {
+          "caller": "__init__",
+          "callee": "torch.device",
+          "lineNumber": 27
+        },
+        {
+          "caller": "__init__",
+          "callee": "self._warmup_gpu",
+          "lineNumber": 28
+        },
+        {
+          "caller": "_warmup_gpu",
+          "callee": "torch.randn",
+          "lineNumber": 35
+        },
+        {
+          "caller": "_warmup_gpu",
+          "callee": "torch.sum",
+          "lineNumber": 36
+        },
+        {
+          "caller": "_warmup_gpu",
+          "callee": "torch.cuda.synchronize",
+          "lineNumber": 37
+        },
+        {
+          "caller": "_warmup_gpu",
+          "callee": "torch.device",
+          "lineNumber": 40
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "max",
+          "lineNumber": 58
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "float",
+          "lineNumber": 58
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "max",
+          "lineNumber": 59
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "float",
+          "lineNumber": 59
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "max",
+          "lineNumber": 60
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "float",
+          "lineNumber": 60
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "max",
+          "lineNumber": 61
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "int",
+          "lineNumber": 61
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "max",
+          "lineNumber": 62
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "float",
+          "lineNumber": 62
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "bool",
+          "lineNumber": 63
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "self._cpu_monte_carlo_fallback",
+          "lineNumber": 66
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "time.perf_counter",
+          "lineNumber": 70
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "max",
+          "lineNumber": 72
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "min",
+          "lineNumber": 72
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "math.sqrt",
+          "lineNumber": 73
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "torch.randn",
+          "lineNumber": 76
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "torch.cumsum",
+          "lineNumber": 78
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "torch.exp",
+          "lineNumber": 79
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "max",
+          "lineNumber": 83
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "max",
+          "lineNumber": 87
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "torch.any",
+          "lineNumber": 92
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "torch.any",
+          "lineNumber": 93
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "torch.argmax",
+          "lineNumber": 95
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "hit_target.int",
+          "lineNumber": 95
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "torch.argmax",
+          "lineNumber": 96
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "hit_stop.int",
+          "lineNumber": 96
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "float",
+          "lineNumber": 101
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "torch.sum(win_mask).item",
+          "lineNumber": 101
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "torch.sum",
+          "lineNumber": 101
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "float",
+          "lineNumber": 102
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "torch.sum(loss_mask).item",
+          "lineNumber": 102
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "torch.sum",
+          "lineNumber": 102
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "max",
+          "lineNumber": 103
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "torch.cuda.synchronize",
+          "lineNumber": 105
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "time.perf_counter",
+          "lineNumber": 106
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "round",
+          "lineNumber": 111
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "round",
+          "lineNumber": 112
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "round",
+          "lineNumber": 113
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "round",
+          "lineNumber": 114
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "round",
+          "lineNumber": 115
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "round",
+          "lineNumber": 118
+        },
+        {
+          "caller": "simulate_monte_carlo_po_t",
+          "callee": "str",
+          "lineNumber": 119
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "bool",
+          "lineNumber": 134
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "math.sqrt",
+          "lineNumber": 138
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "max",
+          "lineNumber": 138
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "min",
+          "lineNumber": 139
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "max",
+          "lineNumber": 141
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "min",
+          "lineNumber": 141
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "max",
+          "lineNumber": 142
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "min",
+          "lineNumber": 142
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "round",
+          "lineNumber": 145
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "round",
+          "lineNumber": 146
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "round",
+          "lineNumber": 147
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "max",
+          "lineNumber": 147
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "round",
+          "lineNumber": 148
+        },
+        {
+          "caller": "_cpu_monte_carlo_fallback",
+          "callee": "round",
+          "lineNumber": 149
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "len",
+          "lineNumber": 168
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "zip",
+          "lineNumber": 174
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "max",
+          "lineNumber": 175
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "max",
+          "lineNumber": 176
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "math.sqrt",
+          "lineNumber": 177
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "math.log",
+          "lineNumber": 178
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "math.sqrt",
+          "lineNumber": 180
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "math.exp",
+          "lineNumber": 180
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "math.erf",
+          "lineNumber": 181
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "math.sqrt",
+          "lineNumber": 181
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "math.erf",
+          "lineNumber": 182
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "math.sqrt",
+          "lineNumber": 182
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "math.exp",
+          "lineNumber": 186
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "math.exp",
+          "lineNumber": 186
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "deltas.append",
+          "lineNumber": 189
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "round",
+          "lineNumber": 189
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "gammas.append",
+          "lineNumber": 190
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "round",
+          "lineNumber": 190
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "vegas.append",
+          "lineNumber": 191
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "round",
+          "lineNumber": 191
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "thetas.append",
+          "lineNumber": 192
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "round",
+          "lineNumber": 192
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "vannas.append",
+          "lineNumber": 193
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "round",
+          "lineNumber": 193
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.tensor",
+          "lineNumber": 197
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.tensor",
+          "lineNumber": 198
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.tensor",
+          "lineNumber": 199
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "max",
+          "lineNumber": 199
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.tensor",
+          "lineNumber": 200
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "max",
+          "lineNumber": 200
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.tensor",
+          "lineNumber": 201
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.sqrt",
+          "lineNumber": 203
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.log",
+          "lineNumber": 204
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.exp",
+          "lineNumber": 208
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.erf",
+          "lineNumber": 209
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.erf",
+          "lineNumber": 210
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.where",
+          "lineNumber": 212
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.exp",
+          "lineNumber": 215
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.where",
+          "lineNumber": 216
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "torch.cuda.synchronize",
+          "lineNumber": 220
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "round",
+          "lineNumber": 223
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "delta.cpu().tolist",
+          "lineNumber": 223
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "delta.cpu",
+          "lineNumber": 223
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "round",
+          "lineNumber": 224
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "gamma.cpu().tolist",
+          "lineNumber": 224
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "gamma.cpu",
+          "lineNumber": 224
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "round",
+          "lineNumber": 225
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "vega.cpu().tolist",
+          "lineNumber": 225
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "vega.cpu",
+          "lineNumber": 225
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "round",
+          "lineNumber": 226
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "theta.cpu().tolist",
+          "lineNumber": 226
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "theta.cpu",
+          "lineNumber": 226
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "round",
+          "lineNumber": 227
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "vanna.cpu().tolist",
+          "lineNumber": 227
+        },
+        {
+          "caller": "compute_vectorized_greeks",
+          "callee": "vanna.cpu",
+          "lineNumber": 227
+        },
+        {
+          "caller": "evaluate_correlation_heat_shield",
+          "callee": "len",
+          "lineNumber": 237
+        },
+        {
+          "caller": "evaluate_correlation_heat_shield",
+          "callee": "torch.tensor",
+          "lineNumber": 240
+        },
+        {
+          "caller": "evaluate_correlation_heat_shield",
+          "callee": "torch.mean",
+          "lineNumber": 242
+        },
+        {
+          "caller": "evaluate_correlation_heat_shield",
+          "callee": "torch.norm",
+          "lineNumber": 244
+        },
+        {
+          "caller": "evaluate_correlation_heat_shield",
+          "callee": "torch.mm",
+          "lineNumber": 247
+        },
+        {
+          "caller": "evaluate_correlation_heat_shield",
+          "callee": "normalized.t",
+          "lineNumber": 247
+        },
+        {
+          "caller": "evaluate_correlation_heat_shield",
+          "callee": "range",
+          "lineNumber": 251
+        },
+        {
+          "caller": "evaluate_correlation_heat_shield",
+          "callee": "range",
+          "lineNumber": 252
+        },
+        {
+          "caller": "evaluate_correlation_heat_shield",
+          "callee": "float",
+          "lineNumber": 253
+        },
+        {
+          "caller": "evaluate_correlation_heat_shield",
+          "callee": "corr[i, j].item",
+          "lineNumber": 253
+        },
+        {
+          "caller": "evaluate_correlation_heat_shield",
+          "callee": "high_corr_pairs.append",
+          "lineNumber": 255
+        },
+        {
+          "caller": "evaluate_correlation_heat_shield",
+          "callee": "round",
+          "lineNumber": 255
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "ai/quantitative_alpha.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 327,
+      "nonEmptyLines": 301,
+      "functions": [
+        {
+          "name": "norm_cdf",
+          "startLine": 19,
+          "endLine": 20,
+          "params": [
+            "x"
+          ]
+        },
+        {
+          "name": "norm_pdf",
+          "startLine": 23,
+          "endLine": 24,
+          "params": [
+            "x"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "QuantitativeAlphaState",
+          "startLine": 28,
+          "endLine": 47,
+          "methods": [],
+          "properties": [
+            "symbol",
+            "underlying_price",
+            "micro_price",
+            "micro_price_edge_pts",
+            "queue_imbalance_ratio",
+            "ofi_velocity",
+            "ofi_acceleration",
+            "vanna_dealer_flow",
+            "charm_dealer_flow",
+            "flow_toxicity_score",
+            "gamma_ignition_probability",
+            "machine_signal",
+            "execution_advantage",
+            "z_ofi",
+            "vpin_proxy",
+            "regime",
+            "kobp",
+            "ask_replenish_warning",
+            "source"
+          ]
+        },
+        {
+          "name": "QuantitativeAlphaEngine",
+          "startLine": 50,
+          "endLine": 327,
+          "methods": [
+            "calculate_micro_price",
+            "calculate_5level_z_ofi",
+            "calculate_vpin_proxy",
+            "calculate_second_order_greeks",
+            "evaluate_machine_alpha"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "norm_cdf",
+          "line": 19,
+          "isDefault": false
+        },
+        {
+          "name": "norm_pdf",
+          "line": 23,
+          "isDefault": false
+        },
+        {
+          "name": "QuantitativeAlphaState",
+          "line": 27,
+          "isDefault": false
+        },
+        {
+          "name": "QuantitativeAlphaEngine",
+          "line": 50,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "norm_cdf",
+          "callee": "math.erf",
+          "lineNumber": 20
+        },
+        {
+          "caller": "norm_cdf",
+          "callee": "math.sqrt",
+          "lineNumber": 20
+        },
+        {
+          "caller": "norm_pdf",
+          "callee": "math.exp",
+          "lineNumber": 24
+        },
+        {
+          "caller": "norm_pdf",
+          "callee": "math.sqrt",
+          "lineNumber": 24
+        },
+        {
+          "caller": "calculate_micro_price",
+          "callee": "round",
+          "lineNumber": 76
+        },
+        {
+          "caller": "calculate_micro_price",
+          "callee": "round",
+          "lineNumber": 76
+        },
+        {
+          "caller": "calculate_5level_z_ofi",
+          "callee": "min",
+          "lineNumber": 95
+        },
+        {
+          "caller": "calculate_5level_z_ofi",
+          "callee": "len",
+          "lineNumber": 95
+        },
+        {
+          "caller": "calculate_5level_z_ofi",
+          "callee": "len",
+          "lineNumber": 95
+        },
+        {
+          "caller": "calculate_5level_z_ofi",
+          "callee": "len",
+          "lineNumber": 95
+        },
+        {
+          "caller": "calculate_5level_z_ofi",
+          "callee": "range",
+          "lineNumber": 97
+        },
+        {
+          "caller": "calculate_5level_z_ofi",
+          "callee": "len",
+          "lineNumber": 100
+        },
+        {
+          "caller": "calculate_5level_z_ofi",
+          "callee": "len",
+          "lineNumber": 100
+        },
+        {
+          "caller": "calculate_5level_z_ofi",
+          "callee": "max",
+          "lineNumber": 110
+        },
+        {
+          "caller": "calculate_5level_z_ofi",
+          "callee": "max",
+          "lineNumber": 111
+        },
+        {
+          "caller": "calculate_5level_z_ofi",
+          "callee": "round",
+          "lineNumber": 113
+        },
+        {
+          "caller": "calculate_vpin_proxy",
+          "callee": "round",
+          "lineNumber": 130
+        },
+        {
+          "caller": "calculate_vpin_proxy",
+          "callee": "max",
+          "lineNumber": 130
+        },
+        {
+          "caller": "calculate_vpin_proxy",
+          "callee": "min",
+          "lineNumber": 130
+        },
+        {
+          "caller": "calculate_second_order_greeks",
+          "callee": "max",
+          "lineNumber": 153
+        },
+        {
+          "caller": "calculate_second_order_greeks",
+          "callee": "math.sqrt",
+          "lineNumber": 154
+        },
+        {
+          "caller": "calculate_second_order_greeks",
+          "callee": "math.log",
+          "lineNumber": 155
+        },
+        {
+          "caller": "calculate_second_order_greeks",
+          "callee": "norm_pdf",
+          "lineNumber": 157
+        },
+        {
+          "caller": "calculate_second_order_greeks",
+          "callee": "round",
+          "lineNumber": 168
+        },
+        {
+          "caller": "calculate_second_order_greeks",
+          "callee": "round",
+          "lineNumber": 169
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "str",
+          "lineNumber": 201
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "Path(__file__).resolve",
+          "lineNumber": 201
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "Path",
+          "lineNumber": 201
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "sys.path.insert",
+          "lineNumber": 203
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "compute_book_telemetry",
+          "lineNumber": 206
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "max",
+          "lineNumber": 212
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "float",
+          "lineNumber": 214
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "float",
+          "lineNumber": 215
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "int",
+          "lineNumber": 216
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "int",
+          "lineNumber": 217
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "max",
+          "lineNumber": 218
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "round",
+          "lineNumber": 219
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "float",
+          "lineNumber": 220
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "float",
+          "lineNumber": 221
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "bool",
+          "lineNumber": 222
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "cls.calculate_vpin_proxy",
+          "lineNumber": 223
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "round",
+          "lineNumber": 224
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "round",
+          "lineNumber": 225
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "round",
+          "lineNumber": 226
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "min",
+          "lineNumber": 226
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "max",
+          "lineNumber": 226
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "abs",
+          "lineNumber": 226
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "abs",
+          "lineNumber": 226
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "round",
+          "lineNumber": 227
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "min",
+          "lineNumber": 227
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "max",
+          "lineNumber": 227
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "abs",
+          "lineNumber": 227
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "abs",
+          "lineNumber": 227
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "max",
+          "lineNumber": 235
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "round",
+          "lineNumber": 235
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "abs",
+          "lineNumber": 240
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "abs",
+          "lineNumber": 245
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "cls.calculate_micro_price",
+          "lineNumber": 248
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "round",
+          "lineNumber": 249
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "round",
+          "lineNumber": 254
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "max",
+          "lineNumber": 254
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "max",
+          "lineNumber": 254
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "cls.calculate_second_order_greeks",
+          "lineNumber": 255
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "max",
+          "lineNumber": 258
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "QuantitativeAlphaState",
+          "lineNumber": 307
+        },
+        {
+          "caller": "evaluate_machine_alpha",
+          "callee": "symbol.upper",
+          "lineNumber": 308
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 4,
+        "functionCount": 2,
+        "classCount": 2
+      }
+    },
+    {
+      "path": "ai/smart_edge.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 586,
+      "nonEmptyLines": 487,
+      "functions": [
+        {
+          "name": "compute_wall_fragility",
+          "startLine": 84,
+          "endLine": 134,
+          "params": [
+            "wall_strike",
+            "wall_oi",
+            "wall_oi_change",
+            "spot",
+            "atr",
+            "is_call_wall"
+          ]
+        },
+        {
+          "name": "compute_oi_herfindahl",
+          "startLine": 137,
+          "endLine": 178,
+          "params": [
+            "chain_data"
+          ]
+        },
+        {
+          "name": "compute_iv_skew",
+          "startLine": 181,
+          "endLine": 256,
+          "params": [
+            "chain_data",
+            "spot",
+            "strike_step",
+            "dte_days"
+          ]
+        },
+        {
+          "name": "compute_straddle_compression",
+          "startLine": 259,
+          "endLine": 288,
+          "params": [
+            "atm_straddle_premium",
+            "spot",
+            "realized_vol_annual",
+            "dte_days"
+          ]
+        },
+        {
+          "name": "compute_relative_volume",
+          "startLine": 291,
+          "endLine": 316,
+          "params": [
+            "current_volume",
+            "avg_volume_20d"
+          ]
+        },
+        {
+          "name": "compute_ema_acceleration",
+          "startLine": 319,
+          "endLine": 354,
+          "params": [
+            "ema_20_series",
+            "atr"
+          ]
+        },
+        {
+          "name": "compute_composite_edge",
+          "startLine": 357,
+          "endLine": 488,
+          "params": [
+            "call_wall_frag",
+            "put_wall_frag",
+            "oi_hhi",
+            "oi_regime",
+            "iv_skew",
+            "straddle_pct",
+            "straddle_regime",
+            "rvol",
+            "vol_regime",
+            "accel",
+            "accel_regime",
+            "is_ce",
+            "z_ofi",
+            "kobp",
+            "mc_pot_pct"
+          ]
+        },
+        {
+          "name": "evaluate_smart_edge",
+          "startLine": 491,
+          "endLine": 586,
+          "params": [
+            "symbol",
+            "spot",
+            "chain_data",
+            "strike_step",
+            "tech_indicators",
+            "quant_alpha",
+            "opt_analytics",
+            "mc_result",
+            "is_ce",
+            "current_volume",
+            "avg_volume_20d",
+            "dte_days"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "WallFragility",
+          "startLine": 29,
+          "endLine": 36,
+          "methods": [],
+          "properties": [
+            "wall_strike",
+            "wall_oi",
+            "wall_oi_change",
+            "fragility_score",
+            "status",
+            "breakout_probability"
+          ]
+        },
+        {
+          "name": "IVSkewSignal",
+          "startLine": 40,
+          "endLine": 46,
+          "methods": [],
+          "properties": [
+            "atm_iv",
+            "otm_put_iv",
+            "otm_call_iv",
+            "put_call_iv_skew",
+            "skew_regime"
+          ]
+        },
+        {
+          "name": "SmartEdgeResult",
+          "startLine": 50,
+          "endLine": 81,
+          "methods": [],
+          "properties": [
+            "symbol",
+            "spot",
+            "call_wall_fragility",
+            "put_wall_fragility",
+            "oi_herfindahl",
+            "oi_concentration_regime",
+            "iv_skew",
+            "straddle_premium_pct",
+            "straddle_regime",
+            "relative_volume",
+            "volume_regime",
+            "ema_20_acceleration",
+            "acceleration_regime",
+            "composite_edge_score",
+            "edge_verdict",
+            "edge_factors"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "WallFragility",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "IVSkewSignal",
+          "line": 39,
+          "isDefault": false
+        },
+        {
+          "name": "SmartEdgeResult",
+          "line": 49,
+          "isDefault": false
+        },
+        {
+          "name": "compute_wall_fragility",
+          "line": 84,
+          "isDefault": false
+        },
+        {
+          "name": "compute_oi_herfindahl",
+          "line": 137,
+          "isDefault": false
+        },
+        {
+          "name": "compute_iv_skew",
+          "line": 181,
+          "isDefault": false
+        },
+        {
+          "name": "compute_straddle_compression",
+          "line": 259,
+          "isDefault": false
+        },
+        {
+          "name": "compute_relative_volume",
+          "line": 291,
+          "isDefault": false
+        },
+        {
+          "name": "compute_ema_acceleration",
+          "line": 319,
+          "isDefault": false
+        },
+        {
+          "name": "compute_composite_edge",
+          "line": 357,
+          "isDefault": false
+        },
+        {
+          "name": "evaluate_smart_edge",
+          "line": 491,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "WallFragility",
+          "lineNumber": 100
+        },
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "max",
+          "lineNumber": 103
+        },
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "min",
+          "lineNumber": 103
+        },
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "max",
+          "lineNumber": 103
+        },
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "abs",
+          "lineNumber": 106
+        },
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "max",
+          "lineNumber": 107
+        },
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "math.exp",
+          "lineNumber": 110
+        },
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "max",
+          "lineNumber": 110
+        },
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "max",
+          "lineNumber": 113
+        },
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "min",
+          "lineNumber": 113
+        },
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "math.exp",
+          "lineNumber": 116
+        },
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "WallFragility",
+          "lineNumber": 127
+        },
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "round",
+          "lineNumber": 131
+        },
+        {
+          "caller": "compute_wall_fragility",
+          "callee": "round",
+          "lineNumber": 133
+        },
+        {
+          "caller": "compute_oi_herfindahl",
+          "callee": "sum",
+          "lineNumber": 152
+        },
+        {
+          "caller": "compute_oi_herfindahl",
+          "callee": "d.get",
+          "lineNumber": 152
+        },
+        {
+          "caller": "compute_oi_herfindahl",
+          "callee": "d.get",
+          "lineNumber": 152
+        },
+        {
+          "caller": "compute_oi_herfindahl",
+          "callee": "d.get",
+          "lineNumber": 158
+        },
+        {
+          "caller": "compute_oi_herfindahl",
+          "callee": "d.get",
+          "lineNumber": 158
+        },
+        {
+          "caller": "compute_oi_herfindahl",
+          "callee": "max",
+          "lineNumber": 163
+        },
+        {
+          "caller": "compute_oi_herfindahl",
+          "callee": "len",
+          "lineNumber": 163
+        },
+        {
+          "caller": "compute_oi_herfindahl",
+          "callee": "round",
+          "lineNumber": 178
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "IVSkewSignal",
+          "lineNumber": 198
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "max",
+          "lineNumber": 201
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "float",
+          "lineNumber": 201
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "max",
+          "lineNumber": 202
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "math.sqrt",
+          "lineNumber": 202
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "sorted",
+          "lineNumber": 205
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "abs",
+          "lineNumber": 205
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "s.get",
+          "lineNumber": 205
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "float",
+          "lineNumber": 213
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "atm.get",
+          "lineNumber": 213
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "float",
+          "lineNumber": 214
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "atm.get",
+          "lineNumber": 214
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "max",
+          "lineNumber": 217
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "min",
+          "lineNumber": 217
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "atm.get",
+          "lineNumber": 220
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "next",
+          "lineNumber": 221
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "abs",
+          "lineNumber": 221
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "s.get",
+          "lineNumber": 221
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "float",
+          "lineNumber": 223
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "otm_put.get",
+          "lineNumber": 223
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "max",
+          "lineNumber": 225
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "min",
+          "lineNumber": 225
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "atm.get",
+          "lineNumber": 228
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "next",
+          "lineNumber": 229
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "abs",
+          "lineNumber": 229
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "s.get",
+          "lineNumber": 229
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "float",
+          "lineNumber": 231
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "otm_call.get",
+          "lineNumber": 231
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "max",
+          "lineNumber": 233
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "min",
+          "lineNumber": 233
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "round",
+          "lineNumber": 237
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "max",
+          "lineNumber": 237
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "round",
+          "lineNumber": 239
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "max",
+          "lineNumber": 239
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "abs",
+          "lineNumber": 245
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "IVSkewSignal",
+          "lineNumber": 250
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "round",
+          "lineNumber": 251
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "round",
+          "lineNumber": 252
+        },
+        {
+          "caller": "compute_iv_skew",
+          "callee": "round",
+          "lineNumber": 253
+        },
+        {
+          "caller": "compute_straddle_compression",
+          "callee": "round",
+          "lineNumber": 274
+        },
+        {
+          "caller": "compute_straddle_compression",
+          "callee": "max",
+          "lineNumber": 275
+        },
+        {
+          "caller": "compute_straddle_compression",
+          "callee": "float",
+          "lineNumber": 275
+        },
+        {
+          "caller": "compute_straddle_compression",
+          "callee": "max",
+          "lineNumber": 277
+        },
+        {
+          "caller": "compute_straddle_compression",
+          "callee": "math.sqrt",
+          "lineNumber": 277
+        },
+        {
+          "caller": "compute_straddle_compression",
+          "callee": "max",
+          "lineNumber": 279
+        },
+        {
+          "caller": "compute_relative_volume",
+          "callee": "round",
+          "lineNumber": 305
+        },
+        {
+          "caller": "compute_ema_acceleration",
+          "callee": "len",
+          "lineNumber": 335
+        },
+        {
+          "caller": "compute_ema_acceleration",
+          "callee": "round",
+          "lineNumber": 343
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 388
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 391
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 394
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 400
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 403
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 408
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 411
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 416
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 419
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 422
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 427
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 430
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 435
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 438
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 443
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 446
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "abs",
+          "lineNumber": 449
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 454
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 457
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "abs",
+          "lineNumber": 460
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 466
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 471
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "factors.append",
+          "lineNumber": 474
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "max",
+          "lineNumber": 477
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "min",
+          "lineNumber": 477
+        },
+        {
+          "caller": "compute_composite_edge",
+          "callee": "round",
+          "lineNumber": 488
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "tech_indicators.get",
+          "lineNumber": 512
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "tech_indicators.get",
+          "lineNumber": 513
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "compute_wall_fragility",
+          "lineNumber": 516
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "opt_analytics.get",
+          "lineNumber": 517
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "opt_analytics.get",
+          "lineNumber": 518
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "opt_analytics.get",
+          "lineNumber": 519
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "compute_wall_fragility",
+          "lineNumber": 522
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "opt_analytics.get",
+          "lineNumber": 523
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "opt_analytics.get",
+          "lineNumber": 524
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "opt_analytics.get",
+          "lineNumber": 525
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "compute_oi_herfindahl",
+          "lineNumber": 530
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "compute_iv_skew",
+          "lineNumber": 533
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "opt_analytics.get",
+          "lineNumber": 536
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "compute_straddle_compression",
+          "lineNumber": 537
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "compute_relative_volume",
+          "lineNumber": 540
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "tech_indicators.get",
+          "lineNumber": 543
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "compute_ema_acceleration",
+          "lineNumber": 544
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "quant_alpha.get",
+          "lineNumber": 547
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "quant_alpha.get",
+          "lineNumber": 548
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "mc_result.get",
+          "lineNumber": 549
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "compute_composite_edge",
+          "lineNumber": 551
+        },
+        {
+          "caller": "evaluate_smart_edge",
+          "callee": "SmartEdgeResult",
+          "lineNumber": 569
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 11,
+        "functionCount": 8,
+        "classCount": 3
+      }
+    }
+  ]
+}

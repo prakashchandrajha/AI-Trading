@@ -1,0 +1,36 @@
+{
+  "nodes": [
+    {
+      "id": "config:ai/runtime/cockpit_briefing.json",
+      "type": "config",
+      "name": "cockpit_briefing.json",
+      "filePath": "ai/runtime/cockpit_briefing.json",
+      "summary": "Latest compact market and candidate snapshot consumed by the external CIO agent for a discretionary paper-trading decision.",
+      "tags": ["runtime-data", "cockpit", "market-analysis", "decision-support"],
+      "complexity": "complex"
+    },
+    {
+      "id": "config:ai/runtime/logic_test_report.json",
+      "type": "config",
+      "name": "logic_test_report.json",
+      "filePath": "ai/runtime/logic_test_report.json",
+      "summary": "Cached regime-validation report used to show historical expectancy and anti-curve-fit evidence in the CIO cockpit.",
+      "tags": ["runtime-data", "validation", "backtesting", "risk-governance"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:ai/runtime/oi_baseline_2026-11-25.json",
+      "type": "config",
+      "name": "oi_baseline_2026-11-25.json",
+      "filePath": "ai/runtime/oi_baseline_2026-11-25.json",
+      "summary": "Session baseline of option open-interest observations used to derive intraday OI changes and wall dynamics.",
+      "tags": ["runtime-data", "options", "open-interest", "market-analysis"],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {"source":"file:ai/cockpit.py","target":"config:ai/runtime/cockpit_briefing.json","type":"writes_to","direction":"forward","weight":0.5},
+    {"source":"file:ai/logic_tester.py","target":"config:ai/runtime/logic_test_report.json","type":"writes_to","direction":"forward","weight":0.5},
+    {"source":"file:ai/options_analytics.py","target":"config:ai/runtime/oi_baseline_2026-11-25.json","type":"reads_from","direction":"forward","weight":0.5}
+  ]
+}

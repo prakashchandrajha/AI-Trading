@@ -1,0 +1,4198 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 4,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "ai/live_kite_feed.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 609,
+      "nonEmptyLines": 540,
+      "functions": [
+        {
+          "name": "_extract_5level_depth",
+          "startLine": 68,
+          "endLine": 81,
+          "params": [
+            "depth_dict"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "LiveMarketSnapshot",
+          "startLine": 43,
+          "endLine": 65,
+          "methods": [],
+          "properties": [
+            "symbol",
+            "spot_symbol",
+            "spot_price",
+            "vwap_live",
+            "prev_close",
+            "lot_size",
+            "strike_step",
+            "expiry",
+            "chain",
+            "contract_map",
+            "price_history",
+            "volume_history",
+            "fetched_at",
+            "high_history",
+            "low_history",
+            "spot_bid_depth",
+            "spot_ask_depth",
+            "prev_spot_bid_depth",
+            "prev_spot_ask_depth",
+            "spot_volume_today",
+            "spot_buy_qty",
+            "spot_sell_qty"
+          ]
+        },
+        {
+          "name": "LiveKiteFeed",
+          "startLine": 84,
+          "endLine": 609,
+          "methods": [
+            "__init__",
+            "_baseline_oi_path",
+            "_load_baseline_oi",
+            "_save_baseline_oi",
+            "_load_credentials",
+            "_ensure_kite",
+            "_ensure_instruments",
+            "get_symbol_meta",
+            "get_available_universe",
+            "get_full_fno_universe",
+            "_fetch_spot_5m_ohlcv",
+            "_fetch_spot_5m_bars",
+            "fetch_historical_5m_bars",
+            "fetch_live_market_breadth",
+            "fetch_spot_and_option_chain",
+            "fetch_contract_quotes"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "LiveMarketSnapshot",
+          "line": 42,
+          "isDefault": false
+        },
+        {
+          "name": "_extract_5level_depth",
+          "line": 68,
+          "isDefault": false
+        },
+        {
+          "name": "LiveKiteFeed",
+          "line": 84,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "float",
+          "lineNumber": 72
+        },
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "x.get",
+          "lineNumber": 72
+        },
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "int",
+          "lineNumber": 72
+        },
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "x.get",
+          "lineNumber": 72
+        },
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "depth_dict.get",
+          "lineNumber": 73
+        },
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "float",
+          "lineNumber": 74
+        },
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "x.get",
+          "lineNumber": 74
+        },
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "float",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "x.get",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "int",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "x.get",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "depth_dict.get",
+          "lineNumber": 78
+        },
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "float",
+          "lineNumber": 79
+        },
+        {
+          "caller": "_extract_5level_depth",
+          "callee": "x.get",
+          "lineNumber": 79
+        },
+        {
+          "caller": "__init__",
+          "callee": "SmartTradingBridge",
+          "lineNumber": 91
+        },
+        {
+          "caller": "__init__",
+          "callee": "self._load_baseline_oi",
+          "lineNumber": 105
+        },
+        {
+          "caller": "_baseline_oi_path",
+          "callee": "datetime.datetime.now(IST).strftime",
+          "lineNumber": 108
+        },
+        {
+          "caller": "_baseline_oi_path",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 108
+        },
+        {
+          "caller": "_load_baseline_oi",
+          "callee": "datetime.datetime.now(IST).strftime",
+          "lineNumber": 112
+        },
+        {
+          "caller": "_load_baseline_oi",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 112
+        },
+        {
+          "caller": "_load_baseline_oi",
+          "callee": "self._baseline_oi_path",
+          "lineNumber": 114
+        },
+        {
+          "caller": "_load_baseline_oi",
+          "callee": "p.exists",
+          "lineNumber": 115
+        },
+        {
+          "caller": "_load_baseline_oi",
+          "callee": "json.loads",
+          "lineNumber": 117
+        },
+        {
+          "caller": "_load_baseline_oi",
+          "callee": "p.read_text",
+          "lineNumber": 117
+        },
+        {
+          "caller": "_load_baseline_oi",
+          "callee": "isinstance",
+          "lineNumber": 118
+        },
+        {
+          "caller": "_load_baseline_oi",
+          "callee": "str",
+          "lineNumber": 119
+        },
+        {
+          "caller": "_load_baseline_oi",
+          "callee": "int",
+          "lineNumber": 119
+        },
+        {
+          "caller": "_load_baseline_oi",
+          "callee": "data.items",
+          "lineNumber": 119
+        },
+        {
+          "caller": "_save_baseline_oi",
+          "callee": "self._baseline_oi_path",
+          "lineNumber": 125
+        },
+        {
+          "caller": "_save_baseline_oi",
+          "callee": "p.parent.mkdir",
+          "lineNumber": 126
+        },
+        {
+          "caller": "_save_baseline_oi",
+          "callee": "p.write_text",
+          "lineNumber": 127
+        },
+        {
+          "caller": "_save_baseline_oi",
+          "callee": "json.dumps",
+          "lineNumber": 127
+        },
+        {
+          "caller": "_load_credentials",
+          "callee": "self.bridge.get_session_credentials",
+          "lineNumber": 132
+        },
+        {
+          "caller": "_ensure_kite",
+          "callee": "self._load_credentials",
+          "lineNumber": 147
+        },
+        {
+          "caller": "_ensure_kite",
+          "callee": "KiteConnect",
+          "lineNumber": 153
+        },
+        {
+          "caller": "_ensure_kite",
+          "callee": "kite.set_access_token",
+          "lineNumber": 154
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "bool",
+          "lineNumber": 163
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "datetime.datetime.now(IST).strftime",
+          "lineNumber": 165
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 165
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "self.bridge.get_instruments_path",
+          "lineNumber": 166
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "inst_path.exists",
+          "lineNumber": 167
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "json.loads",
+          "lineNumber": 171
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "inst_path.read_text",
+          "lineNumber": 171
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "payload.get",
+          "lineNumber": 172
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "isinstance",
+          "lineNumber": 172
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "isinstance",
+          "lineNumber": 173
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "item.get",
+          "lineNumber": 178
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "item.get",
+          "lineNumber": 179
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "item.get",
+          "lineNumber": 180
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "int",
+          "lineNumber": 182
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "item.get",
+          "lineNumber": 184
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "int",
+          "lineNumber": 186
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "item.get",
+          "lineNumber": 187
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "str(item.get(\"name\", \"\")).upper",
+          "lineNumber": 188
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "str",
+          "lineNumber": 188
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "item.get",
+          "lineNumber": 188
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "str",
+          "lineNumber": 189
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "item.get",
+          "lineNumber": 189
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "by_name_exp.setdefault(name, {}).setdefault(exp, []).append",
+          "lineNumber": 192
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "by_name_exp.setdefault(name, {}).setdefault",
+          "lineNumber": 192
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "by_name_exp.setdefault",
+          "lineNumber": 192
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "by_name_exp.items",
+          "lineNumber": 194
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "min",
+          "lineNumber": 195
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "exp_dict.keys",
+          "lineNumber": 195
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "int",
+          "lineNumber": 199
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "contracts[0].get",
+          "lineNumber": 199
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "sorted",
+          "lineNumber": 200
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "float",
+          "lineNumber": 200
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "len",
+          "lineNumber": 201
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "len",
+          "lineNumber": 202
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "round",
+          "lineNumber": 204
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "range",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "max",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "min",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "len",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "min",
+          "lineNumber": 208
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "round",
+          "lineNumber": 208
+        },
+        {
+          "caller": "_ensure_instruments",
+          "callee": "bool",
+          "lineNumber": 213
+        },
+        {
+          "caller": "get_symbol_meta",
+          "callee": "symbol.upper",
+          "lineNumber": 220
+        },
+        {
+          "caller": "get_symbol_meta",
+          "callee": "self._ensure_instruments",
+          "lineNumber": 221
+        },
+        {
+          "caller": "get_symbol_meta",
+          "callee": "self._spot_tokens.get",
+          "lineNumber": 225
+        },
+        {
+          "caller": "get_symbol_meta",
+          "callee": "datetime.datetime.now(IST).date",
+          "lineNumber": 227
+        },
+        {
+          "caller": "get_symbol_meta",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 227
+        },
+        {
+          "caller": "get_symbol_meta",
+          "callee": "datetime.date.fromisoformat",
+          "lineNumber": 229
+        },
+        {
+          "caller": "get_symbol_meta",
+          "callee": "max",
+          "lineNumber": 230
+        },
+        {
+          "caller": "get_available_universe",
+          "callee": "self._ensure_instruments",
+          "lineNumber": 246
+        },
+        {
+          "caller": "get_available_universe",
+          "callee": "s.upper",
+          "lineNumber": 248
+        },
+        {
+          "caller": "get_full_fno_universe",
+          "callee": "self._ensure_instruments",
+          "lineNumber": 252
+        },
+        {
+          "caller": "get_full_fno_universe",
+          "callee": "sorted",
+          "lineNumber": 255
+        },
+        {
+          "caller": "get_full_fno_universe",
+          "callee": "self._nfo_opts.keys",
+          "lineNumber": 255
+        },
+        {
+          "caller": "get_full_fno_universe",
+          "callee": "sorted",
+          "lineNumber": 256
+        },
+        {
+          "caller": "get_full_fno_universe",
+          "callee": "self._nfo_opts.keys",
+          "lineNumber": 256
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "time.time",
+          "lineNumber": 261
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "self._bars_cache.get",
+          "lineNumber": 262
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "self._ensure_kite",
+          "lineNumber": 266
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 271
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "datetime.timedelta",
+          "lineNumber": 272
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "kite.historical_data",
+          "lineNumber": 273
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "float",
+          "lineNumber": 275
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "b.get",
+          "lineNumber": 275
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "float",
+          "lineNumber": 276
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "b.get",
+          "lineNumber": 276
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "b.get",
+          "lineNumber": 276
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "float",
+          "lineNumber": 277
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "b.get",
+          "lineNumber": 277
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "b.get",
+          "lineNumber": 277
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "int",
+          "lineNumber": 278
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "b.get",
+          "lineNumber": 278
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "b.get",
+          "lineNumber": 278
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "b[\"date\"].isoformat",
+          "lineNumber": 279
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "hasattr",
+          "lineNumber": 279
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "str",
+          "lineNumber": 279
+        },
+        {
+          "caller": "_fetch_spot_5m_ohlcv",
+          "callee": "b.get",
+          "lineNumber": 279
+        },
+        {
+          "caller": "_fetch_spot_5m_bars",
+          "callee": "self._fetch_spot_5m_ohlcv",
+          "lineNumber": 289
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "self.get_symbol_meta",
+          "lineNumber": 294
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "meta.get",
+          "lineNumber": 295
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "datetime.datetime.now(IST).strftime",
+          "lineNumber": 299
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 299
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "cache_file.exists",
+          "lineNumber": 301
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "json.loads",
+          "lineNumber": 303
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "cache_file.read_text",
+          "lineNumber": 303
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "self._ensure_kite",
+          "lineNumber": 307
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 312
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "datetime.timedelta",
+          "lineNumber": 313
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "kite.historical_data",
+          "lineNumber": 314
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "b[\"date\"].isoformat",
+          "lineNumber": 317
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "hasattr",
+          "lineNumber": 317
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "str",
+          "lineNumber": 317
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "float",
+          "lineNumber": 318
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "float",
+          "lineNumber": 319
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "float",
+          "lineNumber": 320
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "float",
+          "lineNumber": 321
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "int",
+          "lineNumber": 322
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "b.get",
+          "lineNumber": 322
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "b.get",
+          "lineNumber": 325
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "cache_dir.mkdir",
+          "lineNumber": 328
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "cache_file.write_text",
+          "lineNumber": 329
+        },
+        {
+          "caller": "fetch_historical_5m_bars",
+          "callee": "json.dumps",
+          "lineNumber": 329
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "self._ensure_kite",
+          "lineNumber": 339
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "self._ensure_instruments",
+          "lineNumber": 340
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "sym.upper",
+          "lineNumber": 346
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "req_keys.append",
+          "lineNumber": 351
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "range",
+          "lineNumber": 355
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "len",
+          "lineNumber": 355
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "quotes.update",
+          "lineNumber": 357
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "kite.quote",
+          "lineNumber": 357
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "sym_to_key.items",
+          "lineNumber": 367
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "quotes.get",
+          "lineNumber": 368
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "float",
+          "lineNumber": 369
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "q.get",
+          "lineNumber": 369
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "float",
+          "lineNumber": 370
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "(q.get(\"ohlc\") or {}).get",
+          "lineNumber": 370
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "q.get",
+          "lineNumber": 370
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "int",
+          "lineNumber": 371
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "q.get",
+          "lineNumber": 371
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "float",
+          "lineNumber": 372
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "q.get",
+          "lineNumber": 372
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "int",
+          "lineNumber": 373
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "q.get",
+          "lineNumber": 373
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "int",
+          "lineNumber": 374
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "q.get",
+          "lineNumber": 374
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "round",
+          "lineNumber": 378
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "round",
+          "lineNumber": 379
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "max",
+          "lineNumber": 379
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "stock_moves.append",
+          "lineNumber": 386
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "round",
+          "lineNumber": 388
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "round",
+          "lineNumber": 389
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "round",
+          "lineNumber": 390
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "round",
+          "lineNumber": 391
+        },
+        {
+          "caller": "_idx_summary",
+          "callee": "quotes.get",
+          "lineNumber": 399
+        },
+        {
+          "caller": "_idx_summary",
+          "callee": "float",
+          "lineNumber": 400
+        },
+        {
+          "caller": "_idx_summary",
+          "callee": "q.get",
+          "lineNumber": 400
+        },
+        {
+          "caller": "_idx_summary",
+          "callee": "float",
+          "lineNumber": 401
+        },
+        {
+          "caller": "_idx_summary",
+          "callee": "(q.get(\"ohlc\") or {}).get",
+          "lineNumber": 401
+        },
+        {
+          "caller": "_idx_summary",
+          "callee": "q.get",
+          "lineNumber": 401
+        },
+        {
+          "caller": "_idx_summary",
+          "callee": "round",
+          "lineNumber": 403
+        },
+        {
+          "caller": "_idx_summary",
+          "callee": "round",
+          "lineNumber": 403
+        },
+        {
+          "caller": "_idx_summary",
+          "callee": "round",
+          "lineNumber": 403
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "stock_moves.sort",
+          "lineNumber": 405
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "round",
+          "lineNumber": 406
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "max",
+          "lineNumber": 406
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "_idx_summary",
+          "lineNumber": 415
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "_idx_summary",
+          "lineNumber": 416
+        },
+        {
+          "caller": "fetch_live_market_breadth",
+          "callee": "_idx_summary",
+          "lineNumber": 417
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "self._ensure_kite",
+          "lineNumber": 431
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "self.get_symbol_meta",
+          "lineNumber": 432
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "datetime.datetime.now(IST).strftime",
+          "lineNumber": 436
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 436
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "self._baseline_oi.clear",
+          "lineNumber": 438
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "self._load_baseline_oi",
+          "lineNumber": 439
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "kite.quote",
+          "lineNumber": 446
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "spot_quotes.get",
+          "lineNumber": 447
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "float",
+          "lineNumber": 448
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "sq.get",
+          "lineNumber": 448
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "float",
+          "lineNumber": 451
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "float",
+          "lineNumber": 452
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "sq.get",
+          "lineNumber": 452
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "float",
+          "lineNumber": 453
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "(sq.get(\"ohlc\") or {}).get",
+          "lineNumber": 453
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "sq.get",
+          "lineNumber": 453
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "int",
+          "lineNumber": 454
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "sq.get",
+          "lineNumber": 454
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "int",
+          "lineNumber": 455
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "sq.get",
+          "lineNumber": 455
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "int",
+          "lineNumber": 456
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "sq.get",
+          "lineNumber": 456
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "_extract_5level_depth",
+          "lineNumber": 457
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "sq.get",
+          "lineNumber": 457
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "self._prev_spot_depth.get",
+          "lineNumber": 458
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "sorted",
+          "lineNumber": 465
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "float",
+          "lineNumber": 465
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "sorted",
+          "lineNumber": 469
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "abs",
+          "lineNumber": 469
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "sorted",
+          "lineNumber": 470
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "max",
+          "lineNumber": 470
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "set",
+          "lineNumber": 471
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "float",
+          "lineNumber": 476
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "quote_keys.append",
+          "lineNumber": 481
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "kite.quote",
+          "lineNumber": 487
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "strike_contracts.get",
+          "lineNumber": 494
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "strike_contracts.get",
+          "lineNumber": 495
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "opt_quotes.get",
+          "lineNumber": 496
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "opt_quotes.get",
+          "lineNumber": 497
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "float",
+          "lineNumber": 499
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "ce_q.get",
+          "lineNumber": 499
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "float",
+          "lineNumber": 500
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "pe_q.get",
+          "lineNumber": 500
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "int",
+          "lineNumber": 501
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "ce_q.get",
+          "lineNumber": 501
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "int",
+          "lineNumber": 502
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "pe_q.get",
+          "lineNumber": 502
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "_extract_5level_depth",
+          "lineNumber": 518
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "ce_q.get",
+          "lineNumber": 518
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "_extract_5level_depth",
+          "lineNumber": 519
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "pe_q.get",
+          "lineNumber": 519
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "chain.append",
+          "lineNumber": 525
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "OptionStrikeData",
+          "lineNumber": 526
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "int",
+          "lineNumber": 534
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "ce_q.get",
+          "lineNumber": 534
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "int",
+          "lineNumber": 535
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "pe_q.get",
+          "lineNumber": 535
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "self._save_baseline_oi",
+          "lineNumber": 544
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "self._fetch_spot_5m_ohlcv",
+          "lineNumber": 546
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "meta.get",
+          "lineNumber": 546
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "LiveMarketSnapshot",
+          "lineNumber": 547
+        },
+        {
+          "caller": "fetch_spot_and_option_chain",
+          "callee": "time.time",
+          "lineNumber": 560
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "self._ensure_kite",
+          "lineNumber": 577
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "s.startswith",
+          "lineNumber": 581
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "kite.quote",
+          "lineNumber": 583
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "raw.items",
+          "lineNumber": 588
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "full_key.replace",
+          "lineNumber": 589
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "_extract_5level_depth",
+          "lineNumber": 590
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "q.get",
+          "lineNumber": 590
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "self._prev_opt_depth.get",
+          "lineNumber": 591
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "float",
+          "lineNumber": 596
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "q.get",
+          "lineNumber": 596
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "int",
+          "lineNumber": 601
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "q.get",
+          "lineNumber": 601
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "int",
+          "lineNumber": 602
+        },
+        {
+          "caller": "fetch_contract_quotes",
+          "callee": "q.get",
+          "lineNumber": 602
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 3,
+        "functionCount": 1,
+        "classCount": 2
+      }
+    },
+    {
+      "path": "ai/logic_tester.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 467,
+      "nonEmptyLines": 412,
+      "functions": [
+        {
+          "name": "classify_indian_session_regime",
+          "startLine": 46,
+          "endLine": 60,
+          "params": [
+            "trading_date",
+            "day_range_pct"
+          ]
+        },
+        {
+          "name": "_parse_bar_dt",
+          "startLine": 63,
+          "endLine": 67,
+          "params": [
+            "date_str"
+          ]
+        },
+        {
+          "name": "_simulate_logic_on_bars",
+          "startLine": 87,
+          "endLine": 280,
+          "params": [
+            "symbol",
+            "bars_by_day",
+            "lot_size",
+            "logic_name",
+            "atr_stop_mult",
+            "cutoff_hhmm",
+            "late_window_only",
+            "random_seed"
+          ]
+        },
+        {
+          "name": "_summarize_trades",
+          "startLine": 283,
+          "endLine": 301,
+          "params": [
+            "trades"
+          ]
+        },
+        {
+          "name": "inspect_archived_tick_spread_audit",
+          "startLine": 304,
+          "endLine": 340,
+          "params": [
+            "bridge",
+            "max_dbs"
+          ]
+        },
+        {
+          "name": "run_logic_validation",
+          "startLine": 343,
+          "endLine": 426,
+          "params": [
+            "symbols",
+            "days",
+            "feed"
+          ]
+        },
+        {
+          "name": "load_cached_logic_report",
+          "startLine": 429,
+          "endLine": 435,
+          "params": []
+        },
+        {
+          "name": "format_logic_report",
+          "startLine": 438,
+          "endLine": 467,
+          "params": [
+            "report"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "SimTradeResult",
+          "startLine": 71,
+          "endLine": 84,
+          "methods": [],
+          "properties": [
+            "symbol",
+            "date",
+            "regime",
+            "logic",
+            "direction",
+            "entry_time",
+            "exit_time",
+            "spot_entry",
+            "spot_exit",
+            "option_net_pnl",
+            "friction",
+            "r_multiple",
+            "exit_reason"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "classify_indian_session_regime",
+          "line": 46,
+          "isDefault": false
+        },
+        {
+          "name": "_parse_bar_dt",
+          "line": 63,
+          "isDefault": false
+        },
+        {
+          "name": "SimTradeResult",
+          "line": 70,
+          "isDefault": false
+        },
+        {
+          "name": "_simulate_logic_on_bars",
+          "line": 87,
+          "isDefault": false
+        },
+        {
+          "name": "_summarize_trades",
+          "line": 283,
+          "isDefault": false
+        },
+        {
+          "name": "inspect_archived_tick_spread_audit",
+          "line": 304,
+          "isDefault": false
+        },
+        {
+          "name": "run_logic_validation",
+          "line": 343,
+          "isDefault": false
+        },
+        {
+          "name": "load_cached_logic_report",
+          "line": 429,
+          "isDefault": false
+        },
+        {
+          "name": "format_logic_report",
+          "line": 438,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "classify_indian_session_regime",
+          "callee": "trading_date.weekday",
+          "lineNumber": 49
+        },
+        {
+          "caller": "classify_indian_session_regime",
+          "callee": "calendar.monthrange",
+          "lineNumber": 50
+        },
+        {
+          "caller": "classify_indian_session_regime",
+          "callee": "datetime.date(trading_date.year, trading_date.month, last_thu).weekday",
+          "lineNumber": 52
+        },
+        {
+          "caller": "classify_indian_session_regime",
+          "callee": "datetime.date",
+          "lineNumber": 52
+        },
+        {
+          "caller": "_parse_bar_dt",
+          "callee": "datetime.datetime.fromisoformat",
+          "lineNumber": 64
+        },
+        {
+          "caller": "_parse_bar_dt",
+          "callee": "dt.replace",
+          "lineNumber": 66
+        },
+        {
+          "caller": "_parse_bar_dt",
+          "callee": "dt.astimezone",
+          "lineNumber": 67
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "random.Random",
+          "lineNumber": 102
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "sorted",
+          "lineNumber": 110
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "bars_by_day.keys",
+          "lineNumber": 110
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "len",
+          "lineNumber": 112
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "datetime.date.fromisoformat",
+          "lineNumber": 115
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "max",
+          "lineNumber": 116
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "min",
+          "lineNumber": 117
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "classify_indian_session_regime",
+          "lineNumber": 120
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "enumerate",
+          "lineNumber": 130
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "float",
+          "lineNumber": 131
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "float",
+          "lineNumber": 132
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "float",
+          "lineNumber": 133
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "max",
+          "lineNumber": 134
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "int",
+          "lineNumber": 134
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "bar.get",
+          "lineNumber": 134
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "_parse_bar_dt",
+          "lineNumber": 135
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "rolling_closes.append",
+          "lineNumber": 142
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "rolling_highs.append",
+          "lineNumber": 143
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "rolling_lows.append",
+          "lineNumber": 144
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "rolling_vols.append",
+          "lineNumber": 145
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "len",
+          "lineNumber": 146
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "rolling_closes.pop",
+          "lineNumber": 147
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "rolling_highs.pop",
+          "lineNumber": 148
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "rolling_lows.pop",
+          "lineNumber": 149
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "rolling_vols.pop",
+          "lineNumber": 150
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "len",
+          "lineNumber": 152
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "TechnicalLensEngine.calculate_ema",
+          "lineNumber": 155
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "TechnicalLensEngine.calculate_ema",
+          "lineNumber": 156
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "TechnicalLensEngine.calculate_ema",
+          "lineNumber": 157
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "TechnicalLensEngine.calculate_atr_and_vol",
+          "lineNumber": 158
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "max",
+          "lineNumber": 159
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "rolling_atrs.append",
+          "lineNumber": 160
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "len",
+          "lineNumber": 161
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "rolling_atrs.pop",
+          "lineNumber": 162
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "sorted",
+          "lineNumber": 165
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "len",
+          "lineNumber": 165
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "max",
+          "lineNumber": 166
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "float",
+          "lineNumber": 166
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "len",
+          "lineNumber": 166
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "sorted",
+          "lineNumber": 168
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "len",
+          "lineNumber": 168
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "max",
+          "lineNumber": 169
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "float",
+          "lineNumber": 169
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "len",
+          "lineNumber": 169
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "len",
+          "lineNumber": 180
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "max",
+          "lineNumber": 195
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "max",
+          "lineNumber": 196
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "max",
+          "lineNumber": 198
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "max",
+          "lineNumber": 199
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "AIPaperLedger.calculate_indian_friction",
+          "lineNumber": 201
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "round",
+          "lineNumber": 202
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "max",
+          "lineNumber": 203
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "trades.append",
+          "lineNumber": 207
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "SimTradeResult",
+          "lineNumber": 208
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "dt_ist.strftime",
+          "lineNumber": 215
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "round",
+          "lineNumber": 216
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "round",
+          "lineNumber": 217
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "round",
+          "lineNumber": 219
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "round",
+          "lineNumber": 220
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "rng.random",
+          "lineNumber": 240
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "rng.random",
+          "lineNumber": 241
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "logic_name.startswith",
+          "lineNumber": 242
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "max",
+          "lineNumber": 246
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "abs",
+          "lineNumber": 248
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "max",
+          "lineNumber": 258
+        },
+        {
+          "caller": "_simulate_logic_on_bars",
+          "callee": "dt_ist.strftime",
+          "lineNumber": 277
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "sum",
+          "lineNumber": 288
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "abs",
+          "lineNumber": 289
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "sum",
+          "lineNumber": 289
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "round",
+          "lineNumber": 290
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "round",
+          "lineNumber": 291
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "sum",
+          "lineNumber": 291
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "round",
+          "lineNumber": 292
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "sum",
+          "lineNumber": 292
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "len",
+          "lineNumber": 292
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "len",
+          "lineNumber": 294
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "len",
+          "lineNumber": 295
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "len",
+          "lineNumber": 296
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "round",
+          "lineNumber": 297
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "len",
+          "lineNumber": 297
+        },
+        {
+          "caller": "_summarize_trades",
+          "callee": "len",
+          "lineNumber": 297
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "bridge.get_archived_tick_dbs",
+          "lineNumber": 307
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "sqlite3.connect",
+          "lineNumber": 309
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "conn.execute(\n                \"SELECT payload FROM recorded_ticks WHERE payload LIKE '%depth%' ORDER BY id DESC LIMIT 400\"\n            ).fetchall",
+          "lineNumber": 310
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "conn.execute",
+          "lineNumber": 310
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "conn.close",
+          "lineNumber": 313
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "json.loads",
+          "lineNumber": 321
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "p.get",
+          "lineNumber": 322
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "float",
+          "lineNumber": 323
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "int",
+          "lineNumber": 323
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "d.get",
+          "lineNumber": 323
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "x.get",
+          "lineNumber": 323
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "float",
+          "lineNumber": 324
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "int",
+          "lineNumber": 324
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "d.get",
+          "lineNumber": 324
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "x.get",
+          "lineNumber": 324
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "compute_book_telemetry",
+          "lineNumber": 326
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "float",
+          "lineNumber": 326
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "p.get",
+          "lineNumber": 326
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "spreads.append",
+          "lineNumber": 328
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "abs_kobps.append",
+          "lineNumber": 329
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "abs",
+          "lineNumber": 329
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "summaries.append",
+          "lineNumber": 334
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "len",
+          "lineNumber": 336
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "round",
+          "lineNumber": 337
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "sum",
+          "lineNumber": 337
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "len",
+          "lineNumber": 337
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "round",
+          "lineNumber": 338
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "sum",
+          "lineNumber": 338
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "max",
+          "lineNumber": 338
+        },
+        {
+          "caller": "inspect_archived_tick_spread_audit",
+          "callee": "len",
+          "lineNumber": 338
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "LiveKiteFeed",
+          "lineNumber": 352
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "active_feed.fetch_historical_5m_bars",
+          "lineNumber": 365
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "active_feed.get_symbol_meta",
+          "lineNumber": 366
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "loaded_symbols.append",
+          "lineNumber": 369
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "int",
+          "lineNumber": 370
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "meta.get",
+          "lineNumber": 370
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "defaultdict",
+          "lineNumber": 371
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "bars_by_day[_parse_bar_dt(b[\"date\"]).date().isoformat()].append",
+          "lineNumber": 373
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_parse_bar_dt(b[\"date\"]).date().isoformat",
+          "lineNumber": 373
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_parse_bar_dt(b[\"date\"]).date",
+          "lineNumber": 373
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_parse_bar_dt",
+          "lineNumber": 373
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "all_core.extend",
+          "lineNumber": 375
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_simulate_logic_on_bars",
+          "lineNumber": 375
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "all_causal.extend",
+          "lineNumber": 376
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_simulate_logic_on_bars",
+          "lineNumber": 376
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "all_late.extend",
+          "lineNumber": 377
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_simulate_logic_on_bars",
+          "lineNumber": 377
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "all_null.extend",
+          "lineNumber": 378
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_simulate_logic_on_bars",
+          "lineNumber": 378
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "perturb_low.extend",
+          "lineNumber": 379
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_simulate_logic_on_bars",
+          "lineNumber": 379
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "perturb_high.extend",
+          "lineNumber": 380
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_simulate_logic_on_bars",
+          "lineNumber": 380
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_summarize_trades",
+          "lineNumber": 385
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_summarize_trades",
+          "lineNumber": 386
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_summarize_trades",
+          "lineNumber": 388
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_summarize_trades",
+          "lineNumber": 389
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_summarize_trades",
+          "lineNumber": 390
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_summarize_trades",
+          "lineNumber": 391
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_summarize_trades",
+          "lineNumber": 392
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "_summarize_trades",
+          "lineNumber": 393
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "inspect_archived_tick_spread_audit",
+          "lineNumber": 400
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "datetime.datetime.now(IST).isoformat",
+          "lineNumber": 403
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 403
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "REPORT_PATH.parent.mkdir",
+          "lineNumber": 422
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "REPORT_PATH.write_text",
+          "lineNumber": 423
+        },
+        {
+          "caller": "run_logic_validation",
+          "callee": "json.dumps",
+          "lineNumber": 423
+        },
+        {
+          "caller": "load_cached_logic_report",
+          "callee": "REPORT_PATH.exists",
+          "lineNumber": 430
+        },
+        {
+          "caller": "load_cached_logic_report",
+          "callee": "json.loads",
+          "lineNumber": 433
+        },
+        {
+          "caller": "load_cached_logic_report",
+          "callee": "REPORT_PATH.read_text",
+          "lineNumber": 433
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "report.get",
+          "lineNumber": 439
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "report.get",
+          "lineNumber": 442
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "len",
+          "lineNumber": 447
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "causal.get",
+          "lineNumber": 451
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "causal.get",
+          "lineNumber": 451
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "causal.get",
+          "lineNumber": 451
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "causal.get",
+          "lineNumber": 451
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "causal.get",
+          "lineNumber": 451
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "report.get(\"causal_by_regime\", {}).items",
+          "lineNumber": 457
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "report.get",
+          "lineNumber": 457
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "lines.append",
+          "lineNumber": 458
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "report.get",
+          "lineNumber": 461
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "lines.append",
+          "lineNumber": 462
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "lines.append",
+          "lineNumber": 463
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "lines.append",
+          "lineNumber": 465
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "lines.append",
+          "lineNumber": 466
+        },
+        {
+          "caller": "format_logic_report",
+          "callee": "\"\\n\".join",
+          "lineNumber": 467
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 9,
+        "functionCount": 8,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "connector/__init__.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 5,
+      "nonEmptyLines": 3,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "connector/smart_trading_bridge.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 638,
+      "nonEmptyLines": 575,
+      "functions": [
+        {
+          "name": "resolve_smart_trading_root",
+          "startLine": 28,
+          "endLine": 41,
+          "params": []
+        },
+        {
+          "name": "_is_tcp_listening",
+          "startLine": 44,
+          "endLine": 50,
+          "params": [
+            "host",
+            "port",
+            "timeout"
+          ]
+        },
+        {
+          "name": "_http_get_json",
+          "startLine": 53,
+          "endLine": 61,
+          "params": [
+            "url",
+            "timeout"
+          ]
+        },
+        {
+          "name": "compute_book_telemetry",
+          "startLine": 64,
+          "endLine": 164,
+          "params": [
+            "spot_or_mid",
+            "bid_depth",
+            "ask_depth",
+            "prev_bid_depth",
+            "prev_ask_depth",
+            "lot_size"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "SmartTradingBridge",
+          "startLine": 167,
+          "endLine": 638,
+          "methods": [
+            "__init__",
+            "get_session_credentials",
+            "get_instruments_path",
+            "get_http_telemetry",
+            "read_shm_ltp_cache",
+            "sample_zmq_alerts",
+            "_latest_by_date_dir",
+            "read_nse_premarket_and_oi",
+            "get_active_external_positions",
+            "extract_underlying_from_ticker",
+            "get_archived_tick_dbs",
+            "read_latest_decision_journal",
+            "get_unified_desk_context"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "resolve_smart_trading_root",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "_is_tcp_listening",
+          "line": 44,
+          "isDefault": false
+        },
+        {
+          "name": "_http_get_json",
+          "line": 53,
+          "isDefault": false
+        },
+        {
+          "name": "compute_book_telemetry",
+          "line": 64,
+          "isDefault": false
+        },
+        {
+          "name": "SmartTradingBridge",
+          "line": 167,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "resolve_smart_trading_root",
+          "callee": "os.environ.get(\"SMARTTRADING_ROOT\", \"\").strip",
+          "lineNumber": 31
+        },
+        {
+          "caller": "resolve_smart_trading_root",
+          "callee": "os.environ.get",
+          "lineNumber": 31
+        },
+        {
+          "caller": "resolve_smart_trading_root",
+          "callee": "candidates.append",
+          "lineNumber": 33
+        },
+        {
+          "caller": "resolve_smart_trading_root",
+          "callee": "Path",
+          "lineNumber": 33
+        },
+        {
+          "caller": "resolve_smart_trading_root",
+          "callee": "Path(__file__).resolve",
+          "lineNumber": 34
+        },
+        {
+          "caller": "resolve_smart_trading_root",
+          "callee": "Path",
+          "lineNumber": 34
+        },
+        {
+          "caller": "resolve_smart_trading_root",
+          "callee": "candidates.append",
+          "lineNumber": 35
+        },
+        {
+          "caller": "resolve_smart_trading_root",
+          "callee": "candidates.append",
+          "lineNumber": 36
+        },
+        {
+          "caller": "resolve_smart_trading_root",
+          "callee": "Path",
+          "lineNumber": 36
+        },
+        {
+          "caller": "resolve_smart_trading_root",
+          "callee": "cand.exists",
+          "lineNumber": 39
+        },
+        {
+          "caller": "resolve_smart_trading_root",
+          "callee": "(cand / \"data\").exists",
+          "lineNumber": 39
+        },
+        {
+          "caller": "_is_tcp_listening",
+          "callee": "socket.create_connection",
+          "lineNumber": 47
+        },
+        {
+          "caller": "_http_get_json",
+          "callee": "urllib.request.Request",
+          "lineNumber": 55
+        },
+        {
+          "caller": "_http_get_json",
+          "callee": "urllib.request.urlopen",
+          "lineNumber": 56
+        },
+        {
+          "caller": "_http_get_json",
+          "callee": "json.loads",
+          "lineNumber": 59
+        },
+        {
+          "caller": "_http_get_json",
+          "callee": "resp.read().decode",
+          "lineNumber": 59
+        },
+        {
+          "caller": "_http_get_json",
+          "callee": "resp.read",
+          "lineNumber": 59
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "float",
+          "lineNumber": 94
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "int",
+          "lineNumber": 94
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "float",
+          "lineNumber": 95
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "int",
+          "lineNumber": 95
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "max",
+          "lineNumber": 103
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "int",
+          "lineNumber": 111
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "max",
+          "lineNumber": 112
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "abs",
+          "lineNumber": 112
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "float",
+          "lineNumber": 112
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "float",
+          "lineNumber": 113
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "int",
+          "lineNumber": 118
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "max",
+          "lineNumber": 119
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "abs",
+          "lineNumber": 119
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "float",
+          "lineNumber": 119
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "float",
+          "lineNumber": 120
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "min",
+          "lineNumber": 127
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "len",
+          "lineNumber": 127
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "len",
+          "lineNumber": 127
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "len",
+          "lineNumber": 127
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "range",
+          "lineNumber": 131
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "float",
+          "lineNumber": 132
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "int",
+          "lineNumber": 132
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "float",
+          "lineNumber": 133
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "int",
+          "lineNumber": 133
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "len",
+          "lineNumber": 134
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "len",
+          "lineNumber": 134
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "float",
+          "lineNumber": 135
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "int",
+          "lineNumber": 135
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "float",
+          "lineNumber": 136
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "int",
+          "lineNumber": 136
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "float",
+          "lineNumber": 145
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "max",
+          "lineNumber": 149
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "float",
+          "lineNumber": 149
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "max",
+          "lineNumber": 150
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "min",
+          "lineNumber": 150
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "round",
+          "lineNumber": 153
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "round",
+          "lineNumber": 154
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "round",
+          "lineNumber": 155
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "round",
+          "lineNumber": 156
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "round",
+          "lineNumber": 157
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "round",
+          "lineNumber": 158
+        },
+        {
+          "caller": "compute_book_telemetry",
+          "callee": "round",
+          "lineNumber": 159
+        },
+        {
+          "caller": "__init__",
+          "callee": "resolve_smart_trading_root",
+          "lineNumber": 175
+        },
+        {
+          "caller": "__init__",
+          "callee": "desk_http_url.rstrip",
+          "lineNumber": 176
+        },
+        {
+          "caller": "__init__",
+          "callee": "Path(__file__).resolve",
+          "lineNumber": 177
+        },
+        {
+          "caller": "__init__",
+          "callee": "Path",
+          "lineNumber": 177
+        },
+        {
+          "caller": "__init__",
+          "callee": "os.environ.get",
+          "lineNumber": 178
+        },
+        {
+          "caller": "__init__",
+          "callee": "Path",
+          "lineNumber": 179
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "os.environ.get(\"KITE_API_KEY\", \"\").strip",
+          "lineNumber": 183
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "os.environ.get",
+          "lineNumber": 183
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "os.environ.get(\"KITE_ACCESS_TOKEN\", \"\").strip",
+          "lineNumber": 184
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "os.environ.get",
+          "lineNumber": 184
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "datetime.datetime.now(IST).strftime",
+          "lineNumber": 188
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 188
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "search_roots.append",
+          "lineNumber": 191
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "candidates.extend",
+          "lineNumber": 195
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "cand.exists",
+          "lineNumber": 203
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "json.loads",
+          "lineNumber": 206
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "cand.read_text",
+          "lineNumber": 206
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "str(data.get(\"api_key\", \"\")).strip",
+          "lineNumber": 207
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "str",
+          "lineNumber": 207
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "data.get",
+          "lineNumber": 207
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "str(data.get(\"access_token\", \"\")).strip",
+          "lineNumber": 208
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "str",
+          "lineNumber": 208
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "data.get",
+          "lineNumber": 208
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "str",
+          "lineNumber": 211
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "data.get",
+          "lineNumber": 211
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "cand.stat",
+          "lineNumber": 212
+        },
+        {
+          "caller": "get_session_credentials",
+          "callee": "str",
+          "lineNumber": 214
+        },
+        {
+          "caller": "get_instruments_path",
+          "callee": "datetime.datetime.now(IST).strftime",
+          "lineNumber": 224
+        },
+        {
+          "caller": "get_instruments_path",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 224
+        },
+        {
+          "caller": "get_instruments_path",
+          "callee": "roots.append",
+          "lineNumber": 227
+        },
+        {
+          "caller": "get_instruments_path",
+          "callee": "Path",
+          "lineNumber": 231
+        },
+        {
+          "caller": "get_instruments_path",
+          "callee": "Path",
+          "lineNumber": 232
+        },
+        {
+          "caller": "get_instruments_path",
+          "callee": "Path",
+          "lineNumber": 233
+        },
+        {
+          "caller": "get_instruments_path",
+          "callee": "cand.exists",
+          "lineNumber": 236
+        },
+        {
+          "caller": "get_http_telemetry",
+          "callee": "self.desk_http_url.replace(\"http://\", \"\").replace",
+          "lineNumber": 242
+        },
+        {
+          "caller": "get_http_telemetry",
+          "callee": "self.desk_http_url.replace",
+          "lineNumber": 242
+        },
+        {
+          "caller": "get_http_telemetry",
+          "callee": "host_port.partition",
+          "lineNumber": 243
+        },
+        {
+          "caller": "get_http_telemetry",
+          "callee": "int",
+          "lineNumber": 244
+        },
+        {
+          "caller": "get_http_telemetry",
+          "callee": "port_s.isdigit",
+          "lineNumber": 244
+        },
+        {
+          "caller": "get_http_telemetry",
+          "callee": "_is_tcp_listening",
+          "lineNumber": 245
+        },
+        {
+          "caller": "get_http_telemetry",
+          "callee": "_http_get_json",
+          "lineNumber": 248
+        },
+        {
+          "caller": "get_http_telemetry",
+          "callee": "_http_get_json",
+          "lineNumber": 249
+        },
+        {
+          "caller": "get_http_telemetry",
+          "callee": "_http_get_json",
+          "lineNumber": 250
+        },
+        {
+          "caller": "get_http_telemetry",
+          "callee": "_http_get_json",
+          "lineNumber": 251
+        },
+        {
+          "caller": "get_http_telemetry",
+          "callee": "sig_payload.get",
+          "lineNumber": 252
+        },
+        {
+          "caller": "get_http_telemetry",
+          "callee": "isinstance",
+          "lineNumber": 252
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "self.shm_ltp_db.exists",
+          "lineNumber": 266
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "sqlite3.connect",
+          "lineNumber": 269
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "conn.execute(\"SELECT symbol, previous_close FROM ltp_cache_ohlc\").fetchall",
+          "lineNumber": 271
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "conn.execute",
+          "lineNumber": 271
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "float",
+          "lineNumber": 272
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "\",\".join",
+          "lineNumber": 275
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "conn.execute(\n                    f\"SELECT symbol, last_price, depth_buy, depth_sell, last_update FROM ltp_cache WHERE symbol IN ({placeholders})\",\n                    symbols,\n                ).fetchall",
+          "lineNumber": 276
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "conn.execute",
+          "lineNumber": 276
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "conn.execute(\n                    \"SELECT symbol, last_price, depth_buy, depth_sell, last_update FROM ltp_cache\"\n                ).fetchall",
+          "lineNumber": 281
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "conn.execute",
+          "lineNumber": 281
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "conn.close",
+          "lineNumber": 284
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 288
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "str",
+          "lineNumber": 294
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "datetime.datetime.fromisoformat",
+          "lineNumber": 295
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "dt.replace",
+          "lineNumber": 297
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "max",
+          "lineNumber": 298
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "(now_utc - dt).total_seconds",
+          "lineNumber": 298
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "json.loads",
+          "lineNumber": 305
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "json.loads",
+          "lineNumber": 306
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "float",
+          "lineNumber": 307
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "x.get",
+          "lineNumber": 307
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "int",
+          "lineNumber": 307
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "x.get",
+          "lineNumber": 307
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "float",
+          "lineNumber": 307
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "x.get",
+          "lineNumber": 307
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "float",
+          "lineNumber": 308
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "x.get",
+          "lineNumber": 308
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "int",
+          "lineNumber": 308
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "x.get",
+          "lineNumber": 308
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "float",
+          "lineNumber": 308
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "x.get",
+          "lineNumber": 308
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "float",
+          "lineNumber": 312
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "compute_book_telemetry",
+          "lineNumber": 313
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "prev_closes.get",
+          "lineNumber": 316
+        },
+        {
+          "caller": "read_shm_ltp_cache",
+          "callee": "round",
+          "lineNumber": 317
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "_is_tcp_listening",
+          "lineNumber": 327
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "zmq.Context",
+          "lineNumber": 335
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "ctx.socket",
+          "lineNumber": 336
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "sock.setsockopt",
+          "lineNumber": 337
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "sock.setsockopt_string",
+          "lineNumber": 338
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "sock.connect",
+          "lineNumber": 340
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "time.monotonic",
+          "lineNumber": 341
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "len",
+          "lineNumber": 342
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "time.monotonic",
+          "lineNumber": 342
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "sock.recv_string",
+          "lineNumber": 344
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "alerts.append",
+          "lineNumber": 345
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "json.loads",
+          "lineNumber": 345
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "time.sleep",
+          "lineNumber": 347
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "sock.close",
+          "lineNumber": 353
+        },
+        {
+          "caller": "sample_zmq_alerts",
+          "callee": "ctx.term",
+          "lineNumber": 354
+        },
+        {
+          "caller": "_latest_by_date_dir",
+          "callee": "by_date.exists",
+          "lineNumber": 361
+        },
+        {
+          "caller": "_latest_by_date_dir",
+          "callee": "(by_date / target_date).exists",
+          "lineNumber": 363
+        },
+        {
+          "caller": "_latest_by_date_dir",
+          "callee": "sorted",
+          "lineNumber": 365
+        },
+        {
+          "caller": "_latest_by_date_dir",
+          "callee": "by_date.iterdir",
+          "lineNumber": 365
+        },
+        {
+          "caller": "_latest_by_date_dir",
+          "callee": "d.is_dir",
+          "lineNumber": 365
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "datetime.datetime.now(IST).strftime",
+          "lineNumber": 370
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 370
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "self._latest_by_date_dir",
+          "lineNumber": 386
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "pm_candidates.append",
+          "lineNumber": 391
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "pm_candidates.append",
+          "lineNumber": 392
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "pm_path.exists",
+          "lineNumber": 395
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "json.loads",
+          "lineNumber": 397
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "pm_path.read_text",
+          "lineNumber": 397
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "str",
+          "lineNumber": 398
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "pm.get",
+          "lineNumber": 398
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "pm.get",
+          "lineNumber": 401
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "pm.get",
+          "lineNumber": 402
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "pm.get",
+          "lineNumber": 403
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "csv_path.exists",
+          "lineNumber": 411
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "list",
+          "lineNumber": 413
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "csv.DictReader",
+          "lineNumber": 413
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "csv_path.read_text(encoding=\"utf-8\").splitlines",
+          "lineNumber": 413
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "csv_path.read_text",
+          "lineNumber": 413
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "p.exists",
+          "lineNumber": 425
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "json.loads",
+          "lineNumber": 427
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "p.read_text",
+          "lineNumber": 427
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "set",
+          "lineNumber": 431
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "mi.exists",
+          "lineNumber": 433
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "json.loads",
+          "lineNumber": 435
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "mi.read_text",
+          "lineNumber": 435
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "mi_json.get",
+          "lineNumber": 436
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "isinstance",
+          "lineNumber": 436
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "mi_json.get",
+          "lineNumber": 436
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "mi_data.get",
+          "lineNumber": 437
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "ban_set.add",
+          "lineNumber": 438
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "str(x).upper",
+          "lineNumber": 438
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "str",
+          "lineNumber": 438
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "mi_data.get",
+          "lineNumber": 439
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "mi_data.get",
+          "lineNumber": 440
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "mc.exists",
+          "lineNumber": 445
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "json.loads",
+          "lineNumber": 447
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "mc.read_text",
+          "lineNumber": 447
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "mc_json.get",
+          "lineNumber": 448
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "(secs.get(\"fno_ban\") or {}).get",
+          "lineNumber": 449
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "secs.get",
+          "lineNumber": 449
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "ban_set.add",
+          "lineNumber": 450
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "str(x).upper",
+          "lineNumber": 450
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "str",
+          "lineNumber": 450
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "(secs.get(\"mwpl\") or {}).get",
+          "lineNumber": 451
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "secs.get",
+          "lineNumber": 451
+        },
+        {
+          "caller": "read_nse_premarket_and_oi",
+          "callee": "sorted",
+          "lineNumber": 455
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "isinstance",
+          "lineNumber": 461
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "http_telemetry.get",
+          "lineNumber": 461
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "http_telemetry[\"positions\"].get",
+          "lineNumber": 462
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "positions.append",
+          "lineNumber": 463
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "str",
+          "lineNumber": 465
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "p.get",
+          "lineNumber": 465
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "str",
+          "lineNumber": 466
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "p.get",
+          "lineNumber": 466
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "p.get",
+          "lineNumber": 467
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "db_path.exists",
+          "lineNumber": 472
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "sqlite3.connect",
+          "lineNumber": 474
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "conn.execute(\n                                f\"SELECT ticker, direction, entry_price, quantity FROM {tbl} WHERE status = 'OPEN'\"\n                            ).fetchall",
+          "lineNumber": 478
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "conn.execute",
+          "lineNumber": 478
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "positions.append",
+          "lineNumber": 482
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "str",
+          "lineNumber": 484
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "str",
+          "lineNumber": 485
+        },
+        {
+          "caller": "get_active_external_positions",
+          "callee": "conn.close",
+          "lineNumber": 490
+        },
+        {
+          "caller": "extract_underlying_from_ticker",
+          "callee": "ticker.upper().strip",
+          "lineNumber": 498
+        },
+        {
+          "caller": "extract_underlying_from_ticker",
+          "callee": "ticker.upper",
+          "lineNumber": 498
+        },
+        {
+          "caller": "extract_underlying_from_ticker",
+          "callee": "up.startswith",
+          "lineNumber": 500
+        },
+        {
+          "caller": "extract_underlying_from_ticker",
+          "callee": "up.startswith",
+          "lineNumber": 502
+        },
+        {
+          "caller": "extract_underlying_from_ticker",
+          "callee": "up.startswith",
+          "lineNumber": 504
+        },
+        {
+          "caller": "extract_underlying_from_ticker",
+          "callee": "ch.isalpha",
+          "lineNumber": 509
+        },
+        {
+          "caller": "extract_underlying_from_ticker",
+          "callee": "letters.append",
+          "lineNumber": 510
+        },
+        {
+          "caller": "extract_underlying_from_ticker",
+          "callee": "\"\".join",
+          "lineNumber": 513
+        },
+        {
+          "caller": "get_archived_tick_dbs",
+          "callee": "by_date.exists",
+          "lineNumber": 520
+        },
+        {
+          "caller": "get_archived_tick_dbs",
+          "callee": "sorted",
+          "lineNumber": 524
+        },
+        {
+          "caller": "get_archived_tick_dbs",
+          "callee": "by_date.iterdir",
+          "lineNumber": 524
+        },
+        {
+          "caller": "get_archived_tick_dbs",
+          "callee": "d.is_dir",
+          "lineNumber": 524
+        },
+        {
+          "caller": "get_archived_tick_dbs",
+          "callee": "db.exists",
+          "lineNumber": 526
+        },
+        {
+          "caller": "get_archived_tick_dbs",
+          "callee": "db.stat",
+          "lineNumber": 526
+        },
+        {
+          "caller": "get_archived_tick_dbs",
+          "callee": "found.append",
+          "lineNumber": 527
+        },
+        {
+          "caller": "get_archived_tick_dbs",
+          "callee": "len",
+          "lineNumber": 528
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "datetime.datetime.now(IST).strftime",
+          "lineNumber": 536
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 536
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "cand.exists",
+          "lineNumber": 539
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "jdir.exists",
+          "lineNumber": 539
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "sorted",
+          "lineNumber": 540
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "jdir.glob",
+          "lineNumber": 540
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "cand.exists",
+          "lineNumber": 542
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "cand.open",
+          "lineNumber": 546
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "f.seek",
+          "lineNumber": 547
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "f.tell",
+          "lineNumber": 548
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "f.seek",
+          "lineNumber": 549
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "max",
+          "lineNumber": 549
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "f.read().decode(\"utf-8\", errors=\"ignore\").splitlines",
+          "lineNumber": 550
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "f.read().decode",
+          "lineNumber": 550
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "f.read",
+          "lineNumber": 550
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "json.loads",
+          "lineNumber": 551
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "ln.strip().startswith",
+          "lineNumber": 551
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "ln.strip",
+          "lineNumber": 551
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "last.get",
+          "lineNumber": 555
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "last.get",
+          "lineNumber": 556
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "last.get",
+          "lineNumber": 559
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "round",
+          "lineNumber": 560
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "float",
+          "lineNumber": 560
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "last.get",
+          "lineNumber": 560
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "round",
+          "lineNumber": 561
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "float",
+          "lineNumber": 561
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "tf.get",
+          "lineNumber": 561
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "round",
+          "lineNumber": 562
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "float",
+          "lineNumber": 562
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "oi_ctx.get",
+          "lineNumber": 562
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "str",
+          "lineNumber": 563
+        },
+        {
+          "caller": "read_latest_decision_journal",
+          "callee": "last.get",
+          "lineNumber": 563
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "self.get_http_telemetry",
+          "lineNumber": 570
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "self.get_active_external_positions",
+          "lineNumber": 571
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "sorted",
+          "lineNumber": 572
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "self.extract_underlying_from_ticker",
+          "lineNumber": 573
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "p.get",
+          "lineNumber": 575
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "self.read_shm_ltp_cache",
+          "lineNumber": 577
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "self.sample_zmq_alerts",
+          "lineNumber": 578
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "self.read_nse_premarket_and_oi",
+          "lineNumber": 579
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "self.read_latest_decision_journal",
+          "lineNumber": 580
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "http_info.get",
+          "lineNumber": 583
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "nse_pm.get",
+          "lineNumber": 584
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "nse_pm.get",
+          "lineNumber": 585
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "fp.get",
+          "lineNumber": 586
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "upols.get",
+          "lineNumber": 587
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "upols.get",
+          "lineNumber": 588
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "fp.get",
+          "lineNumber": 591
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "datetime.datetime.fromisoformat",
+          "lineNumber": 593
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "fdt.replace",
+          "lineNumber": 595
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "round",
+          "lineNumber": 596
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "max",
+          "lineNumber": 596
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "(datetime.datetime.now(IST) - fdt).total_seconds",
+          "lineNumber": 596
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "datetime.datetime.now",
+          "lineNumber": 596
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "http_macro.get",
+          "lineNumber": 600
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "http_macro.get",
+          "lineNumber": 602
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "http_macro.get",
+          "lineNumber": 603
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "bool",
+          "lineNumber": 604
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "http_macro.get",
+          "lineNumber": 604
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "(http_inds.get(\"CRUDEOIL\") or {}).get",
+          "lineNumber": 605
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "http_inds.get",
+          "lineNumber": 605
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "(http_inds.get(\"CRUDEOIL\") or {}).get",
+          "lineNumber": 606
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "http_inds.get",
+          "lineNumber": 606
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "(http_inds.get(\"USDINR\") or {}).get",
+          "lineNumber": 607
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "http_inds.get",
+          "lineNumber": 607
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "(http_inds.get(\"INDIA VIX\") or {}).get",
+          "lineNumber": 608
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "http_inds.get",
+          "lineNumber": 608
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "fp.get",
+          "lineNumber": 609
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "th.get",
+          "lineNumber": 609
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "fp.get",
+          "lineNumber": 611
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "(nifty_pol.get(\"macro\") or {}).get",
+          "lineNumber": 612
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "nifty_pol.get",
+          "lineNumber": 612
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "(nifty_pol.get(\"macro\") or {}).get",
+          "lineNumber": 613
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "nifty_pol.get",
+          "lineNumber": 613
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "nifty_pol.get",
+          "lineNumber": 614
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "bnf_pol.get",
+          "lineNumber": 615
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "th.get",
+          "lineNumber": 616
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "nse_pm.get",
+          "lineNumber": 617
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "list",
+          "lineNumber": 621
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "http_info.get",
+          "lineNumber": 621
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "recent_signals.append",
+          "lineNumber": 623
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "al.get",
+          "lineNumber": 624
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "al.get",
+          "lineNumber": 624
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "al.get",
+          "lineNumber": 624
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "al.get",
+          "lineNumber": 625
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "al.get",
+          "lineNumber": 625
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "str",
+          "lineNumber": 629
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "len",
+          "lineNumber": 637
+        },
+        {
+          "caller": "get_unified_desk_context",
+          "callee": "self.get_archived_tick_dbs",
+          "lineNumber": 637
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 5,
+        "functionCount": 4,
+        "classCount": 1
+      }
+    }
+  ]
+}

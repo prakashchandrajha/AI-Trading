@@ -64,7 +64,7 @@ class NuvamaOptionsEngine:
 
     SYMBOL_SPECS = {
         "NIFTY": {
-            "lot_size": 25,
+            "lot_size": 65,
             "strike_step": 50.0,
             "near_range": 300.0,
             "stop_buffer": 25.0,
@@ -72,7 +72,7 @@ class NuvamaOptionsEngine:
             "expiry_day": "Thursday / Monthly",
         },
         "BANKNIFTY": {
-            "lot_size": 15,
+            "lot_size": 30,
             "strike_step": 100.0,
             "near_range": 600.0,
             "stop_buffer": 60.0,

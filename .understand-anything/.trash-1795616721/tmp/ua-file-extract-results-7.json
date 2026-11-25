@@ -1,0 +1,31 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 3,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": ".understand-anything/.understandignore",
+      "language": "unknown",
+      "fileCategory": "code",
+      "totalLines": 27,
+      "nonEmptyLines": 25,
+      "metrics": {}
+    },
+    {
+      "path": "ai/ai_paper_trades.db",
+      "language": "db",
+      "fileCategory": "code",
+      "totalLines": 38,
+      "nonEmptyLines": 38,
+      "metrics": {}
+    },
+    {
+      "path": "ai/runtime/paper_ledger.db",
+      "language": "db",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 0,
+      "metrics": {}
+    }
+  ]
+}

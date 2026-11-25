@@ -1,0 +1,164 @@
+{
+  "generated_at_ist": "2026-11-25T16:54:48.491110+05:30",
+  "days_tested": 25,
+  "symbols_tested": [
+    "HAL",
+    "TATASTEEL",
+    "HDFCBANK",
+    "ICICIBANK",
+    "M&M",
+    "INFY",
+    "SBIN",
+    "NIFTY"
+  ],
+  "core_ribbon_vwap": {
+    "trades": 250,
+    "wins": 92,
+    "losses": 158,
+    "win_rate": 36.8,
+    "net_pnl": 2376.51,
+    "expectancy_r": -0.098,
+    "profit_factor": 1.01
+  },
+  "causal_expansion_ribbon": {
+    "trades": 97,
+    "wins": 41,
+    "losses": 56,
+    "win_rate": 42.3,
+    "net_pnl": 42615.3,
+    "expectancy_r": 0.117,
+    "profit_factor": 1.47
+  },
+  "by_regime": {
+    "NORMAL_DAY": {
+      "trades": 109,
+      "wins": 27,
+      "losses": 82,
+      "win_rate": 24.8,
+      "net_pnl": -73619.35,
+      "expectancy_r": -0.546,
+      "profit_factor": 0.35
+    },
+    "EXPIRY_DAY": {
+      "trades": 34,
+      "wins": 10,
+      "losses": 24,
+      "win_rate": 29.4,
+      "net_pnl": -10643.88,
+      "expectancy_r": -0.501,
+      "profit_factor": 0.61
+    },
+    "HIGH_VOL_TREND": {
+      "trades": 107,
+      "wins": 55,
+      "losses": 52,
+      "win_rate": 51.4,
+      "net_pnl": 86639.74,
+      "expectancy_r": 0.486,
+      "profit_factor": 2.07
+    }
+  },
+  "causal_by_regime": {
+    "NORMAL_DAY": {
+      "trades": 31,
+      "wins": 6,
+      "losses": 25,
+      "win_rate": 19.4,
+      "net_pnl": -33813.45,
+      "expectancy_r": -0.69,
+      "profit_factor": 0.15
+    },
+    "EXPIRY_DAY": {
+      "trades": 13,
+      "wins": 5,
+      "losses": 8,
+      "win_rate": 38.5,
+      "net_pnl": 1977.91,
+      "expectancy_r": -0.202,
+      "profit_factor": 1.16
+    },
+    "HIGH_VOL_TREND": {
+      "trades": 53,
+      "wins": 30,
+      "losses": 23,
+      "win_rate": 56.6,
+      "net_pnl": 74450.84,
+      "expectancy_r": 0.668,
+      "profit_factor": 3.0
+    }
+  },
+  "late_entry_1445_1510_stress": {
+    "trades": 78,
+    "wins": 36,
+    "losses": 42,
+    "win_rate": 46.2,
+    "net_pnl": 3889.47,
+    "expectancy_r": 0.004,
+    "profit_factor": 1.16
+  },
+  "random_null_baseline": {
+    "trades": 154,
+    "wins": 54,
+    "losses": 100,
+    "win_rate": 35.1,
+    "net_pnl": -50026.79,
+    "expectancy_r": -0.267,
+    "profit_factor": 0.67
+  },
+  "perturbation_sensitivity": {
+    "atr_1_20x": {
+      "trades": 97,
+      "wins": 38,
+      "losses": 59,
+      "win_rate": 39.2,
+      "net_pnl": 42933.89,
+      "expectancy_r": 0.159,
+      "profit_factor": 1.53
+    },
+    "atr_1_50x": {
+      "trades": 97,
+      "wins": 41,
+      "losses": 56,
+      "win_rate": 42.3,
+      "net_pnl": 42615.3,
+      "expectancy_r": 0.117,
+      "profit_factor": 1.47
+    },
+    "atr_1_85x": {
+      "trades": 99,
+      "wins": 46,
+      "losses": 53,
+      "win_rate": 46.5,
+      "net_pnl": 45376.01,
+      "expectancy_r": 0.103,
+      "profit_factor": 1.48
+    }
+  },
+  "anti_curve_fit_verdict": "ROBUST",
+  "archived_l2_tick_spreads": [
+    {
+      "date": "2026-11-25",
+      "samples": 400,
+      "avg_spread_pct": 0.279,
+      "avg_abs_kobp": 0.259
+    },
+    {
+      "date": "2026-11-23",
+      "samples": 232,
+      "avg_spread_pct": 0.033,
+      "avg_abs_kobp": 0.193
+    },
+    {
+      "date": "2026-11-20",
+      "samples": 400,
+      "avg_spread_pct": 4.535,
+      "avg_abs_kobp": 0.307
+    },
+    {
+      "date": "2026-11-19",
+      "samples": 399,
+      "avg_spread_pct": 0.273,
+      "avg_abs_kobp": 0.292
+    }
+  ]
+}

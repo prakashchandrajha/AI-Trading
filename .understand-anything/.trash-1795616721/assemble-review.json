@@ -1,0 +1,13 @@
+{
+  "fixedSectionOk": true,
+  "nodesRecovered": 0,
+  "edgesRestored": 0,
+  "crossBatchEdgesAdded": 0,
+  "typesRemapped": 0,
+  "complexityRemapped": 0,
+  "notes": [
+    "All 36 resolved internal imports are represented in the assembled graph.",
+    "No dangling references or merge-time repairs were reported.",
+    "The graph identifies two authority-boundary conflicts: the legacy autonomous entry loop and the direct ungated execute_paper_order MCP tool."
+  ]
+}

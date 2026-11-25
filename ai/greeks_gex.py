@@ -65,7 +65,7 @@ class FrontierAnalyticsEngine:
         strike: float,
         dte: float,
         iv: float = 0.15,
-        r: float = 0.07,
+        r: float = 0.053,
         call_oi: int = 0,
         put_oi: int = 0,
         lot_size: int = 1,
@@ -76,7 +76,7 @@ class FrontierAnalyticsEngine:
         if spot <= 0 or strike <= 0 or iv <= 0:
             return OptionGreeks(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
-        t = max(0.001, dte / 365.0)
+        t = max(0.15 / 365.0, dte / 365.0)
         sqrt_t = math.sqrt(t)
 
         d1 = (math.log(spot / strike) + (r + 0.5 * iv * iv) * t) / (iv * sqrt_t)
@@ -87,9 +87,10 @@ class FrontierAnalyticsEngine:
 
         pdf_d1 = norm_pdf(d1)
         gamma = pdf_d1 / (spot * iv * sqrt_t)
+        cdf_d2 = norm_cdf(d2)
 
-        # Theta in ₹ per day
-        theta_c = -(spot * pdf_d1 * iv) / (2.0 * sqrt_t * 365.0)
+        # Theta in ₹ per day (includes rKe^{-rT}N(d2) interest rate carry term)
+        theta_c = (-(spot * pdf_d1 * iv) / (2.0 * sqrt_t) - r * strike * math.exp(-r * t) * cdf_d2) / 365.0
         vega = spot * sqrt_t * pdf_d1 / 100.0
 
         # GEX calculation:

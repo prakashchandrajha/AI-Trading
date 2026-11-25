@@ -1,0 +1,21 @@
+{
+  "projectRoot": "/home/vvd/prakash/AI-Trading",
+  "batchFiles": [
+    {"path": "ai/agent_trader.py", "language": "python", "sizeLines": 1781, "fileCategory": "code"},
+    {"path": "ai/greeks_gex.py", "language": "python", "sizeLines": 265, "fileCategory": "code"},
+    {"path": "ai/mcp_server.py", "language": "python", "sizeLines": 411, "fileCategory": "code"},
+    {"path": "ai/options_analytics.py", "language": "python", "sizeLines": 489, "fileCategory": "code"},
+    {"path": "ai/paper_ledger.py", "language": "python", "sizeLines": 496, "fileCategory": "code"},
+    {"path": "ai/technical_lens.py", "language": "python", "sizeLines": 437, "fileCategory": "code"},
+    {"path": "ai/test_ai_agent.py", "language": "python", "sizeLines": 469, "fileCategory": "code"}
+  ],
+  "batchImportData": {
+    "ai/agent_trader.py": ["ai/cockpit.py", "ai/gpu_engine.py", "ai/greeks_gex.py", "ai/live_kite_feed.py", "ai/logic_tester.py", "ai/options_analytics.py", "ai/paper_ledger.py", "ai/quantitative_alpha.py", "ai/technical_lens.py", "connector/smart_trading_bridge.py"],
+    "ai/greeks_gex.py": ["ai/options_analytics.py"],
+    "ai/mcp_server.py": ["ai/agent_trader.py", "ai/greeks_gex.py", "ai/options_analytics.py", "ai/paper_ledger.py", "ai/technical_lens.py"],
+    "ai/options_analytics.py": [],
+    "ai/paper_ledger.py": [],
+    "ai/technical_lens.py": [],
+    "ai/test_ai_agent.py": ["ai/greeks_gex.py", "ai/options_analytics.py", "ai/paper_ledger.py"]
+  }
+}

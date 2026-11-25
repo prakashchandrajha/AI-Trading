@@ -1,0 +1,22 @@
+{
+  "nodes": [
+    {"id":"config:ai/runtime/history_cache/HAL_25d_2026-11-25.json","type":"config","name":"HAL_25d_2026-11-25.json","filePath":"ai/runtime/history_cache/HAL_25d_2026-11-25.json","summary":"Cached 25-day HAL historical market series used for regime and logic validation.","tags":["runtime-data","market-history","hal","validation"],"complexity":"moderate"},
+    {"id":"config:ai/runtime/history_cache/HDFCBANK_25d_2026-11-25.json","type":"config","name":"HDFCBANK_25d_2026-11-25.json","filePath":"ai/runtime/history_cache/HDFCBANK_25d_2026-11-25.json","summary":"Cached 25-day HDFCBANK historical market series used for regime and logic validation.","tags":["runtime-data","market-history","hdfcbank","validation"],"complexity":"moderate"},
+    {"id":"config:ai/runtime/history_cache/ICICIBANK_25d_2026-11-25.json","type":"config","name":"ICICIBANK_25d_2026-11-25.json","filePath":"ai/runtime/history_cache/ICICIBANK_25d_2026-11-25.json","summary":"Cached 25-day ICICIBANK historical market series used for regime and logic validation.","tags":["runtime-data","market-history","icicibank","validation"],"complexity":"moderate"},
+    {"id":"config:ai/runtime/history_cache/INFY_25d_2026-11-25.json","type":"config","name":"INFY_25d_2026-11-25.json","filePath":"ai/runtime/history_cache/INFY_25d_2026-11-25.json","summary":"Cached 25-day INFY historical market series used for regime and logic validation.","tags":["runtime-data","market-history","infy","validation"],"complexity":"moderate"},
+    {"id":"config:ai/runtime/history_cache/M&M_25d_2026-11-25.json","type":"config","name":"M&M_25d_2026-11-25.json","filePath":"ai/runtime/history_cache/M&M_25d_2026-11-25.json","summary":"Cached 25-day M&M historical market series used for regime and logic validation.","tags":["runtime-data","market-history","auto-sector","validation"],"complexity":"moderate"},
+    {"id":"config:ai/runtime/history_cache/NIFTY_25d_2026-11-25.json","type":"config","name":"NIFTY_25d_2026-11-25.json","filePath":"ai/runtime/history_cache/NIFTY_25d_2026-11-25.json","summary":"Cached 25-day NIFTY historical market series used for regime and logic validation.","tags":["runtime-data","market-history","nifty","validation"],"complexity":"moderate"},
+    {"id":"config:ai/runtime/history_cache/SBIN_25d_2026-11-25.json","type":"config","name":"SBIN_25d_2026-11-25.json","filePath":"ai/runtime/history_cache/SBIN_25d_2026-11-25.json","summary":"Cached 25-day SBIN historical market series used for regime and logic validation.","tags":["runtime-data","market-history","sbin","validation"],"complexity":"moderate"},
+    {"id":"config:ai/runtime/history_cache/TATASTEEL_25d_2026-11-25.json","type":"config","name":"TATASTEEL_25d_2026-11-25.json","filePath":"ai/runtime/history_cache/TATASTEEL_25d_2026-11-25.json","summary":"Cached 25-day TATASTEEL historical market series used for regime and logic validation.","tags":["runtime-data","market-history","tatasteel","validation"],"complexity":"moderate"}
+  ],
+  "edges": [
+    {"source":"file:ai/logic_tester.py","target":"config:ai/runtime/history_cache/HAL_25d_2026-11-25.json","type":"reads_from","direction":"forward","weight":0.5},
+    {"source":"file:ai/logic_tester.py","target":"config:ai/runtime/history_cache/HDFCBANK_25d_2026-11-25.json","type":"reads_from","direction":"forward","weight":0.5},
+    {"source":"file:ai/logic_tester.py","target":"config:ai/runtime/history_cache/ICICIBANK_25d_2026-11-25.json","type":"reads_from","direction":"forward","weight":0.5},
+    {"source":"file:ai/logic_tester.py","target":"config:ai/runtime/history_cache/INFY_25d_2026-11-25.json","type":"reads_from","direction":"forward","weight":0.5},
+    {"source":"file:ai/logic_tester.py","target":"config:ai/runtime/history_cache/M&M_25d_2026-11-25.json","type":"reads_from","direction":"forward","weight":0.5},
+    {"source":"file:ai/logic_tester.py","target":"config:ai/runtime/history_cache/NIFTY_25d_2026-11-25.json","type":"reads_from","direction":"forward","weight":0.5},
+    {"source":"file:ai/logic_tester.py","target":"config:ai/runtime/history_cache/SBIN_25d_2026-11-25.json","type":"reads_from","direction":"forward","weight":0.5},
+    {"source":"file:ai/logic_tester.py","target":"config:ai/runtime/history_cache/TATASTEEL_25d_2026-11-25.json","type":"reads_from","direction":"forward","weight":0.5}
+  ]
+}

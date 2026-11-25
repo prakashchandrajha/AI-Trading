@@ -1,0 +1,59 @@
+{
+  "nodes": [
+    {
+      "id": "document:ai/AI_TRADER_PLAYBOOK.md",
+      "type": "document",
+      "name": "AI_TRADER_PLAYBOOK.md",
+      "filePath": "ai/AI_TRADER_PLAYBOOK.md",
+      "summary": "Defines the operating contract for the AI CIO cockpit: analytics and SmartTrading telemetry are helping hands, while an external Antigravity or Codex agent owns discretionary entries and management decisions.",
+      "tags": ["documentation", "trading-workflow", "decision-authority", "paper-trading"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:ai/AUDIT_FINDINGS.md",
+      "type": "document",
+      "name": "AUDIT_FINDINGS.md",
+      "filePath": "ai/AUDIT_FINDINGS.md",
+      "summary": "Records the live-feed, fail-closed, ledger, and risk-control audit state, including known remaining refinements.",
+      "tags": ["documentation", "audit", "risk-controls", "runtime-status"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:ai/SYSTEM_BLUEPRINT.md",
+      "type": "document",
+      "name": "SYSTEM_BLUEPRINT.md",
+      "filePath": "ai/SYSTEM_BLUEPRINT.md",
+      "summary": "Architectural specification for the isolated desk, trader, and AI CIO lanes, their market-data responsibilities, and paper-trading risk model.",
+      "tags": ["documentation", "architecture", "risk-governance", "market-structure"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:ai/run_morning_ai_trader.sh",
+      "type": "file",
+      "name": "run_morning_ai_trader.sh",
+      "filePath": "ai/run_morning_ai_trader.sh",
+      "summary": "Operational launcher for the guardian, cockpit, logic test, session status, and controlled stop workflow.",
+      "tags": ["shell", "operations", "guardian", "paper-trading"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:ai/strategy.yaml",
+      "type": "config",
+      "name": "strategy.yaml",
+      "filePath": "ai/strategy.yaml",
+      "summary": "Declarative V3.0-APEX strategy, market-regime, sizing, stop, and collision-policy specification intended to govern the AI CIO workflow.",
+      "tags": ["configuration", "risk-governance", "strategy", "paper-trading"],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {"source":"document:ai/AI_TRADER_PLAYBOOK.md","target":"file:ai/agent_trader.py","type":"documents","direction":"forward","weight":0.5},
+    {"source":"document:ai/AI_TRADER_PLAYBOOK.md","target":"file:ai/cockpit.py","type":"documents","direction":"forward","weight":0.5},
+    {"source":"document:ai/SYSTEM_BLUEPRINT.md","target":"file:ai/agent_trader.py","type":"documents","direction":"forward","weight":0.5},
+    {"source":"document:ai/SYSTEM_BLUEPRINT.md","target":"file:connector/smart_trading_bridge.py","type":"documents","direction":"forward","weight":0.5},
+    {"source":"document:ai/AUDIT_FINDINGS.md","target":"file:ai/live_kite_feed.py","type":"documents","direction":"forward","weight":0.5},
+    {"source":"file:ai/run_morning_ai_trader.sh","target":"file:ai/agent_trader.py","type":"depends_on","direction":"forward","weight":0.6},
+    {"source":"config:ai/strategy.yaml","target":"file:ai/agent_trader.py","type":"configures","direction":"forward","weight":0.6},
+    {"source":"config:ai/strategy.yaml","target":"file:ai/cockpit.py","type":"configures","direction":"forward","weight":0.6}
+  ]
+}

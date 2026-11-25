@@ -1,0 +1,11 @@
+{
+  "nodes": [
+    {"id":"config:.understand-anything/.understandignore","type":"config","name":".understandignore","filePath":".understand-anything/.understandignore","summary":"Analysis-only ignore policy defining files excluded from the repository knowledge graph.","tags":["configuration","analysis-tooling","ignore-rules"],"complexity":"simple"},
+    {"id":"file:ai/ai_paper_trades.db","type":"file","name":"ai_paper_trades.db","filePath":"ai/ai_paper_trades.db","summary":"Persistent SQLite ledger containing AI paper trades, P&L, statutory friction, and CIO decision records.","tags":["database","paper-trading","audit-trail","risk-governance"],"complexity":"moderate"},
+    {"id":"file:ai/runtime/paper_ledger.db","type":"file","name":"paper_ledger.db","filePath":"ai/runtime/paper_ledger.db","summary":"Runtime SQLite artifact for paper-ledger state.","tags":["database","runtime-data","paper-trading"],"complexity":"simple"}
+  ],
+  "edges": [
+    {"source":"file:ai/paper_ledger.py","target":"file:ai/ai_paper_trades.db","type":"writes_to","direction":"forward","weight":0.5},
+    {"source":"file:ai/agent_trader.py","target":"file:ai/ai_paper_trades.db","type":"reads_from","direction":"forward","weight":0.5}
+  ]
+}

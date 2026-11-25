@@ -60,6 +60,21 @@ class AIPaperLedger:
             cols = [c[1] for c in conn.execute("PRAGMA table_info(ai_paper_trades)").fetchall()]
             if "source_tag" not in cols:
                 conn.execute("ALTER TABLE ai_paper_trades ADD COLUMN source_tag TEXT DEFAULT 'REPLAY'")
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS ai_cio_decisions (
+                    decision_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    timestamp_ist TEXT NOT NULL,
+                    action TEXT NOT NULL,         -- ENTER, STAND_ASIDE, TRAIL_SL, PARTIAL_BOOK, BOOK_PROFIT, EXIT
+                    trade_id INTEGER,
+                    underlying TEXT,
+                    contract TEXT,
+                    regime TEXT,
+                    reasoning TEXT NOT NULL,
+                    context_json TEXT
+                )
+                """
+            )
             conn.commit()
 
     @staticmethod
@@ -91,8 +106,8 @@ class AIPaperLedger:
         # 1. STT: 0.15% on sell turnover (rounded to nearest integer rupee per Indian tax law)
         stt = float(round(0.0015 * sell_turnover))
 
-        # 2. Exchange turnover charge: 0.03553% (NSE options rate inclusive of IPFT, post-Oct 2024 / 2026 schedule)
-        exch_turnover_fee = 0.0003553 * total_turnover
+        # 2. Exchange turnover charge: 0.03503% (NSE options rate, post-Oct 2024 per statutory_rates.json)
+        exch_turnover_fee = 0.0003503 * total_turnover
 
         # 3. Stamp duty: 0.003% on buy
         stamp_duty = 0.00003 * buy_turnover
@@ -349,4 +364,133 @@ class AIPaperLedger:
             conn.commit()
             return count
 
+    def partial_close_trade(
+        self,
+        trade_id: int,
+        exit_lots: int,
+        exit_price: float,
+        exit_reason: str = "PARTIAL_PROFIT_BOOK_CIO",
+    ) -> Dict:
+        """
+        Books profit/loss on `exit_lots` while leaving remaining runner lots OPEN.
+        If `exit_lots >= open_lots`, performs full close.
+        """
+        now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        with self._get_conn() as conn:
+            cursor = conn.cursor()
+            row = cursor.execute("SELECT * FROM ai_paper_trades WHERE trade_id = ?", (trade_id,)).fetchone()
+            if not row or row["status"] != "OPEN":
+                return {}
 
+            open_lots = int(row["lots"])
+            open_qty = int(row["quantity"])
+            if exit_lots <= 0 or open_lots <= 0:
+                return {}
+            if exit_lots >= open_lots:
+                return self.close_trade(trade_id, exit_price, exit_reason)
+
+            lot_size = max(1, open_qty // open_lots)
+            close_qty = exit_lots * lot_size
+            rem_lots = open_lots - exit_lots
+            rem_qty = open_qty - close_qty
+            entry_price = float(row["entry_price"])
+            direction = row["direction"]
+
+            gross_pnl = round((exit_price - entry_price) * close_qty, 2)
+            friction = self.calculate_indian_friction(entry_price, exit_price, close_qty, direction)
+            net_pnl = round(gross_pnl - friction, 2)
+
+            # Reduce active open runner size in place
+            cursor.execute(
+                "UPDATE ai_paper_trades SET lots = ?, quantity = ? WHERE trade_id = ?",
+                (rem_lots, rem_qty, trade_id),
+            )
+            # Record closed booked leg separately for exact accounting
+            cursor.execute(
+                """
+                INSERT INTO ai_paper_trades (
+                    entry_timestamp, exit_timestamp, underlying, symbol, direction,
+                    entry_price, stop_loss, target, lots, quantity, status,
+                    exit_price, gross_pnl, statutory_friction, net_pnl, exit_reason, thesis, source_tag
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'CLOSED', ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    row["entry_timestamp"],
+                    now_iso,
+                    row["underlying"],
+                    row["symbol"],
+                    direction,
+                    entry_price,
+                    row["stop_loss"],
+                    row["target"],
+                    exit_lots,
+                    close_qty,
+                    exit_price,
+                    gross_pnl,
+                    friction,
+                    net_pnl,
+                    exit_reason,
+                    row["thesis"],
+                    row["source_tag"],
+                ),
+            )
+            booked_id = cursor.lastrowid
+            conn.commit()
+
+            return {
+                "trade_id": trade_id,
+                "booked_trade_id": booked_id,
+                "symbol": row["symbol"],
+                "closed_lots": exit_lots,
+                "remaining_lots": rem_lots,
+                "entry_price": entry_price,
+                "exit_price": exit_price,
+                "gross_pnl": gross_pnl,
+                "friction": friction,
+                "net_pnl": net_pnl,
+                "exit_reason": exit_reason,
+            }
+
+    def log_cio_decision(
+        self,
+        action: str,
+        reasoning: str,
+        trade_id: Optional[int] = None,
+        underlying: Optional[str] = None,
+        contract: Optional[str] = None,
+        regime: Optional[str] = None,
+        context: Optional[Dict] = None,
+    ) -> int:
+        """Persists explicit AI CIO decisions (`ENTER`, `STAND_ASIDE`, `TRAIL_SL`, `PARTIAL_BOOK`, `BOOK_PROFIT`, `EXIT`)."""
+        from zoneinfo import ZoneInfo
+        import json
+        ts_ist = datetime.datetime.now(ZoneInfo("Asia/Kolkata")).isoformat()
+        with self._get_conn() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT INTO ai_cio_decisions (
+                    timestamp_ist, action, trade_id, underlying, contract, regime, reasoning, context_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    ts_ist,
+                    action.upper(),
+                    trade_id,
+                    underlying,
+                    contract,
+                    regime,
+                    reasoning,
+                    json.dumps(context or {}),
+                ),
+            )
+            conn.commit()
+            return cursor.lastrowid
+
+    def get_recent_cio_decisions(self, limit: int = 15) -> List[Dict]:
+        with self._get_conn() as conn:
+            rows = conn.execute(
+                "SELECT * FROM ai_cio_decisions ORDER BY decision_id DESC LIMIT ?",
+                (limit,),
+            ).fetchall()
+            return [dict(r) for r in rows]

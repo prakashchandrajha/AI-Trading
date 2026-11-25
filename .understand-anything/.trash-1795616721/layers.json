@@ -1,0 +1,78 @@
+[
+  {
+    "id": "layer:external-cio-control",
+    "name": "External CIO Control",
+    "description": "The command and MCP surface through which Codex or Antigravity should independently inspect evidence, authorize entries, and make discretionary management decisions; it also contains the legacy autonomous loop that conflicts with that authority model.",
+    "nodeIds": [
+      "file:ai/agent_trader.py",
+      "file:ai/mcp_server.py",
+      "file:ai/run_morning_ai_trader.sh"
+    ]
+  },
+  {
+    "id": "layer:market-data-and-smarttrading-bridge",
+    "name": "Market Data & SmartTrading Bridge",
+    "description": "Fail-closed live Kite market access and the read-only SmartTrading connector supplying telemetry, market context, and collision information without cross-project writes.",
+    "nodeIds": [
+      "file:ai/live_kite_feed.py",
+      "file:connector/__init__.py",
+      "file:connector/smart_trading_bridge.py"
+    ]
+  },
+  {
+    "id": "layer:analytics-and-cockpit-evidence",
+    "name": "Analytics & Cockpit Evidence",
+    "description": "Option-chain, Greeks, microstructure, volatility, technical, and composite-edge engines that compress market data into evidence for the external CIO rather than owning the final decision.",
+    "nodeIds": [
+      "file:ai/cockpit.py",
+      "file:ai/gpu_engine.py",
+      "file:ai/greeks_gex.py",
+      "file:ai/options_analytics.py",
+      "file:ai/quantitative_alpha.py",
+      "file:ai/smart_edge.py",
+      "file:ai/technical_lens.py"
+    ]
+  },
+  {
+    "id": "layer:paper-ledger-and-safety-audit",
+    "name": "Paper Ledger & Safety Audit",
+    "description": "Independent paper-trade persistence, statutory-friction accounting, decision journaling, and the SQLite artifacts that make positions and actions auditable.",
+    "nodeIds": [
+      "file:ai/paper_ledger.py",
+      "file:ai/ai_paper_trades.db",
+      "file:ai/runtime/paper_ledger.db"
+    ]
+  },
+  {
+    "id": "layer:validation-and-historical-evidence",
+    "name": "Validation & Historical Evidence",
+    "description": "Logic-test workflows, regression coverage, cached market histories, and validation reports used to evaluate claims without driving a mandatory trade decision.",
+    "nodeIds": [
+      "file:ai/logic_tester.py",
+      "file:ai/test_ai_agent.py",
+      "config:ai/runtime/logic_test_report.json",
+      "config:ai/runtime/history_cache/HAL_25d_2026-11-25.json",
+      "config:ai/runtime/history_cache/HDFCBANK_25d_2026-11-25.json",
+      "config:ai/runtime/history_cache/ICICIBANK_25d_2026-11-25.json",
+      "config:ai/runtime/history_cache/INFY_25d_2026-11-25.json",
+      "config:ai/runtime/history_cache/M&M_25d_2026-11-25.json",
+      "config:ai/runtime/history_cache/NIFTY_25d_2026-11-25.json",
+      "config:ai/runtime/history_cache/SBIN_25d_2026-11-25.json",
+      "config:ai/runtime/history_cache/TATASTEEL_25d_2026-11-25.json"
+    ]
+  },
+  {
+    "id": "layer:policy-documentation-and-runtime-state",
+    "name": "Policy, Documentation & Runtime State",
+    "description": "The written operating contract, intended risk configuration, analysis configuration, and generated snapshots that give the CIO operational context.",
+    "nodeIds": [
+      "document:ai/AI_TRADER_PLAYBOOK.md",
+      "document:ai/AUDIT_FINDINGS.md",
+      "document:ai/SYSTEM_BLUEPRINT.md",
+      "config:ai/strategy.yaml",
+      "config:ai/runtime/cockpit_briefing.json",
+      "config:ai/runtime/oi_baseline_2026-11-25.json",
+      "config:.understand-anything/.understandignore"
+    ]
+  }
+]

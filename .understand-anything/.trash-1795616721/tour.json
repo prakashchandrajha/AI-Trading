@@ -1,0 +1,50 @@
+[
+  {
+    "order": 1,
+    "title": "CIO Authority Contract",
+    "description": "Begin with the project’s core promise: SmartTrading, analytics, and the guardian are helping hands, while an external Codex or Antigravity agent makes the trading decision. This document is the benchmark for judging whether actual code preserves that separation.",
+    "nodeIds": ["document:ai/AI_TRADER_PLAYBOOK.md", "document:ai/SYSTEM_BLUEPRINT.md"]
+  },
+  {
+    "order": 2,
+    "title": "Read-Only Data Bridge",
+    "description": "Next inspect the boundary to SmartTrading. The bridge reads desk telemetry, positions, journals, and shared data without importing SmartTrading code or issuing writes, so the analysis project cannot interfere with the desk runtime.",
+    "nodeIds": ["file:connector/smart_trading_bridge.py", "file:ai/live_kite_feed.py"]
+  },
+  {
+    "order": 3,
+    "title": "Evidence, Not Authority",
+    "description": "The cockpit assembles breadth, OI, walls, Greeks, microstructure, volatility, technical context, and sizing suggestions into a compact briefing. Its candidate ranking is deliberately evidence for a CIO, not a self-executing mandate.",
+    "nodeIds": ["file:ai/cockpit.py", "file:ai/options_analytics.py", "file:ai/greeks_gex.py", "file:ai/smart_edge.py"]
+  },
+  {
+    "order": 4,
+    "title": "External Agent Tools",
+    "description": "The MCP server is the intended interface for Codex or Antigravity to request market evidence, inspect positions, and send a deliberate CIO decision. The authorized entry and management tools should be the only normal route from analysis to a paper-trade state change.",
+    "nodeIds": ["file:ai/mcp_server.py", "function:ai/mcp_server.py:cio_authorize_entry", "function:ai/mcp_server.py:cio_manage_position"]
+  },
+  {
+    "order": 5,
+    "title": "Gated CIO Decisions",
+    "description": "The CIO path is where an external agent’s free decision is checked for non-negotiable operational safety: live price, spread, clock, F&O ban, collision mutex, cash, and maximum loss. It records the decision thesis, but it does not decide the thesis itself.",
+    "nodeIds": ["function:ai/agent_trader.py:cio_enter_trade", "function:ai/agent_trader.py:cio_manage_trade", "file:ai/paper_ledger.py"]
+  },
+  {
+    "order": 6,
+    "title": "Guardian Safety Boundary",
+    "description": "The guardian should only maintain the briefing, enforce a hard stop, and ensure the end-of-day square-off. This is the mechanical safety boundary that lets the external CIO remain discretionary without allowing unattended risk to remain open overnight.",
+    "nodeIds": ["function:ai/agent_trader.py:run_guardian_loop", "function:ai/agent_trader.py:square_off_all_positions", "file:ai/run_morning_ai_trader.sh"]
+  },
+  {
+    "order": 7,
+    "title": "Conflicting Legacy Paths",
+    "description": "Finally, examine the two paths that do not match the authority contract: the rule-driven autonomous loop can open trades, and the direct paper-order MCP tool bypasses the complete CIO authorization gate. These should be removed, disabled, or guarded before treating the architecture as external-agent-led.",
+    "nodeIds": ["function:ai/agent_trader.py:run_autonomous_loop", "function:ai/mcp_server.py:execute_paper_order", "config:ai/strategy.yaml"]
+  },
+  {
+    "order": 8,
+    "title": "Evidence and Regression",
+    "description": "Historical logic reports, cached market series, and regression tests are used to challenge the system’s assumptions and prevent fictional marks or broken risk rules. They support the CIO’s judgment, but should never silently turn a backtest score into an order.",
+    "nodeIds": ["file:ai/logic_tester.py", "file:ai/test_ai_agent.py", "config:ai/runtime/logic_test_report.json"]
+  }
+]
