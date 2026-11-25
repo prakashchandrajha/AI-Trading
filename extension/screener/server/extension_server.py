@@ -37,7 +37,7 @@ def _json_response(handler: BaseHTTPRequestHandler, status: int, payload: dict[s
 
 class ExtensionQueueHandler(BaseHTTPRequestHandler):
     def log_message(self, format: str, *args: Any) -> None:
-        logger.debug(format, *args)
+        logger.debug(format % args)
 
     def do_OPTIONS(self) -> None:
         _json_response(self, 200, {"ok": True})
