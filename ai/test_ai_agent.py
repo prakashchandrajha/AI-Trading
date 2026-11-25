@@ -239,7 +239,8 @@ def test_live_mode_fails_closed_without_synthetic_bump(tmp_path):
 
     tid = ledger.open_trade("HAL", "HAL26DEC4900CE", "BUY_CE", 180.0, 150.0, 243.0, 1, 150, "live", source_tag="LIVE_KITE")
     res_open = agent.run_cycle()
-    assert res_open["action"] == "MANAGED_ACTIVE_TRADES"
+    assert res_open["action"] == "POSITION_REVIEW_REQUIRED"
+    assert res_open["trade_ids"] == [tid]
     assert ledger.get_open_trades()[0]["stop_loss"] == 150.0
     assert ledger.get_open_trades()[0]["status"] == "OPEN"
 
@@ -312,28 +313,76 @@ def test_cio_clock_enter_trail_and_partial_book(tmp_path):
     rej = cio_enter_trade("NIFTY", "BUY_CE", "NIFTY26DEC25800CE", 180.0, 260.0, 1, thesis="", entry_price=200.0, live_mode=False, ledger=ledger)
     assert rej["status"] == "REJECTED"
 
-    # Valid entry with 2 lots (sl=185.0 -> risk = (200-185)*130 = 1,950 <= ₹3,500 cap)
+    # Valid entry with 2 lots: ₹15,600 deployment and ₹1,950 risk are inside policy.
     entered = cio_enter_trade(
-        "NIFTY", "BUY_CE", "NIFTY26DEC25800CE", sl=185.0, target=270.0, lots=2,
+        "NIFTY", "BUY_CE", "NIFTY26DEC25800CE", sl=105.0, target=165.0, lots=2,
         thesis="Strong institutional breakout above VWAP with open Call Wall",
-        entry_price=200.0, live_mode=False, ledger=ledger,
+        entry_price=120.0, live_mode=False, ledger=ledger,
     )
     assert entered["status"] == "OPENED_TRADE"
     tid = entered["trade_id"]
 
     # Stay & Ride Rally: trail SL upward
-    trailed = cio_manage_trade(tid, "TRAIL_SL", "Holding above 20 EMA", sl=205.0, live_mode=False, ledger=ledger)
+    trailed = cio_manage_trade(tid, "TRAIL_SL", "Holding above 20 EMA", sl=125.0, live_mode=False, ledger=ledger)
     assert trailed["status"] == "SL_UPDATED"
-    assert ledger.get_open_trades()[0]["stop_loss"] == 205.0
+    assert ledger.get_open_trades()[0]["stop_loss"] == 125.0
 
-    # Partial Profit Book: sell 1 lot at ₹245, keep 1 runner open with higher SL ₹220
-    pbook = cio_manage_trade(tid, "PARTIAL_BOOK", "Lock 50% near Call Wall, ride 1 runner", sl=220.0, exit_lots=1, exit_price=245.0, live_mode=False, ledger=ledger)
+    # Partial Profit Book: sell 1 lot at ₹165, keep 1 runner open with higher SL ₹140
+    pbook = cio_manage_trade(tid, "PARTIAL_BOOK", "Lock 50% near Call Wall, ride 1 runner", sl=140.0, exit_lots=1, exit_price=165.0, live_mode=False, ledger=ledger)
     assert pbook["status"] == "PARTIAL_BOOKED"
     assert pbook["remaining_lots"] == 1
     assert pbook["net_pnl"] > 1000.0
     assert ledger.get_open_trades()[0]["lots"] == 1
-    assert ledger.get_open_trades()[0]["stop_loss"] == 220.0
+    assert ledger.get_open_trades()[0]["stop_loss"] == 140.0
     assert len(ledger.get_recent_cio_decisions(10)) == 3
+
+    missing_reason = cio_manage_trade(tid, "EXIT", "", exit_price=220.0, live_mode=False, ledger=ledger)
+    assert missing_reason["reason"] == "MISSING_CIO_REASON"
+
+
+def test_external_cio_policy_disables_all_ungated_execution_paths(tmp_path):
+    """Signals may propose; only a written external-CIO decision may write a trade."""
+    from agent_trader import AIAgentTrader, cio_enter_trade, run_autonomous_loop
+    from mcp_server import close_paper_order, execute_paper_order, get_trading_authority
+    from trading_policy import get_trading_policy
+
+    policy = get_trading_policy()
+    assert policy.external_cio_only is True
+    assert policy.max_concurrent_positions == 2
+    assert policy.max_single_trade_risk_inr == 3500.0
+
+    disabled_loop = run_autonomous_loop(live_mode=False, max_cycles=1)
+    assert disabled_loop["status"] == "DISABLED"
+    assert disabled_loop["reason"] == "EXTERNAL_CIO_ONLY_POLICY"
+
+    # Legacy MCP names remain only as safe compatibility stubs: neither may mutate
+    # the global paper ledger or become an accidental shortcut around CIO approval.
+    blocked_entry = execute_paper_order("NIFTY", "BUY_CE", 100.0, 90.0, 120.0, 1, "test")
+    blocked_exit = close_paper_order(999999, 100.0, "test")
+    assert blocked_entry["reason"] == "UNGATED_ORDER_PATH_DISABLED"
+    assert blocked_exit["reason"] == "UNGATED_EXIT_PATH_DISABLED"
+
+    authority = get_trading_authority()
+    assert authority["execution_mode"] == "EXTERNAL_CIO_ONLY"
+    assert authority["autonomous_entry"] == "DISABLED"
+    assert authority["guardian_authority"] == ["REFRESH_COCKPIT", "HARD_STOP_LOSS", "EOD_SQUARE_OFF"]
+
+    # Existing positions must be surfaced for an external CIO; deterministic code
+    # cannot independently trail, time-stop, book, or exit them.
+    ledger = AIPaperLedger(db_path=tmp_path / "external_cio_only.db")
+    oversized = cio_enter_trade(
+        "NIFTY", "BUY_CE", "NIFTY26DEC25800CE", sl=185.0, target=270.0, lots=2,
+        thesis="Deliberately oversized policy test", entry_price=200.0, live_mode=False, ledger=ledger,
+    )
+    assert oversized["reason"].startswith("POSITION_DEPLOYMENT_TOO_HIGH")
+
+    trade_id = ledger.open_trade("NIFTY", "NIFTY26DEC25800CE", "BUY_CE", 100.0, 85.0, 135.0, 1, 65, "CIO test")
+    agent = AIAgentTrader("NIFTY", live_mode=False)
+    agent.ledger = ledger
+    review = agent.run_cycle()
+    assert review["action"] == "POSITION_REVIEW_REQUIRED"
+    assert review["trade_ids"] == [trade_id]
+    assert ledger.get_open_trades()[0]["stop_loss"] == 85.0
 
 
 def test_logic_tester_regimes_and_simulation():

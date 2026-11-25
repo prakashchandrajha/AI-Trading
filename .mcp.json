@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "ai-trading-cio": {
+      "command": "python3",
+      "args": [
+        "ai/mcp_server.py"
+      ],
+      "cwd": "/home/vvd/prakash/AI-Trading"
+    }
+  }
+}

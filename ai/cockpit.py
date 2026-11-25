@@ -41,6 +41,7 @@ from paper_ledger import AIPaperLedger
 from quantitative_alpha import QuantitativeAlphaEngine
 from smart_edge import evaluate_smart_edge
 from technical_lens import TechnicalLensEngine
+from trading_policy import get_trading_policy
 
 IST = ZoneInfo("Asia/Kolkata")
 BRIEFING_PATH = AI_DIR / "runtime" / "cockpit_briefing.json"
@@ -64,6 +65,7 @@ GENERALS_WEIGHTS = [
 
 def evaluate_session_clock(now_ist: Optional[datetime.datetime] = None) -> Dict[str, Any]:
     """Determines exact market window, minutes to 15:15 IST square-off, and expiry regime."""
+    policy = get_trading_policy()
     now = now_ist or datetime.datetime.now(IST)
     today = now.date()
     is_tuesday = today.weekday() == 1
@@ -73,7 +75,7 @@ def evaluate_session_clock(now_ist: Optional[datetime.datetime] = None) -> Dict[
         last_thu -= 1
     is_expiry = is_tuesday or (today.day == last_thu)
 
-    eod_dt = now.replace(hour=15, minute=15, second=0, microsecond=0)
+    eod_dt = now.replace(hour=policy.eod_square_off[0], minute=policy.eod_square_off[1], second=0, microsecond=0)
     mins_to_eod = int((eod_dt - now).total_seconds() // 60)
     hhmm = (now.hour, now.minute)
 
@@ -87,9 +89,9 @@ def evaluate_session_clock(now_ist: Optional[datetime.datetime] = None) -> Dict[
         phase = "GOLDEN_MORNING"
     elif hhmm < (13, 25):
         phase = "MIDDAY_SELECTIVE"
-    elif hhmm < (14, 40):
+    elif hhmm < policy.entry_cutoff:
         phase = "GOLDEN_AFTERNOON"
-    elif hhmm < (15, 15):
+    elif hhmm < policy.eod_square_off:
         phase = "MANAGE_ONLY_NO_NEW_ENTRIES"
     elif hhmm < (15, 30):
         phase = "POST_SQUAREOFF_CLOSING"
@@ -255,7 +257,8 @@ class CockpitBuilder:
         open_trades = self.ledger.get_open_trades()
         today_live_pnl = self.ledger.get_today_pnl(source_tag="LIVE_KITE")
         deployed = sum(float(t["entry_price"]) * int(t["quantity"]) for t in open_trades)
-        available_cash = max(0.0, 50000.0 - deployed)
+        policy = get_trading_policy()
+        available_cash = max(0.0, policy.demat_budget_inr - deployed)
 
         if candidate_pool:
             available_universe = self.feed.get_available_universe(candidate_pool)
@@ -497,15 +500,15 @@ class CockpitBuilder:
             suggested_tgt = round(chosen_contract["entry_ask"] * 1.35, 2)
 
             risk_per_lot = max(1.0, (chosen_contract["entry_ask"] - suggested_sl) * snap.lot_size)
-            cb_room = max(0.0, 3500.0 + today_live_pnl)
-            target_risk_budget = min(2500.0, cb_room * 0.70) if cb_room > 0 else 1500.0
-            cap_lots = int(min(available_cash, 28000.0) / max(1.0, lot_cost))
+            cb_room = max(0.0, policy.daily_loss_limit_inr + today_live_pnl)
+            target_risk_budget = min(policy.max_single_trade_risk_inr * 0.70, cb_room * 0.70)
+            cap_lots = int(min(available_cash, policy.max_position_deployment_inr) / max(1.0, lot_cost))
             risk_lots = int(target_risk_budget / risk_per_lot)
             suggested_lots = max(1, min(cap_lots if cap_lots >= 1 else 1, max(1, risk_lots)))
             suggested_ticket = round(suggested_lots * lot_cost, 2)
             suggested_max_risk = round(risk_per_lot * suggested_lots, 2)
-            if suggested_max_risk > 3500.0:
-                flags.append(f"WARN:RISK_₹{suggested_max_risk:.0f}>3500")
+            if suggested_max_risk > policy.max_single_trade_risk_inr:
+                flags.append(f"WARN:RISK_₹{suggested_max_risk:.0f}>{policy.max_single_trade_risk_inr:.0f}")
 
             est_fric = AIPaperLedger.calculate_indian_friction(
                 chosen_contract["entry_ask"], chosen_contract["entry_ask"] * 1.15, suggested_lots * snap.lot_size, direction
@@ -641,11 +644,11 @@ class CockpitBuilder:
         briefing = {
             "clock": clock,
             "capital": {
-                "budget_inr": 50000.0,
+                "budget_inr": policy.demat_budget_inr,
                 "deployed_inr": round(deployed, 2),
                 "available_cash_inr": round(available_cash, 2),
                 "today_live_realized_pnl": today_live_pnl,
-                "circuit_breaker_remaining": round(3500.0 + today_live_pnl, 2),
+                "circuit_breaker_remaining": round(policy.daily_loss_limit_inr + today_live_pnl, 2),
             },
             "macro": {
                 "indices": indices_view,

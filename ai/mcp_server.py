@@ -1,13 +1,9 @@
-"""
-NSE & Institutional Options Trading MCP Server
-Exposes standardized Model Context Protocol (MCP) tools for autonomous AI agents.
-Enables AI models to:
-1. Inspect live/synthetic NSE option chains & Nuvama-style institutional analytics.
-2. Calculate Net Gamma Exposure (GEX), Greeks, and Gamma Squeeze probability.
-3. Check 'The Generals' (HDFCBANK, RELIANCE) macro alignment.
-4. Scan liquid F&O universe for intraday stock option breakouts.
-5. Execute paper orders with exact Indian derivatives friction (STT, GST, SEBI fee).
-6. Track open positions, performance, and risk envelope.
+"""MCP helping hands for an external discretionary paper-trading CIO.
+
+The connected IDE agent (Codex, Antigravity, or another approved agent) makes
+trading decisions.  This server exposes market evidence, policy, gated CIO
+actions, ledger state, and safety controls.  It never exposes an autonomous or
+ungated order path.
 """
 from __future__ import annotations
 
@@ -20,6 +16,7 @@ from greeks_gex import GreeksGexEngine
 from options_analytics import OptionsAnalyticsEngine
 from paper_ledger import AIPaperLedger
 from technical_lens import TechnicalLensEngine
+from trading_policy import get_trading_policy
 
 mcp = FastMCP("NSE_Smart_Trading")
 ledger = AIPaperLedger()
@@ -277,46 +274,53 @@ def execute_paper_order(
     stop_loss: float,
     target: float,
     lots: int = 1,
-    thesis: str = "Autonomous MCP execution",
+    thesis: str = "",
 ) -> Dict:
     """
-    Opens an autonomous paper trade with automatic Indian friction modeling (STT, GST, turnover, stamp duty).
-    Direction: 'BUY_CE' or 'BUY_PE'.
+    Deprecated compatibility tool. It intentionally refuses all calls because an
+    external CIO must use `cio_authorize_entry`, which applies the full policy,
+    requires a thesis, and records a CIO decision journal entry.
     """
-    spec = OptionsAnalyticsEngine.SYMBOL_SPECS.get(symbol.upper().split("_")[0], {"lot_size": 25})
-    lot_size = spec["lot_size"]
-
-    trade_id = ledger.open_trade(
-        underlying=symbol.split("_")[0],
-        symbol=symbol,
-        direction=direction,
-        entry_price=entry_price,
-        stop_loss=stop_loss,
-        target=target,
-        lots=lots,
-        lot_size=lot_size,
-        thesis=thesis,
-    )
     return {
-        "status": "ORDER_PLACED",
-        "trade_id": trade_id,
-        "symbol": symbol,
-        "direction": direction,
-        "entry_price": entry_price,
-        "stop_loss": stop_loss,
-        "target": target,
-        "lot_size": lot_size,
-        "quantity": lots * lot_size,
+        "status": "REJECTED",
+        "reason": "UNGATED_ORDER_PATH_DISABLED",
+        "required_tool": "cio_authorize_entry",
+        "message": "Only an explicit external-CIO decision can open a paper trade.",
     }
 
 
 @mcp.tool()
 def close_paper_order(trade_id: int, exit_price: float, exit_reason: str = "MANUAL_EXIT") -> Dict:
     """
-    Closes an active paper trade and records exact net PnL after all statutory friction.
+    Deprecated compatibility tool. It intentionally refuses all calls because a
+    discretionary exit must use `cio_manage_position` with a written reason.
     """
-    result = ledger.close_trade(trade_id, exit_price, exit_reason)
-    return result
+    return {
+        "status": "REJECTED",
+        "reason": "UNGATED_EXIT_PATH_DISABLED",
+        "required_tool": "cio_manage_position",
+        "message": "Only an explicit external-CIO decision can close a paper trade.",
+    }
+
+
+@mcp.tool()
+def get_trading_authority() -> Dict:
+    """Returns the enforced external-CIO authority contract and risk envelope."""
+    policy = get_trading_policy()
+    return {
+        "execution_mode": policy.execution_mode,
+        "authorized_decision_makers": list(policy.authorized_decision_makers),
+        "autonomous_entry": "DISABLED",
+        "autonomous_management": "DISABLED",
+        "guardian_authority": ["REFRESH_COCKPIT", "HARD_STOP_LOSS", "EOD_SQUARE_OFF"],
+        "cio_authority": ["ENTER", "STAND_ASIDE", "HOLD", "TRAIL_SL", "PARTIAL_BOOK", "BOOK_PROFIT", "EXIT"],
+        "risk_envelope": {
+            "demat_budget_inr": policy.demat_budget_inr,
+            "max_concurrent_positions": policy.max_concurrent_positions,
+            "max_single_trade_risk_inr": policy.max_single_trade_risk_inr,
+            "daily_loss_limit_inr": policy.daily_loss_limit_inr,
+        },
+    }
 
 
 @mcp.tool()

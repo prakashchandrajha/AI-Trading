@@ -1,10 +1,9 @@
-"""
-AI Autonomous Trading Agent (Nuvama Open Interest & Institutional Flow)
-Acts as the Chief Investment Officer:
-1. Evaluates live/mock option chain via NuvamaOptionsEngine.
-2. Manages open paper positions (Target, Stop-Loss).
-3. Opens high-conviction institutional swing trades (15-min / hourly horizon).
-4. Records all results in ai/ai_paper_trades.db (100% separate from desk/).
+"""External-CIO paper-trading cockpit and mechanical safety guard.
+
+The deterministic system collects evidence, validates requests, journals decisions,
+and enforces only emergency stop/EOD protection.  Codex, Antigravity, or another
+connected IDE agent is the discretionary CIO: it chooses entries, holds, trails,
+partial bookings, and exits.
 """
 from __future__ import annotations
 
@@ -34,6 +33,7 @@ from paper_ledger import AIPaperLedger
 from technical_lens import TechnicalLensEngine, TechnicalIndicators, MarketLensBreadth
 from quantitative_alpha import QuantitativeAlphaEngine, QuantitativeAlphaState
 from gpu_engine import GPUQuantitativeEngine
+from trading_policy import get_trading_policy
 
 
 class AIAgentTrader:
@@ -404,125 +404,28 @@ class AIAgentTrader:
         precomputed_live: Optional[Dict] = None,
     ) -> Dict:
         """
-        Autonomous Agent Decision Cycle:
-        1. Manages open trades (using live NFO quotes in live_mode; strictly fail-closed).
-        2. If flat, evaluates analytics + technicals + liquidity and opens paper trade.
+        Legacy scanner retained for compatibility.
+
+        It can create a CIO proposal from its deterministic evidence but may never
+        open, close, trail, or partially book a position.  Guardian owns only the
+        mechanical hard-stop and end-of-day safety exits.
         """
+        policy = get_trading_policy()
         all_open_trades = self.ledger.get_open_trades()
         symbol_open_trades = [t for t in all_open_trades if t.get("underlying") == self.symbol]
 
-        # 1. Manage active open trades for this underlying symbol
+        # Active trades require a fresh decision by the external CIO.  Do not let
+        # historical deterministic management logic change a discretionary position.
         if symbol_open_trades:
-            time_stopped: List[str] = []
-            live_quotes: Dict[str, Dict] = {}
-            live_tech: Optional[TechnicalIndicators] = None
-
-            if self.live_mode:
-                if self.feed is None:
-                    self.feed = LiveKiteFeed()
-                live_quotes = self.feed.fetch_contract_quotes([t["symbol"] for t in symbol_open_trades])
-                meta = self.feed.get_symbol_meta(self.symbol)
-                if meta and meta.get("spot_token"):
-                    closes, vols = self.feed._fetch_spot_5m_bars(meta["spot_symbol"], meta["spot_token"])
-                    if closes:
-                        live_tech = TechnicalLensEngine.analyze_technicals(
-                            self.symbol, closes[-1], price_history=closes, volume_history=vols, require_real_history=True
-                        )
-            else:
-                underlying_px, chain = self.load_option_chain_from_tape(tape_db)
-
-            for t in symbol_open_trades:
-                tid = t["trade_id"]
-                sym = t["symbol"]
-                entry_p = t["entry_price"]
-                sl = t["stop_loss"]
-                direction = t["direction"]
-
-                curr_price = None
-                if self.live_mode:
-                    q = live_quotes.get(sym)
-                    if q and q.get("mark", 0.0) > 0.0:
-                        curr_price = float(q["mark"])
-                    else:
-                        print(f"⚠️ [LIVE FAIL-CLOSED] Missing live quote for #{tid} ({sym}). Holding position safely without synthetic mark.")
-                        continue
-                else:
-                    curr_price = entry_p
-                    matched_strike = None
-                    for part in sym.split("_"):
-                        digits = "".join(c for c in part if c.isdigit())
-                        if digits:
-                            matched_strike = float(digits)
-                            break
-                    if matched_strike:
-                        chain_match = next((s for s in chain if s.strike == matched_strike), None)
-                        if chain_match:
-                            ltp = chain_match.call_ltp if "CE" in sym else chain_match.put_ltp
-                            if ltp > 0:
-                                curr_price = ltp
-
-                # Dynamic Trailing Stop-Loss & 45-Minute Momentum Time-Stop
-                gain_ratio = (curr_price - entry_p) / entry_p if entry_p > 0 else 0.0
-
-                is_stagnant = False
-                try:
-                    entry_dt = datetime.datetime.fromisoformat(t["entry_timestamp"])
-                    if entry_dt.tzinfo is None:
-                        entry_dt = entry_dt.replace(tzinfo=datetime.timezone.utc)
-                    now_dt = datetime.datetime.now(datetime.timezone.utc)
-                    elapsed_min = (now_dt - entry_dt).total_seconds() / 60.0
-                    if elapsed_min >= 45.0 and gain_ratio < 0.15:
-                        is_stagnant = True
-                except Exception:
-                    pass
-
-                if is_stagnant:
-                    res = self.ledger.close_trade(tid, curr_price, "MOMENTUM_TIME_STOP_45MIN")
-                    time_stopped.append(self.symbol)
-                    print(f"⏱️ [AI Agent] 45-Minute Momentum Time-Stop for Trade #{tid} ({sym}) at ₹{curr_price:.2f}! Net PnL: ₹{res.get('net_pnl', 0.0):,.2f}")
-                    continue
-
-                if gain_ratio >= 0.35:
-                    rally_trail_sl = max(round(entry_p * 1.02, 2), round(curr_price * 0.82, 2))
-                    if rally_trail_sl > sl:
-                        self.ledger.update_stop_loss(tid, rally_trail_sl)
-                        sl = rally_trail_sl
-                        print(f"🚀 [AI Agent RALLY RUNNER] Trade #{tid} ({sym}) ripping (+{gain_ratio*100:.1f}%)! Trailing SL raised to ₹{sl:.2f}")
-                elif gain_ratio >= 0.25:
-                    new_sl = round(entry_p * 0.95, 2)
-                    if new_sl > sl:
-                        self.ledger.update_stop_loss(tid, new_sl)
-                        sl = new_sl
-                        print(f"💰 [AI Agent] +25% Tailwind for Trade #{tid} ({sym})! Tightened SL to ₹{new_sl:.2f}")
-                elif live_tech and live_tech.ema_20 > 0 and gain_ratio >= 0.15:
-                    ema20_broken = (
-                        (direction == "BUY_CE" and live_tech.current_price < live_tech.ema_20)
-                        or (direction == "BUY_PE" and live_tech.current_price > live_tech.ema_20)
-                    )
-                    if ema20_broken:
-                        lock_sl = round(curr_price * 0.95, 2)
-                        if lock_sl > sl and lock_sl > entry_p:
-                            self.ledger.update_stop_loss(tid, lock_sl)
-                            sl = lock_sl
-                            print(f"🛡️ [20-EMA DEFENSE] Spot crossed 20-EMA (₹{live_tech.ema_20:.2f}) on #{tid} ({sym}) — SL locked at ₹{sl:.2f}")
-
-                if curr_price <= sl:
-                    exit_reason = "TRAILING_STOP_LOCK" if sl > entry_p else "STOP_LOSS_WALL_BREACHED"
-                    res = self.ledger.close_trade(tid, curr_price, exit_reason)
-                    npnl = float(res.get("net_pnl", 0.0) or 0.0)
-                    pnl_s = f"-₹{abs(npnl):,.2f}" if npnl < 0 else f"₹{npnl:,.2f}"
-                    print(f"🛑 [AI Agent] {exit_reason} Hit for Trade #{tid} ({sym}) at ₹{curr_price:.2f}! Net PnL: {pnl_s}")
-                else:
-                    pnl_unrealized = (curr_price - entry_p) * t["quantity"]
-                    pnl_pct_disp = gain_ratio * 100
-                    u_str = f"-₹{abs(pnl_unrealized):,.2f}" if pnl_unrealized < 0 else f"+₹{pnl_unrealized:,.2f}"
-                    pct_str = f"{pnl_pct_disp:+.1f}%"
-                    print(f"📊 [AI Agent] Active #{tid} ({sym}) @ ₹{curr_price:.2f} | Unrealized: {u_str} ({pct_str}) | SL: ₹{sl:.2f}")
-
-            return {"action": "MANAGED_ACTIVE_TRADES", "open_count": len(symbol_open_trades), "time_stopped": time_stopped}
+            return {
+                "action": "POSITION_REVIEW_REQUIRED",
+                "open_count": len(symbol_open_trades),
+                "reason": "EXTERNAL_CIO_MUST_DECIDE_HOLD_TRAIL_PARTIAL_OR_EXIT",
+                "trade_ids": [int(t["trade_id"]) for t in symbol_open_trades],
+            }
 
         # 2. Portfolio Risk Gate: Maximum concurrent positions across all symbols
-        if len(all_open_trades) >= 3:
+        if len(all_open_trades) >= policy.max_concurrent_positions:
             return {"action": "STAND_ASIDE", "reason": "MAX_CONCURRENT_POSITIONS_REACHED"}
 
         # 3. Evaluate entry signal
@@ -586,8 +489,9 @@ class AIAgentTrader:
                 print(f"🛑 [AI Agent VETO] Blocked BUY_PE on {self.symbol}: Distance to Put Wall ({analysis.put_wall_strike:.0f}) is only {dist_to_put_wall:.1f} pts!")
                 return {"action": "VETOED_BY_WALL_PROXIMITY", "reason": f"Only {dist_to_put_wall:.1f} pts to Put Wall"}
 
-        # Demat Budget calculation (₹50,000 Total Capital)
-        DEMAT_BUDGET_TOTAL = 50000.0
+        # Proposal sizing comes from the single policy file.  It remains a suggestion
+        # until the external CIO explicitly authorizes it through cio_enter_trade.
+        DEMAT_BUDGET_TOTAL = policy.demat_budget_inr
         current_deployed = sum(t["entry_price"] * t["quantity"] for t in all_open_trades)
         available_cash = max(0.0, DEMAT_BUDGET_TOTAL - current_deployed)
 
@@ -646,12 +550,11 @@ class AIAgentTrader:
                 return {"action": "STAND_ASIDE", "reason": "ZERO_PREMIUM"}
 
         single_lot_cost = entry_px * self.lot_size
-        # Risk-budgeted SL: keep single-trade stop risk <= ₹3,000 so one stop never triggers the -₹3,500 daily breaker
-        sl_risk_pct = min(0.18, max(0.08, 3000.0 / single_lot_cost)) if single_lot_cost > 0 else 0.18
+        sl_risk_pct = min(0.18, max(0.08, policy.max_single_trade_risk_inr / single_lot_cost)) if single_lot_cost > 0 else 0.18
         stop_px = round(entry_px * (1.0 - sl_risk_pct), 2)
         target_px = round(entry_px * 1.35, 2)
 
-        target_allocation = min(available_cash, 28000.0 if confidence >= 0.85 else 22000.0)
+        target_allocation = min(available_cash, policy.max_position_deployment_inr)
         raw_lots = int(target_allocation / single_lot_cost) if single_lot_cost > 0 else 1
         calc_lots = 1 if (raw_lots < 1 and available_cash >= single_lot_cost) else max(1, raw_lots)
         ticket_value = entry_px * self.lot_size * calc_lots
@@ -674,39 +577,36 @@ class AIAgentTrader:
             drift=0.35 if is_call else -0.35,
         )
 
-        trade_id = self.ledger.open_trade(
-            underlying=self.symbol,
-            symbol=contract_symbol,
-            direction=signal,
-            entry_price=entry_px,
-            stop_loss=stop_px,
-            target=target_px,
-            lots=calc_lots,
-            lot_size=self.lot_size,
-            thesis=thesis,
-            source_tag="LIVE_KITE" if self.live_mode else "SHADOW",
-        )
-
         vwap_disp = tech_info.vwap if tech_info else underlying_px
         ema_disp = f"9:{tech_info.ema_9:.1f} / 20:{tech_info.ema_20:.1f} / 40:{tech_info.ema_40:.1f}" if tech_info else "9 > 40 EMA"
         print("\n" + "═" * 78)
-        print(f" 🎯 {'LIVE KITE' if self.live_mode else 'PAPER'} TRADE EXECUTION: {signal} #{trade_id} ({contract_symbol})")
+        print(f" 🧭 CIO PROPOSAL ONLY: {signal} ({contract_symbol}) — NO ORDER WAS OPENED")
         print("═" * 78)
         print(f" 👤 TECHNICALS & FLOW     : Spot ₹{underlying_px:,.2f} | VWAP ₹{vwap_disp:,.2f} | EMAs ({ema_disp})")
         print(f" 🤖 OPTIONS TELEMETRY     : PCR {analysis.pcr:.2f} | Max Pain ₹{analysis.max_pain_strike:.0f} | Call Wall ₹{analysis.call_wall_strike:.0f}")
         print(f" ⚡ GPU MONTE CARLO (RTX) : 10,000 Paths in {mc_sim['gpu_execution_ms']:.2f}ms | PoT Target: {mc_sim['p_win_target']*100:.1f}% ({mc_sim['device']})")
-        print(f" 📦 DEMAT BUDGET (₹50k)   : {calc_lots} Lot(s) ({calc_lots * self.lot_size} Units) | Ticket: ₹{ticket_value:,.2f} | Buffer: ₹{available_cash - ticket_value:,.2f}")
-        print(f" 🛡️ ACTIVE DEFENSE PLAN   : Entry ₹{entry_px:.2f} | SL ₹{stop_px:.2f} (-{sl_risk_pct*100:.1f}%) | Target ₹{target_px:.2f} (+35%)")
+        print(f" 📦 SUGGESTED SIZE        : {calc_lots} Lot(s) ({calc_lots * self.lot_size} Units) | Ticket: ₹{ticket_value:,.2f} | Buffer: ₹{available_cash - ticket_value:,.2f}")
+        print(f" 🛡️ PROPOSED PLAN         : Entry ₹{entry_px:.2f} | SL ₹{stop_px:.2f} (-{sl_risk_pct*100:.1f}%) | Target ₹{target_px:.2f} (+35%)")
+        print(" 🤖 EXTERNAL CIO REQUIRED : Re-evaluate and explicitly authorize, modify, or reject this proposal.")
         print("═" * 78 + "\n")
 
         return {
-            "action": "OPENED_TRADE",
-            "trade_id": trade_id,
+            "action": "CIO_PROPOSAL",
+            "requires_external_cio": True,
             "symbol": contract_symbol,
             "direction": signal,
             "entry_price": entry_px,
+            "suggested_stop_loss": stop_px,
+            "suggested_target": target_px,
             "lots": calc_lots,
             "ticket_value": ticket_value,
+            "thesis": thesis,
+            "evidence": {
+                "spot": underlying_px,
+                "vwap": vwap_disp,
+                "ema": ema_disp,
+                "monte_carlo_pot": mc_sim["p_win_target"],
+            },
         }
 
 
@@ -1129,159 +1029,17 @@ def run_autonomous_loop(
     max_cycles: Optional[int] = None,
     live_mode: bool = True,
 ):
-    """
-    Autonomous Live Paper Trading Daemon for AI Agent CIO:
-    Runs between 09:15 AM and 03:15 PM IST on genuine Zerodha Kite market prices.
-    1. Monitors and manages active positions every cycle (live Bid/LTP, 20-EMA, Rally Runner, 45m time-stop).
-    2. Scans active F&O universe dynamically ranked by Super Setup Score + Triple Ribbon alignment.
-    3. Enforces 30-minute per-symbol cooldown after time-stops and ₹50,000 Demat budget.
-    4. Automatically squares off 100% of open positions at 03:15 PM IST using live market marks.
-    """
-    log_dir = AI_DIR / "logs"
-    log_dir.mkdir(parents=True, exist_ok=True)
-    log_fh = open(log_dir / "agent_trader.log", "a", encoding="utf-8", buffering=1)
-    orig_stdout = sys.stdout
-    sys.stdout = _TeeStream(orig_stdout, log_fh)
-
-    ledger = AIPaperLedger()
-    shared_feed = LiveKiteFeed() if live_mode else None
-    cooldown_until: Dict[str, float] = {}
-    last_scan_ts = 0.0
-
-    if live_mode:
-        voided = ledger.void_synthetic_open_trades()
-        if voided:
-            print(f"🧹 [CLEANUP] Voided {voided} legacy synthetic open position(s) prior to starting genuine LIVE_KITE session.")
-
-    print("\n" + "═" * 80)
-    print(f" 🦅 STARTING ANTIGRAVITY AI CIO AUTONOMOUS {'LIVE KITE' if live_mode else 'MOCK'} DAEMON")
-    print("    Demat Trading Budget: ₹50,000.00 | Mode: FAIL-CLOSED LIVE QUOTE PAPER")
-    print("    Technicals: Real 5m 9/20/40 EMA Triple Ribbon + Exchange VWAP + GEX + Monte Carlo")
-    print("    Poll Interval: 5.0s (Manage) / 15.0s (Scan) | Mandatory Square-Off: 03:15 PM IST")
-    print("═" * 80 + "\n")
-
-    cycle = 0
-    try:
-        while True:
-            cycle += 1
-            try:
-                from zoneinfo import ZoneInfo
-                now_ist = datetime.datetime.now(ZoneInfo("Asia/Kolkata"))
-
-                # Pre-market / post-market guard in live mode
-                if live_mode:
-                    if now_ist.hour < 9 or (now_ist.hour == 9 and now_ist.minute < 15):
-                        if cycle == 1 or cycle % 12 == 0:
-                            print(f"⏳ [LIVE WAIT] Pre-market ({now_ist.strftime('%H:%M:%S IST')}). Waiting for 09:15 IST open...")
-                        if max_cycles and cycle >= max_cycles:
-                            break
-                        time.sleep(poll_interval_sec)
-                        continue
-
-                # Check 03:15 PM EOD Square-Off
-                if now_ist.hour > 15 or (now_ist.hour == 15 and now_ist.minute >= 15):
-                    print("🏁 [AI Agent] 03:15 PM IST Reached! Triggering mandatory Live EOD Cash Square-Off...")
-                    square_off_all_positions(reason="HARD_EOD_SQUAREOFF_0315PM", live_mode=live_mode, feed=shared_feed)
-                    break
-
-                # 1. Manage currently open positions across all symbols
-                open_trades = ledger.get_open_trades()
-                if open_trades:
-                    seen_underlyings = []
-                    for t in open_trades:
-                        u = t["underlying"]
-                        if u not in seen_underlyings:
-                            seen_underlyings.append(u)
-                    for u in seen_underlyings:
-                        try:
-                            res = AIAgentTrader(u, live_mode=live_mode, feed=shared_feed).run_cycle()
-                            for stopped_sym in res.get("time_stopped", []):
-                                cooldown_until[stopped_sym] = time.time() + 1800.0
-                                print(f"❄️ [COOLDOWN] {stopped_sym} placed on 30-min cooldown after 45m time-stop.")
-                        except Exception as p_err:
-                            print(f"⚠️ [AI Agent] Position monitor error on {u}: {p_err}")
-
-                # 2. Risk Circuit Breakers Check before considering new entries
-                source_filter = "LIVE_KITE" if live_mode else None
-                today_pnl = ledger.get_today_pnl(source_tag=source_filter)
-                consec_losses = ledger.get_recent_consecutive_losses(source_tag=source_filter)
-
-                if today_pnl <= -3500.0:
-                    if cycle % 12 == 0:
-                        print(f"🛑 [CIRCUIT BREAKER ACTIVE] Daily loss limit -₹3,500 hit (Current: -₹{abs(today_pnl):,.2f})! Halting new entries.")
-                elif consec_losses >= 2:
-                    if cycle % 12 == 0:
-                        print(f"⚠️ [LOSS THROTTLE ACTIVE] {consec_losses} consecutive losses detected! Cooling down.")
-                else:
-                    # 3. If position slots available (< 3 concurrent), dynamically scan eligible universe (Cutoff 14:40 IST)
-                    after_entry_cutoff = live_mode and (now_ist.hour > 14 or (now_ist.hour == 14 and now_ist.minute >= 40))
-                    open_trades = ledger.get_open_trades()
-                    now_ts = time.time()
-                    if after_entry_cutoff:
-                        if cycle % 12 == 1:
-                            print(f"🛡️ [MANAGE ONLY >= 14:40 IST] Blocking new entries with {max(0, (15*60+15) - (now_ist.hour*60+now_ist.minute))}m to EOD square-off.")
-                    elif len(open_trades) < 3 and (not live_mode or (now_ts - last_scan_ts) >= 15.0):
-                        last_scan_ts = now_ts
-                        base_universe = [
-                            "HAL", "TATASTEEL", "M&M", "TMPV", "HDFCBANK", "SBIN",
-                            "SUNPHARMA", "BHARTIARTL", "LT", "ICICIBANK", "RELIANCE",
-                            "INFY", "TCS", "ITC", "BEL", "HINDALCO", "NIFTY",
-                        ]
-                        universe = shared_feed.get_available_universe(base_universe) if (live_mode and shared_feed) else base_universe
-
-                        if live_mode:
-                            generals_norm = AIAgentTrader("NIFTY", live_mode=True, feed=shared_feed)._compute_generals_score()
-                            ranked = []
-                            for sym in universe:
-                                if any(t["underlying"] == sym for t in open_trades):
-                                    continue
-                                if cooldown_until.get(sym, 0.0) > now_ts:
-                                    continue
-                                try:
-                                    ev = AIAgentTrader(sym, live_mode=True, feed=shared_feed).inspect_live_setup()
-                                    if ev and ev["signal"] in ("BUY_CE", "BUY_PE") and ev["confidence"] >= 0.75:
-                                        ranked.append((ev["score"], sym, ev))
-                                except Exception:
-                                    continue
-                                time.sleep(0.15)
-
-                            ranked.sort(key=lambda x: x[0], reverse=True)
-                            if not ranked and cycle % 4 == 1:
-                                print(f"🔎 [LIVE SCAN @ {now_ist.strftime('%H:%M:%S')}] Evaluated {len(universe)} real F&O symbols; standing aside (no high-conviction alignment).")
-                            for _, sym, ev in ranked:
-                                try:
-                                    agent = AIAgentTrader(sym, live_mode=True, feed=shared_feed)
-                                    res = agent.run_cycle(generals_norm=generals_norm, precomputed_live=ev)
-                                    if res.get("action") == "OPENED_TRADE":
-                                        break
-                                except Exception:
-                                    continue
-                        else:
-                            for sym in universe:
-                                if any(t["underlying"] == sym for t in open_trades):
-                                    continue
-                                if cooldown_until.get(sym, 0.0) > now_ts:
-                                    continue
-                                try:
-                                    res = AIAgentTrader(sym, live_mode=False).run_cycle()
-                                    if res.get("action") == "OPENED_TRADE":
-                                        break
-                                except Exception:
-                                    continue
-
-            except Exception as loop_err:
-                print(f"⚠️ [AI Agent Loop Error]: {loop_err}")
-
-            if max_cycles and cycle >= max_cycles:
-                break
-
-            time.sleep(poll_interval_sec)
-    except KeyboardInterrupt:
-        print("\n🛑 [AI Agent] Keyboard Interrupt received. Daemon paused.")
-    finally:
-        sys.stdout = orig_stdout
-        log_fh.close()
-
+    """Disabled compatibility entry point for the former autonomous trader loop."""
+    policy = get_trading_policy()
+    print(
+        "🛑 [AUTONOMOUS LOOP DISABLED] Policy is "
+        f"{policy.execution_mode}. Start the guardian and let the external CIO decide every trade."
+    )
+    return {
+        "status": "DISABLED",
+        "reason": "EXTERNAL_CIO_ONLY_POLICY",
+        "next_step": "Use guardian for mechanical safety and cio-enter/cio-manage for explicit CIO decisions.",
+    }
 
 def _format_inr(val: float) -> str:
     return f"-₹{abs(val):,.2f}" if val < 0 else f"₹{val:,.2f}"
@@ -1303,10 +1061,11 @@ def cio_enter_trade(
     enforce_market_clock: bool = True,
 ) -> Dict:
     """
-    Executes an explicit AI CIO trade decision (never auto-triggered by dumb loops).
-    Enforces fail-closed live quotes, spread <= 2.5%, Desk Collision Mutex, F&O ban,
-    ₹50,000 Demat budget, <= ₹3,500 risk cap, and logs thesis in `ai_cio_decisions`.
+    Executes an explicit external-CIO paper-trade decision (never auto-triggered).
+    Enforces the repository policy, fail-closed live quotes, spread, Desk Collision
+    Mutex, F&O ban, cash, and risk caps; then journals the CIO's written thesis.
     """
+    policy = get_trading_policy()
     active_ledger = ledger or AIPaperLedger()
     active_bridge = bridge or SmartTradingBridge()
     active_feed = feed or (LiveKiteFeed(bridge=active_bridge) if live_mode else None)
@@ -1316,7 +1075,7 @@ def cio_enter_trade(
 
     if up_dir not in ("BUY_CE", "BUY_PE"):
         return {"status": "REJECTED", "reason": "INVALID_DIRECTION"}
-    if not thesis.strip():
+    if policy.require_written_thesis and not thesis.strip():
         return {"status": "REJECTED", "reason": "MISSING_CIO_THESIS"}
 
     clock = evaluate_session_clock()
@@ -1335,13 +1094,13 @@ def cio_enter_trade(
         return {"status": "REJECTED", "reason": f"NSE_FNO_BAN:{up_sym}"}
 
     open_trades = active_ledger.get_open_trades()
-    if len(open_trades) >= 3:
-        return {"status": "REJECTED", "reason": "MAX_CONCURRENT_POSITIONS_3"}
+    if len(open_trades) >= policy.max_concurrent_positions:
+        return {"status": "REJECTED", "reason": f"MAX_CONCURRENT_POSITIONS_{policy.max_concurrent_positions}"}
     if any(t["underlying"] == up_sym for t in open_trades):
         return {"status": "REJECTED", "reason": f"SYMBOL_ALREADY_OPEN:{up_sym}"}
 
     today_pnl = active_ledger.get_today_pnl(source_tag="LIVE_KITE" if live_mode else None)
-    if today_pnl <= -3500.0:
+    if today_pnl <= -policy.daily_loss_limit_inr:
         return {"status": "REJECTED", "reason": f"DAILY_CIRCUIT_BREAKER_HIT:{today_pnl}"}
 
     lot_size = OptionsAnalyticsEngine.SYMBOL_SPECS.get(up_sym, {}).get("lot_size", 25)
@@ -1371,13 +1130,21 @@ def cio_enter_trade(
     qty = lots * lot_size
     ticket = exec_px * qty
     deployed = sum(float(t["entry_price"]) * int(t["quantity"]) for t in open_trades)
-    avail = max(0.0, 50000.0 - deployed)
+    avail = max(0.0, policy.demat_budget_inr - deployed)
     if ticket > avail:
         return {"status": "REJECTED", "reason": f"INSUFFICIENT_DEMAT_CASH: needs ₹{ticket:,.0f}, avail ₹{avail:,.0f}"}
+    if ticket > policy.max_position_deployment_inr:
+        return {
+            "status": "REJECTED",
+            "reason": (
+                f"POSITION_DEPLOYMENT_TOO_HIGH: ₹{ticket:,.0f} > "
+                f"₹{policy.max_position_deployment_inr:,.0f}"
+            ),
+        }
 
     max_risk = (exec_px - sl) * qty
-    if max_risk > 3500.0:
-        return {"status": "REJECTED", "reason": f"SINGLE_TRADE_RISK_TOO_HIGH: ₹{max_risk:,.0f} > ₹3,500"}
+    if max_risk > policy.max_single_trade_risk_inr:
+        return {"status": "REJECTED", "reason": f"SINGLE_TRADE_RISK_TOO_HIGH: ₹{max_risk:,.0f} > ₹{policy.max_single_trade_risk_inr:,.0f}"}
 
     tag = "LIVE_KITE" if live_mode else "CIO_MOCK"
     tid = active_ledger.open_trade(
@@ -1434,6 +1201,8 @@ def cio_manage_trade(
     """
     active_ledger = ledger or AIPaperLedger()
     act = action.upper()
+    if not reason.strip():
+        return {"status": "ERROR", "reason": "MISSING_CIO_REASON"}
     open_trades = active_ledger.get_open_trades()
     trade = next((t for t in open_trades if int(t["trade_id"]) == int(trade_id)), None)
     if not trade:
@@ -1509,6 +1278,7 @@ def run_guardian_loop(
        stay strictly in the hands of the AI CIO (`cio-enter` / `cio-manage`).
     """
     from zoneinfo import ZoneInfo
+    policy = get_trading_policy()
     log_dir = AI_DIR / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_fh = open(log_dir / "agent_trader.log", "a", encoding="utf-8", buffering=1)
@@ -1538,8 +1308,8 @@ def run_guardian_loop(
             cycle += 1
             now_ist = datetime.datetime.now(ZoneInfo("Asia/Kolkata"))
             try:
-                if live_mode and (now_ist.hour > 15 or (now_ist.hour == 15 and now_ist.minute >= 15)):
-                    print("🏁 [GUARDIAN] 15:15 IST Reached! Executing mandatory EOD Cash Square-Off...")
+                if live_mode and (now_ist.hour > policy.eod_square_off[0] or (now_ist.hour == policy.eod_square_off[0] and now_ist.minute >= policy.eod_square_off[1])):
+                    print(f"🏁 [GUARDIAN] {policy.eod_square_off[0]:02d}:{policy.eod_square_off[1]:02d} IST reached! Executing mandatory EOD cash square-off...")
                     square_off_all_positions(reason="HARD_EOD_SQUAREOFF_0315PM", live_mode=live_mode, feed=shared_feed)
                     cockpit_builder.build_briefing(save_json=True)
                     break
@@ -1645,7 +1415,7 @@ def print_session_status():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="AI Autonomous Options Trading Cockpit & CIO")
+    parser = argparse.ArgumentParser(description="External-CIO paper-trading cockpit and safety guard")
     parser.add_argument(
         "command",
         choices=[
@@ -1653,7 +1423,7 @@ def main():
             "scan", "run-once", "loop", "summary", "status", "generals",
             "scan-fo", "sectors", "radar", "super-setup", "quant", "square-off",
         ],
-        help="Command to execute",
+        help="Command to execute; loop is retained only to report that autonomous trading is disabled.",
     )
     parser.add_argument("--symbol", type=str, default="NIFTY", help="Underlying symbol (e.g. NIFTY, HAL)")
     parser.add_argument("--tape", type=str, default=None, help="Path to tick tape database")
@@ -1707,7 +1477,7 @@ def main():
         res = cio_manage_trade(
             trade_id=args.trade_id,
             action=args.action,
-            reason=args.reason or "CIO decision",
+            reason=args.reason,
             sl=args.sl,
             exit_lots=args.exit_lots,
             exit_price=args.exit_price,

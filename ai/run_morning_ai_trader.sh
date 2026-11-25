@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# ai/run_morning_ai_trader.sh — AI CIO Reflex Guardian & Cockpit Refresher
-# Companion to Antigravity AI Trader (Decisions stay strictly in Antigravity's hands)
+# ai/run_morning_ai_trader.sh — External CIO Reflex Guardian & Cockpit Refresher
+# Companion to Codex / Antigravity / IDE-agent CIO (all discretionary decisions stay external)
 #
 # Usage:
 #   ./ai/run_morning_ai_trader.sh start       # Starts Reflex Guardian + Cockpit Refresher
@@ -24,9 +24,9 @@ LOG_FILE="${ROOT_DIR}/ai/logs/agent_trader.log"
 case "$COMMAND" in
     start)
         echo "=============================================================================="
-        echo "🛡️ SMART TRADING: ANTIGRAVITY AI CIO — REFLEX GUARDIAN + COCKPIT"
+        echo "🛡️ SMART TRADING: EXTERNAL CIO — REFLEX GUARDIAN + COCKPIT"
         echo "   Authority Split: Background guards hard SL & 15:15 EOD + refreshes Cockpit"
-        echo "   All Entries, Trails, Profit Bookings & Exits: STRICTLY ANTIGRAVITY CIO"
+        echo "   All Entries, Holds, Trails, Profit Bookings & Exits: STRICTLY CODEX / ANTIGRAVITY / IDE CIO"
         echo "=============================================================================="
         cd "$ROOT_DIR"
         mkdir -p ai/logs ai/runtime

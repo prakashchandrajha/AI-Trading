@@ -1,0 +1,6 @@
+# Local stdio MCP server for Codex CLI and the Codex IDE extension.
+# It runs entirely on this workstation and does not require an LLM API key.
+[mcp_servers.ai_trading_cio]
+command = "python3"
+args = ["ai/mcp_server.py"]
+cwd = "/home/vvd/prakash/AI-Trading"
