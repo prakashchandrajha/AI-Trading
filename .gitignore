@@ -17,3 +17,4 @@ ai/runtime/*
 extension/screener/data/*/*.json
 !extension/screener/data/.gitkeep
 database/
+project backup/
