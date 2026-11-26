@@ -718,7 +718,7 @@ def format_briefing_text(b: Dict[str, Any]) -> str:
         f" MACRO  : Breadth ({mac.get('breadth_universe_count', 0)} F&O): {mac['market_lens_breadth']} [{mac['breadth_source']}] | 6-Gen {mac['generals_status']} ({mac['generals_6_score']:+.2f})",
         f" SECTORS: {', '.join(mac.get('top_sectors') or ['N/A'])} | FII Net Fut: {mac['nse_fii_futures']} ({mac['nse_fii_bias']}) | GIFT: {gift.get('gap_type', 'N/A')} ({gift.get('gap_pct', 0.0):+.2f}%)",
         f" PREOPEN: {pm_delivery.get('status', 'MISSING')} | Source: {pm_delivery.get('source', 'UNAVAILABLE')} | Fresh: {'YES' if mac.get('nse_premarket_fresh') else 'NO'} | Symbols: {pm_delivery.get('symbol_count', 0)}",
-        f" DESK   : {dsk['status']} | Mutex: {dsk['blocked_symbols'] or 'NONE'} | Regime: {dmr.get('http_regime') or dmr.get('frontier_regime') or 'N/A'} | Nifty Fut OFI: {dmr.get('nifty_fut_ofi_z')}z (Age {dmr.get('frontier_age_min')}m)",
+        f" DESK   : {dsk['status']} | Mutex: {dsk['blocked_symbols'] or 'NONE'} | Regime: {dmr.get('http_regime') or dmr.get('frontier_regime') or 'N/A'} | Frontier: {dmr.get('frontier_status', 'UNAVAILABLE')} (Age {dmr.get('frontier_age_min')}m) | Nifty Fut OFI: {dmr.get('nifty_fut_ofi_z')}z",
     ]
     if jrnl.get("reason"):
         lines.append(

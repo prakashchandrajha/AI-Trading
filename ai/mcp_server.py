@@ -25,6 +25,37 @@ mcp = FastMCP("NSE_Smart_Trading")
 ledger = AIPaperLedger()
 
 
+def _live_option_snapshot(symbol: str):
+    """Returns a complete live option snapshot, never a tape or synthetic fallback."""
+    agent = AIAgentTrader(symbol=symbol, live_mode=True)
+    snapshot = agent._fetch_live_snapshot()
+    if snapshot is None or snapshot.spot_price <= 0 or not snapshot.chain:
+        return agent, None
+    return agent, snapshot
+
+
+def _analyze_live_options(symbol: str):
+    """Analyzes one symbol only when its live spot and option chain are complete."""
+    _, snapshot = _live_option_snapshot(symbol)
+    if snapshot is None:
+        return None
+    return OptionsAnalyticsEngine.analyze(snapshot.spot_price, snapshot.chain, symbol=symbol)
+
+
+def _live_data_unavailable(symbol: str, reason: str) -> Dict:
+    """Consistent fail-closed result for advisory MCP tools."""
+    return {
+        "status": "UNAVAILABLE",
+        "source": "LIVE_KITE",
+        "symbol": symbol.upper(),
+        "reason": reason,
+        "trade_recommendation": "STAND_ASIDE",
+        "actionable_signal": "STAND_ASIDE",
+        "confidence": 0.0,
+        "conviction_pct": 0,
+    }
+
+
 @mcp.tool()
 def analyze_options(symbol: str = "NIFTY", tape_db: Optional[str] = None) -> Dict:
     """
@@ -33,9 +64,15 @@ def analyze_options(symbol: str = "NIFTY", tape_db: Optional[str] = None) -> Dic
     Put Wall (Support), 15-minute OI Velocity, and AI Trade Recommendation.
     Supported symbols: NIFTY, BANKNIFTY, MIDCPNIFTY, HDFCBANK, RELIANCE, SBIN, TATAMOTORS, INFY.
     """
-    agent = AIAgentTrader(symbol=symbol)
-    res = agent.inspect_market(tape_db)
+    # `tape_db` is retained only for MCP compatibility; a trading-session call
+    # always uses a fresh Kite snapshot and never falls back to tape/fixtures.
+    _ = tape_db
+    res = _analyze_live_options(symbol)
+    if res is None:
+        return _live_data_unavailable(symbol, "NO_LIVE_OPTION_CHAIN")
     return {
+        "status": "LIVE",
+        "source": "LIVE_KITE",
         "symbol": symbol.upper(),
         "spot_price": res.underlying_price,
         "max_pain": res.max_pain_strike,
@@ -62,15 +99,18 @@ def get_gex_and_greeks(symbol: str = "NIFTY", dte: float = 2.0) -> Dict:
     Identifies whether the market is in 'LONG_GAMMA_PIN' (stabilizing/mean-reverting)
     or 'SHORT_GAMMA_VOLATILITY' (explosive momentum/gamma squeeze) regime.
     """
-    agent = AIAgentTrader(symbol=symbol)
-    underlying_px, chain = agent.load_option_chain_from_tape()
+    _, snapshot = _live_option_snapshot(symbol)
+    if snapshot is None:
+        return _live_data_unavailable(symbol, "NO_LIVE_OPTION_CHAIN")
     res = GreeksGexEngine.evaluate_frontier_landscape(
         symbol=symbol,
-        underlying_price=underlying_px,
-        chain=chain,
+        underlying_price=snapshot.spot_price,
+        chain=snapshot.chain,
         dte=dte,
     )
     return {
+        "status": "LIVE",
+        "source": "LIVE_KITE",
         "symbol": symbol.upper(),
         "spot_price": res.underlying_price,
         "net_gex_crores": res.net_gex_crores,
@@ -103,23 +143,43 @@ def check_generals_alignment() -> Dict:
 
     total_weight = sum(w for _, w in generals_specs)
     weighted_score = 0.0
+    covered_weight = 0.0
     constituents = {}
+    unavailable_symbols: List[str] = []
 
     for sym, wt in generals_specs:
-        res = AIAgentTrader(sym).inspect_market()
+        res = _analyze_live_options(sym)
+        if res is None:
+            unavailable_symbols.append(sym)
+            constituents[sym] = {
+                "weight_pct": round(wt * 100, 2),
+                "status": "UNAVAILABLE",
+                "spot": None,
+                "sentiment": "UNAVAILABLE",
+                "recommendation": "STAND_ASIDE",
+            }
+            continue
         dir_mult = 1.0 if "BUY_CE" in res.trade_recommendation else (-1.0 if "BUY_PE" in res.trade_recommendation else 0.0)
         weighted_score += dir_mult * wt
+        covered_weight += wt
         constituents[sym] = {
             "weight_pct": round(wt * 100, 2),
+            "status": "LIVE",
             "spot": res.underlying_price,
             "sentiment": res.sentiment,
             "recommendation": res.trade_recommendation,
         }
 
-    norm_score = weighted_score / total_weight
-    nifty_res = AIAgentTrader("NIFTY").inspect_market()
+    norm_score = weighted_score / covered_weight if covered_weight else 0.0
+    nifty_res = _analyze_live_options("NIFTY")
 
-    if norm_score >= 0.25:
+    if not covered_weight:
+        status = "UNAVAILABLE"
+        message = "No live option-chain data for the 6 Generals; stand aside."
+    elif unavailable_symbols:
+        status = "PARTIAL"
+        message = f"Incomplete live coverage ({', '.join(unavailable_symbols)} unavailable); no index-direction permission."
+    elif norm_score >= 0.25:
         status = "GREEN_LIGHT"
         message = f"6 Generals leading confluent institutional accumulation (+{norm_score*100:.1f}% weighted score). Safe to buy Nifty calls."
     elif norm_score <= -0.25:
@@ -131,13 +191,15 @@ def check_generals_alignment() -> Dict:
 
     return {
         "alignment_status": status,
+        "source": "LIVE_KITE",
         "message": message,
         "weighted_score": round(norm_score, 3),
-        "covered_nifty_weight_pct": round(total_weight * 100, 2),
+        "covered_nifty_weight_pct": round(covered_weight * 100, 2),
+        "unavailable_symbols": unavailable_symbols,
         "constituents": constituents,
         "hdfc_bank": constituents["HDFCBANK"],
         "reliance": constituents["RELIANCE"],
-        "nifty_recommendation": nifty_res.trade_recommendation,
+        "nifty_recommendation": nifty_res.trade_recommendation if nifty_res else "STAND_ASIDE",
     }
 
 
@@ -155,11 +217,14 @@ def scan_fo_breakouts() -> List[Dict]:
     rankings = []
 
     for sym in universe:
-        agent = AIAgentTrader(sym)
-        res = agent.inspect_market()
-        atm_strike = int(round(res.underlying_price / agent.spec["strike_step"]) * agent.spec["strike_step"])
+        res = _analyze_live_options(sym)
+        if res is None:
+            continue
+        spec = OptionsAnalyticsEngine.SYMBOL_SPECS.get(sym, OptionsAnalyticsEngine.SYMBOL_SPECS["NIFTY"])
+        atm_strike = int(round(res.underlying_price / spec["strike_step"]) * spec["strike_step"])
         rankings.append({
             "symbol": sym,
+            "source": "LIVE_KITE",
             "spot_price": res.underlying_price,
             "suggested_strike": atm_strike,
             "sentiment": res.sentiment,
@@ -182,13 +247,16 @@ def get_sector_heatmap() -> Dict:
     sectors = OptionsAnalyticsEngine.SECTOR_MAP
     sector_rankings = []
 
+    unavailable_symbols: List[str] = []
     for sec_name, symbols in sectors.items():
         conf_sum = 0.0
         bull_count = 0
         sym_results = []
         for sym in symbols:
-            agent = AIAgentTrader(sym)
-            res = agent.inspect_market()
+            res = _analyze_live_options(sym)
+            if res is None:
+                unavailable_symbols.append(sym)
+                continue
             conf_sum += res.confidence
             if "BUY" in res.trade_recommendation:
                 bull_count += 1
@@ -200,7 +268,9 @@ def get_sector_heatmap() -> Dict:
                 "thesis": res.analysis_thesis,
             })
 
-        avg_conf = conf_sum / len(symbols) if symbols else 0.0
+        if not sym_results:
+            continue
+        avg_conf = conf_sum / len(sym_results)
         top_stock = max(sym_results, key=lambda x: x["conviction"])
         status = "TOP_LEADER" if avg_conf >= 0.75 else ("OUTPERFORM" if bull_count > 0 else "NEUTRAL")
 
@@ -214,10 +284,22 @@ def get_sector_heatmap() -> Dict:
         })
 
     sector_rankings.sort(key=lambda x: x["avg_conviction"], reverse=True)
+    if not sector_rankings:
+        return {
+            "status": "UNAVAILABLE",
+            "source": "LIVE_KITE",
+            "leading_sector": None,
+            "top_actionable_trade": "STAND_ASIDE",
+            "sector_rankings": [],
+            "unavailable_symbols": sorted(set(unavailable_symbols)),
+        }
     return {
+        "status": "LIVE" if not unavailable_symbols else "PARTIAL",
+        "source": "LIVE_KITE",
         "leading_sector": sector_rankings[0]["sector"],
         "top_actionable_trade": f"{sector_rankings[0]['top_signal']} {sector_rankings[0]['top_stock']}",
         "sector_rankings": sector_rankings,
+        "unavailable_symbols": sorted(set(unavailable_symbols)),
     }
 
 
@@ -305,13 +387,24 @@ def evaluate_super_setup(symbol: str = "TATAMOTORS") -> Dict:
     4. Sensibull: Macro Generals (HDFCBANK + RELIANCE)
     5. Live broker breadth (when available; never a fabricated Market Lens feed)
     """
-    agent = AIAgentTrader(symbol)
-    underlying_px, chain = agent.load_option_chain_from_tape()
+    _, snapshot = _live_option_snapshot(symbol)
+    if snapshot is None:
+        return {
+            **_live_data_unavailable(symbol, "NO_LIVE_OPTION_CHAIN"),
+            "super_setup_score": 0,
+            "decision": "STAND_ASIDE",
+            "action_description": "NO TRADE (live option chain unavailable)",
+            "technicals": {},
+            "live_market_breadth": {"source": "UNAVAILABLE"},
+            "confluence_points": [],
+        }
+    underlying_px = snapshot.spot_price
+    chain = snapshot.chain
     opt_res = OptionsAnalyticsEngine.analyze(underlying_px, chain, symbol=symbol)
     gex_res = GreeksGexEngine.evaluate_frontier_landscape(symbol, underlying_px, chain)
 
-    hdfc_res = AIAgentTrader("HDFCBANK").inspect_market()
-    rel_res = AIAgentTrader("RELIANCE").inspect_market()
+    hdfc_res = AIAgentTrader("HDFCBANK", live_mode=True).inspect_market()
+    rel_res = AIAgentTrader("RELIANCE", live_mode=True).inspect_market()
     generals_status = "GREEN_LIGHT" if (hdfc_res.trade_recommendation == "BUY_CE" and rel_res.trade_recommendation == "BUY_CE") else ("RED_LIGHT" if (hdfc_res.trade_recommendation == "BUY_PE" and rel_res.trade_recommendation == "BUY_PE") else "CAUTION")
     feed = LiveKiteFeed()
     universe = feed.get_full_fno_universe(include_indices=False)
@@ -320,7 +413,7 @@ def evaluate_super_setup(symbol: str = "TATAMOTORS") -> Dict:
         raw_breadth, sector_map=OptionsAnalyticsEngine.SECTOR_MAP
     )
 
-    return TechnicalLensEngine.synthesize_super_setup(
+    result = TechnicalLensEngine.synthesize_super_setup(
         symbol=symbol,
         current_price=underlying_px,
         options_recommendation=opt_res.trade_recommendation,
@@ -330,6 +423,8 @@ def evaluate_super_setup(symbol: str = "TATAMOTORS") -> Dict:
         generals_status=generals_status,
         market_breadth=live_breadth,
     )
+    result.update({"status": "LIVE", "source": "LIVE_KITE"})
+    return result
 
 
 @mcp.tool()

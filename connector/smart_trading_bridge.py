@@ -23,6 +23,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from zoneinfo import ZoneInfo
 
 IST = ZoneInfo("Asia/Kolkata")
+DESK_INTRADAY_CONTEXT_MAX_AGE_MINUTES = 15.0
 
 
 def resolve_smart_trading_root() -> Optional[Path]:
@@ -569,6 +570,31 @@ class SmartTradingBridge:
                 break
         return "".join(letters) or up
 
+    @staticmethod
+    def intraday_payload_age_minutes(
+        payload: Dict[str, Any],
+        now_ist: Optional[datetime.datetime] = None,
+    ) -> Optional[float]:
+        """Returns the age of a Desk payload, or ``None`` when it cannot be proven fresh."""
+        now = now_ist or datetime.datetime.now(IST)
+        observed_at: Optional[datetime.datetime] = None
+        raw_iso = payload.get("iso_time") or payload.get("timestamp_ist")
+        if raw_iso:
+            try:
+                observed_at = datetime.datetime.fromisoformat(str(raw_iso).replace("Z", "+00:00"))
+            except (TypeError, ValueError):
+                observed_at = None
+        if observed_at is None and payload.get("timestamp") is not None:
+            try:
+                observed_at = datetime.datetime.fromtimestamp(float(payload["timestamp"]), tz=IST)
+            except (TypeError, ValueError, OSError):
+                observed_at = None
+        if observed_at is None:
+            return None
+        if observed_at.tzinfo is None:
+            observed_at = observed_at.replace(tzinfo=IST)
+        return round(max(0.0, (now - observed_at).total_seconds() / 60.0), 1)
+
     def get_archived_tick_dbs(self, limit: int = 12) -> List[Tuple[str, Path]]:
         """Lists archived Zerodha tick_history.db files across days for non-curve-fit logic tests."""
         if not self.st_root:
@@ -644,15 +670,21 @@ class SmartTradingBridge:
         nifty_pol = upols.get("NIFTY") or {}
         bnf_pol = upols.get("BANKNIFTY") or {}
 
-        fp_age_min = None
-        if fp.get("iso_time"):
-            try:
-                fdt = datetime.datetime.fromisoformat(fp["iso_time"])
-                if fdt.tzinfo is None:
-                    fdt = fdt.replace(tzinfo=IST)
-                fp_age_min = round(max(0.0, (datetime.datetime.now(IST) - fdt).total_seconds() / 60.0), 1)
-            except Exception:
-                pass
+        now_ist = datetime.datetime.now(IST)
+        fp_age_min = self.intraday_payload_age_minutes(fp, now_ist)
+        th_age_min = self.intraday_payload_age_minutes(th, now_ist)
+        fp_fresh = fp_age_min is not None and fp_age_min <= DESK_INTRADAY_CONTEXT_MAX_AGE_MINUTES
+        th_fresh = th_age_min is not None and th_age_min <= DESK_INTRADAY_CONTEXT_MAX_AGE_MINUTES
+        current_journal_name = f"{now_ist.strftime('%Y-%m-%d')}.jsonl"
+        journal_fresh = journal.get("file") == current_journal_name
+
+        # A previous-session regime is especially dangerous because it looks like
+        # a current permission/veto. Preserve its age for audit, but remove every
+        # actionable field until the Desk publishes a fresh payload.
+        fresh_fp = fp if fp_fresh else {}
+        fresh_th = th if th_fresh else {}
+        fresh_nifty_pol = (fresh_fp.get("underlying_policies") or {}).get("NIFTY") or {}
+        fresh_bnf_pol = (fresh_fp.get("underlying_policies") or {}).get("BANKNIFTY") or {}
 
         http_inds = http_macro.get("indicators") or {}
         desk_macro_regime = {
@@ -663,16 +695,20 @@ class SmartTradingBridge:
             "crude_chg_pct": (http_inds.get("CRUDEOIL") or {}).get("change_pct"),
             "usdinr_status": (http_inds.get("USDINR") or {}).get("status"),
             "vix_status": (http_inds.get("INDIA VIX") or {}).get("status"),
-            "frontier_regime": fp.get("regime") or th.get("macro_regime"),
+            "frontier_status": "FRESH" if fp_fresh else ("STALE_IGNORED" if fp else "UNAVAILABLE"),
             "frontier_age_min": fp_age_min,
-            "global_risk_scalar": fp.get("global_risk_scalar"),
-            "nifty_fut_ofi_z": (nifty_pol.get("macro") or {}).get("ofi_z"),
-            "nifty_vwap_bps": (nifty_pol.get("macro") or {}).get("dist_vwap_bps"),
-            "nifty_permitted_side": nifty_pol.get("permitted_side"),
-            "bnf_permitted_side": bnf_pol.get("permitted_side"),
-            "ambient_ofi_scale": th.get("ambient_ofi_scale"),
+            "frontier_regime": fresh_fp.get("regime") or fresh_th.get("macro_regime"),
+            "global_risk_scalar": fresh_fp.get("global_risk_scalar"),
+            "nifty_fut_ofi_z": (fresh_nifty_pol.get("macro") or {}).get("ofi_z"),
+            "nifty_vwap_bps": (fresh_nifty_pol.get("macro") or {}).get("dist_vwap_bps"),
+            "nifty_permitted_side": fresh_nifty_pol.get("permitted_side"),
+            "bnf_permitted_side": fresh_bnf_pol.get("permitted_side"),
+            "trader_health_status": "FRESH" if th_fresh else ("STALE_IGNORED" if th else "UNAVAILABLE"),
+            "trader_health_age_min": th_age_min,
+            "ambient_ofi_scale": fresh_th.get("ambient_ofi_scale"),
             "gift_nifty": nse_pm.get("gift_nifty") or {},
-            "latest_journal": journal,
+            "latest_journal_status": "FRESH" if journal_fresh else ("STALE_IGNORED" if journal else "UNAVAILABLE"),
+            "latest_journal": journal if journal_fresh else {},
         }
 
         recent_signals = list(http_info.get("signals") or [])

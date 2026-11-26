@@ -128,19 +128,26 @@ def test_greeks_and_gex_calculation():
 def test_mcp_server_tools():
     from mcp_server import analyze_options, check_generals_alignment, scan_fo_breakouts, get_portfolio_summary, get_sector_heatmap
     nifty_data = analyze_options("NIFTY")
-    assert nifty_data["spot_price"] > 0
+    assert nifty_data["status"] in ("LIVE", "UNAVAILABLE")
     assert "trade_recommendation" in nifty_data
+    if nifty_data["status"] == "LIVE":
+        assert nifty_data["spot_price"] > 0
 
     generals = check_generals_alignment()
     assert "alignment_status" in generals
-    assert generals["alignment_status"] in ("GREEN_LIGHT", "RED_LIGHT", "CAUTION")
+    assert generals["alignment_status"] in ("GREEN_LIGHT", "RED_LIGHT", "CAUTION", "PARTIAL", "UNAVAILABLE")
+    assert generals["source"] == "LIVE_KITE"
 
     breakouts = scan_fo_breakouts()
-    assert len(breakouts) >= 5
+    assert isinstance(breakouts, list)
+    assert all(row["source"] == "LIVE_KITE" and row["spot_price"] > 0 for row in breakouts)
 
     heatmap = get_sector_heatmap()
+    assert heatmap["status"] in ("LIVE", "PARTIAL", "UNAVAILABLE")
+    assert heatmap["source"] == "LIVE_KITE"
     assert "leading_sector" in heatmap
-    assert len(heatmap["sector_rankings"]) > 0
+    if heatmap["status"] != "UNAVAILABLE":
+        assert len(heatmap["sector_rankings"]) > 0
 
     summary = get_portfolio_summary()
     assert "total_trades" in summary
@@ -152,9 +159,13 @@ def test_mcp_server_tools():
 
     super_setup = evaluate_super_setup("TATAMOTORS")
     assert "super_setup_score" in super_setup
-    assert super_setup["super_setup_score"] >= 75
-    assert "technicals" in super_setup
-    assert super_setup["technicals"]["vwap"] > 0
+    assert 0 <= super_setup["super_setup_score"] <= 100
+    assert super_setup["status"] in ("LIVE", "UNAVAILABLE")
+    if super_setup["status"] == "LIVE":
+        assert super_setup["technicals"]["vwap"] > 0
+        assert super_setup["live_market_breadth"]["source"] in ("LIVE_KITE_BATCH", "UNAVAILABLE")
+    else:
+        assert super_setup["decision"] == "STAND_ASIDE"
 
 
 def test_ai_is_strictly_self_contained():
@@ -288,6 +299,23 @@ def test_connector_bridge_and_book_telemetry():
     )
     assert live_state.source == "LIVE_L2_DEPTH"
     assert live_state.kobp > 0.3
+
+
+def test_desk_intraday_payload_age_is_explicit_and_fail_closed():
+    import datetime
+    import sys
+    from zoneinfo import ZoneInfo
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from connector.smart_trading_bridge import SmartTradingBridge
+
+    ist = ZoneInfo("Asia/Kolkata")
+    now = datetime.datetime(2026, 11, 26, 10, 0, tzinfo=ist)
+    recent = {"iso_time": "2026-11-26T09:50:00+05:30"}
+    old = {"timestamp": datetime.datetime(2026, 11, 25, 13, 28, tzinfo=ist).timestamp()}
+
+    assert SmartTradingBridge.intraday_payload_age_minutes(recent, now) == 10.0
+    assert SmartTradingBridge.intraday_payload_age_minutes(old, now) > 1_000
+    assert SmartTradingBridge.intraday_payload_age_minutes({}, now) is None
 
 
 def test_connector_proves_extension_premarket_provenance(tmp_path):
