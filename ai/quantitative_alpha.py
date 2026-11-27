@@ -158,9 +158,9 @@ class QuantitativeAlphaEngine:
 
         # Vanna per unit
         vanna_call = -pdf_d1 * d2 / iv
-        # Charm per day
+        # Charm per day (rate of delta change as calendar time elapses toward expiry)
         charm_call = (
-            pdf_d1 * (2.0 * r * t - d2 * iv * sqrt_t) / (2.0 * t * iv * sqrt_t)
+            pdf_d1 * (d2 * iv * sqrt_t - 2.0 * r * t) / (2.0 * t * iv * sqrt_t)
         ) / 365.0
 
         # Market-wide dealer hedging pressure (in ₹ Crores per 1% IV shift)
@@ -188,6 +188,7 @@ class QuantitativeAlphaEngine:
         prev_ask_depth: Optional[List[Tuple[float, int]]] = None,
         dte: float = 2.0,
         require_real_depth: bool = False,
+        iv: float = 0.16,
     ) -> QuantitativeAlphaState:
         """
         Synthesizes Machine-Level Alpha State.
@@ -256,7 +257,7 @@ class QuantitativeAlphaEngine:
             spot=spot_price,
             strike=atm_strike,
             dte=max(0.15, dte),
-            iv=0.16,
+            iv=max(0.08, float(iv or 0.16)),
             call_oi=call_oi_atm,
             put_oi=put_oi_atm,
             lot_size=lot_size,

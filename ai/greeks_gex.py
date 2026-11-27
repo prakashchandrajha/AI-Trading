@@ -69,9 +69,11 @@ class FrontierAnalyticsEngine:
         call_oi: int = 0,
         put_oi: int = 0,
         lot_size: int = 1,
+        is_forward: bool = False,
     ) -> OptionGreeks:
         """
         Calculates Black-Scholes Greeks and Net Dealer Gamma Exposure (GEX).
+        When is_forward=True, applies Black-76 pricing with zero interest-rate drift.
         """
         if spot <= 0 or strike <= 0 or iv <= 0:
             return OptionGreeks(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
@@ -79,7 +81,8 @@ class FrontierAnalyticsEngine:
         t = max(0.15 / 365.0, dte / 365.0)
         sqrt_t = math.sqrt(t)
 
-        d1 = (math.log(spot / strike) + (r + 0.5 * iv * iv) * t) / (iv * sqrt_t)
+        drift = (0.5 * iv * iv) * t if is_forward else (r + 0.5 * iv * iv) * t
+        d1 = (math.log(spot / strike) + drift) / (iv * sqrt_t)
         d2 = d1 - iv * sqrt_t
 
         delta_c = norm_cdf(d1)
@@ -119,6 +122,9 @@ class FrontierAnalyticsEngine:
         chain: List[OptionStrikeData],
         dte: float = 2.0,
         sector_confluence_state: str = "CONFIRMED_LEADERSHIP",
+        iv: Optional[float] = None,
+        lot_size: Optional[int] = None,
+        strike_step: Optional[float] = None,
     ) -> FrontierAnalysisResult:
         """
         Synthesizes Nuvama Open Interest walls with institutional Net GEX and Gamma Squeeze mechanics.
@@ -126,7 +132,9 @@ class FrontierAnalyticsEngine:
         spec = NuvamaOptionsEngine.SYMBOL_SPECS.get(
             symbol.upper(), NuvamaOptionsEngine.SYMBOL_SPECS["NIFTY"]
         )
-        lot_size = spec["lot_size"]
+        eff_lot_size = int(lot_size or spec["lot_size"])
+        eff_strike_step = float(strike_step or spec["strike_step"])
+        eff_iv = max(0.08, float(iv or 0.14))
 
         # 1. Base Nuvama Analytics (Max Pain, Walls, Velocity)
         nuvama_res = NuvamaOptionsEngine.analyze(
@@ -152,21 +160,49 @@ class FrontierAnalyticsEngine:
                 frontier_thesis="Insufficient option chain data for Greeks/GEX evaluation.",
             )
 
-        # 2. Compute Strike-Wise GEX and Net Landscape
+        # 2. Compute Synthetic Forward F via Put-Call Parity at near-ATM strikes (Black-76 pricing)
+        pricing_forward = underlying_price
+        if chain and underlying_price > 0:
+            candidates = sorted(chain, key=lambda x: abs(x.strike - underlying_price))
+            for item in candidates[:3]:
+                # Require tight, contemporaneous quotes on both legs (never mix stale LTP with live quote)
+                has_live_c = (item.call_bid > 0 and item.call_ask > 0 and item.call_ask >= item.call_bid)
+                has_live_p = (item.put_bid > 0 and item.put_ask > 0 and item.put_ask >= item.put_bid)
+                if has_live_c and has_live_p:
+                    c_mid = (item.call_bid + item.call_ask) / 2.0
+                    p_mid = (item.put_bid + item.put_ask) / 2.0
+                    c_spread_ok = (item.call_ask - item.call_bid) <= max(0.50, c_mid * 0.05)
+                    p_spread_ok = (item.put_ask - item.put_bid) <= max(0.50, p_mid * 0.05)
+                    if c_spread_ok and p_spread_ok:
+                        synthetic_f = item.strike + (c_mid - p_mid)
+                        if abs(synthetic_f - underlying_price) <= (underlying_price * 0.02):
+                            pricing_forward = round(synthetic_f, 2)
+                            break
+                elif item.call_ltp > 0 and item.put_ltp > 0:
+                    # Fallback for tape/mock playback without L2 book
+                    synthetic_f = item.strike + (item.call_ltp - item.put_ltp)
+                    if abs(synthetic_f - underlying_price) <= (underlying_price * 0.02):
+                        pricing_forward = round(synthetic_f, 2)
+                        break
+
         total_net_gex = 0.0
+        total_abs_gex = 0.0
         strike_gex: List[Tuple[float, float]] = []
 
+        is_fwd = (pricing_forward != underlying_price)
         for item in chain:
             greeks = cls.calculate_greeks(
-                spot=underlying_price,
+                spot=pricing_forward,
                 strike=item.strike,
                 dte=dte,
-                iv=0.14,
+                iv=eff_iv,
                 call_oi=item.call_oi,
                 put_oi=item.put_oi,
-                lot_size=lot_size,
+                lot_size=eff_lot_size,
+                is_forward=is_fwd,
             )
             total_net_gex += greeks.net_gex
+            total_abs_gex += abs(greeks.net_gex)
             strike_gex.append((item.strike, greeks.net_gex))
 
         # 3. Detect GEX Flip Point (The line where market maker hedging turns explosive)
@@ -179,27 +215,24 @@ class FrontierAnalyticsEngine:
                 gex_flip = round((s1 + s2) / 2.0, 1)
                 break
 
-        # 4. GEX Regime
-        # Long Gamma: Dealers buy dips and sell rallies -> Stabilizing, Pinning to Max Pain
-        # Short Gamma: Dealers forced to chase market momentum -> Explosive Volatility Squeeze
-        if total_net_gex < -5.0:
+        # 4. Scale-Free Normalized GEX Regime (invariant across NIFTY and mid-cap stock OI notions)
+        net_gex_ratio = (total_net_gex / total_abs_gex) if total_abs_gex > 0 else 0.0
+        if total_abs_gex > 0.25 and net_gex_ratio < -0.10:
             gex_regime = "SHORT_GAMMA_VOLATILITY"
-        elif total_net_gex > 5.0:
+        elif total_abs_gex > 0.25 and net_gex_ratio > 0.10:
             gex_regime = "LONG_GAMMA_PINNING"
         else:
             gex_regime = "TRANSITIONAL_NEUTRAL"
 
         # 5. Gamma Squeeze Probability Telemetry
-        # Triggered when:
-        # A) Spot is within 1 strike of Call Wall
-        # B) Call OI is unwinding (<0 change)
-        # C) Net ATM velocity is positive (Put writing > Call writing)
         dist_to_call_wall = nuvama_res.call_wall_strike - underlying_price
+        tot_chain_oi = sum(s.call_oi + s.put_oi for s in chain)
+        vel_threshold = max(eff_lot_size * 5.0, tot_chain_oi * 0.015)
         squeeze_score = 0.0
 
-        if dist_to_call_wall <= (spec["strike_step"] * 1.5):
+        if dist_to_call_wall <= (eff_strike_step * 1.5):
             squeeze_score += 40.0
-        if nuvama_res.near_atm_oi_velocity > 500000:
+        if nuvama_res.near_atm_oi_velocity > vel_threshold:
             squeeze_score += 30.0
         if gex_regime == "SHORT_GAMMA_VOLATILITY":
             squeeze_score += 20.0
@@ -223,7 +256,7 @@ class FrontierAnalyticsEngine:
                 f"Spot ({underlying_price:.1f}) pressing Call Wall ({nuvama_res.call_wall_strike:.0f}). "
                 f"Dealers trapped in {gex_regime}. Short-covering forced futures buying underway."
             )
-        elif gex_regime == "LONG_GAMMA_PINNING" and abs(underlying_price - nuvama_res.max_pain_strike) > spec["strike_step"]:
+        elif gex_regime == "LONG_GAMMA_PINNING" and abs(underlying_price - nuvama_res.max_pain_strike) > eff_strike_step:
             signal = "BUY_CE" if underlying_price < nuvama_res.max_pain_strike else "BUY_PE"
             strategy = "MEAN_REVERSION_PIN"
             conviction = 82

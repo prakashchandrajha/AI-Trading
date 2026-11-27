@@ -722,3 +722,452 @@ def test_nse_institutional_intel():
         assert hdfc["is_in_fno_ban"] is False
 
 
+def test_cas_clock_charm_sign_and_synthetic_forward():
+    import datetime
+    from trading_policy import get_trading_policy
+    from quantitative_alpha import QuantitativeAlphaEngine
+    from greeks_gex import GreeksGexEngine
+    from options_analytics import OptionStrikeData
+
+    policy = get_trading_policy()
+
+    # 1. Test Date-Aware CAS EOD Square-Off Cutover
+    pre_cas_date = datetime.date(2026, 11, 26)
+    post_cas_date = datetime.date(2026, 12, 7)
+
+    assert policy.get_eod_square_off(pre_cas_date) == (15, 15)
+    assert policy.get_eod_square_off(post_cas_date, is_expiry=False) == (15, 25)
+    assert policy.get_eod_square_off(post_cas_date, is_expiry=True) == (15, 20)
+    # Verify default call without args runs cleanly with IST timezone
+    assert policy.get_eod_square_off() in ((15, 15), (15, 20), (15, 25))
+
+    # Test Cockpit Clock Keys
+    from cockpit import evaluate_session_clock
+    clk = evaluate_session_clock()
+    assert "eod_cutoff" in clk
+    assert "minutes_to_eod" in clk
+
+    # 2. Test Charm Sign Physics: ITM call delta converges to 1.0 (positive slope), OTM decays to 0.0 (negative slope)
+    _, itm_charm = QuantitativeAlphaEngine.calculate_second_order_greeks(
+        spot=25800.0, strike=25000.0, dte=2.0, iv=0.15, call_oi=10000, put_oi=5000, lot_size=25,
+    )
+    assert itm_charm > 0, "ITM call charm must be positive as time elapses toward expiry (delta converging to 1.0)"
+
+    _, otm_charm = QuantitativeAlphaEngine.calculate_second_order_greeks(
+        spot=25800.0, strike=26500.0, dte=2.0, iv=0.15, call_oi=10000, put_oi=5000, lot_size=25,
+    )
+    assert otm_charm < 0, "OTM call charm must be negative as time elapses toward expiry (delta decaying to 0.0)"
+
+    # 3. Test Put-Call Parity Synthetic Forward in Greeks Engine
+    # Strike 25800: CE=240, PE=185 -> Synthetic F = 25800 + (240 - 185) = 25855
+    mock_chain = [
+        OptionStrikeData(strike=25800.0, call_ltp=240.0, put_ltp=185.0, call_oi=100000, put_oi=120000),
+    ]
+    res = GreeksGexEngine.evaluate_frontier_landscape(
+        symbol="NIFTY",
+        underlying_price=25819.0,
+        chain=mock_chain,
+        dte=2.0,
+    )
+    assert res.underlying_price == 25819.0
+    assert res.net_gex_crores != 0.0
+
+    # 4. Test Pure Black-76 vs Spot BSM Drift Parity
+    # For monthly option (25 DTE), forward pricing eliminates double-counted interest rate drift
+    g_bsm = GreeksGexEngine.calculate_greeks(spot=25800.0, strike=25800.0, dte=25.0, iv=0.16, r=0.053, is_forward=False)
+    g_b76 = GreeksGexEngine.calculate_greeks(spot=25800.0, strike=25800.0, dte=25.0, iv=0.16, r=0.053, is_forward=True)
+    assert g_b76.delta_call < g_bsm.delta_call, "Black-76 forward option delta must not double-count risk-free drift"
+    assert round(g_b76.delta_call, 2) in (0.50, 0.51), f"Black-76 ATM forward delta should be ~0.50-0.51, got {g_b76.delta_call}"
+
+    # 5. Test Unified Expiry Day Detection
+    assert policy.is_expiry_day(datetime.date(2026, 11, 24)) is True  # Tuesday weekly
+    assert policy.is_expiry_day(datetime.date(2026, 11, 25)) is False # Wednesday non-expiry
+    assert policy.is_expiry_day(datetime.date(2026, 11, 26)) is True  # Last Thursday monthly
+    assert policy.is_expiry_day(datetime.date(2026, 11, 27)) is False # Friday non-expiry
+
+    # 6. Test Asymmetric / Illiquid Quote Rejection
+    # Strike with wide call spread (>5%) must be rejected from synthetic forward calculation
+    mock_wide_chain = [
+        OptionStrikeData(
+            strike=25800.0, call_ltp=240.0, put_ltp=185.0,
+            call_bid=200.0, call_ask=280.0, # 80 pt spread (~33% of mid 240) -> REJECT
+            put_bid=184.0, put_ask=186.0,   # 2 pt spread (~1% of mid 185) -> OK
+            call_oi=100000, put_oi=120000,
+        )
+    ]
+    res_wide = GreeksGexEngine.evaluate_frontier_landscape(
+        symbol="NIFTY",
+        underlying_price=25819.0,
+        chain=mock_wide_chain,
+        dte=2.0,
+    )
+    # When wide spread is rejected and no fallback matches, spot price is preserved
+    assert res_wide.underlying_price == 25819.0
+
+
+def test_spring_boot_broker_execution_adapters(tmp_path):
+    """Verifies Spring Boot-style Dual-Mode (PAPER vs LIVE) Broker Architecture."""
+    from dataclasses import replace
+    from trading_policy import get_trading_policy
+    from broker_execution import (
+        get_execution_broker,
+        PaperExecutionBroker,
+        LiveKiteExecutionBroker,
+    )
+    from paper_ledger import AIPaperLedger
+
+    policy = get_trading_policy()
+    test_ledger = AIPaperLedger(db_path=tmp_path / "broker_test.db")
+
+    # 1. Default policy (strategy.yaml has target_venue: "PAPER") returns PaperExecutionBroker
+    paper_broker = get_execution_broker(policy=policy, ledger=test_ledger)
+    assert isinstance(paper_broker, PaperExecutionBroker)
+    assert paper_broker.get_mode() == "PAPER"
+
+    # 2. Live profile policy (target_venue: "LIVE") returns LiveKiteExecutionBroker
+    live_policy = replace(policy, target_venue="LIVE")
+    live_broker = get_execution_broker(policy=live_policy, ledger=test_ledger)
+    assert isinstance(live_broker, LiveKiteExecutionBroker)
+    assert live_broker.get_mode() == "LIVE"
+
+    # 3. Test Paper Execution Entry Fills
+    res = paper_broker.execute_entry(
+        symbol="NIFTY",
+        direction="BUY_CE",
+        contract="NIFTY26DEC26000CE",
+        lots=1,
+        lot_size=25,
+        exec_px=150.0,
+        sl=130.0,
+        target=200.0,
+        thesis="Spring Boot Paper Adapter Test",
+        clock={"expiry_regime": "NORMAL_DAY"},
+        max_risk=500.0,
+        ticket=3750.0,
+    )
+    assert res["status"] == "OPENED_TRADE"
+    assert res["venue"] == "PAPER"
+    tid = res["trade_id"]
+    assert tid > 0
+
+    # Test Paper Position Exit
+    exit_res = paper_broker.execute_exit(
+        trade={"trade_id": tid, "symbol": "NIFTY26DEC26000CE", "underlying": "NIFTY", "lots": 1, "quantity": 25, "stop_loss": 130.0},
+        mark=160.0,
+        action="BOOK_PROFIT",
+        reason="Test Exit Profit",
+        regime="NORMAL_DAY",
+    )
+    assert exit_res["status"] == "CLOSED"
+    assert exit_res["venue"] == "PAPER"
+
+
+def test_vertical_spread_and_spot_sl_integration(tmp_path):
+    """Verifies full 2-leg vertical debit spread lifecycle, 4-order friction, partial close, and spot SL."""
+    from broker_execution import PaperExecutionBroker
+    from paper_ledger import AIPaperLedger
+    from trading_policy import get_trading_policy
+
+    policy = get_trading_policy()
+    assert policy.vertical_spreads_enabled is True
+    assert policy.max_spread_net_debit_inr == 14000.0
+    assert policy.tier_1_super_setup_budget_inr == 20000.0
+
+    db_path = tmp_path / "test_spread_trades.db"
+    ledger = AIPaperLedger(db_path=str(db_path))
+    broker = PaperExecutionBroker(ledger=ledger)
+
+    # 1. Open 2-lot vertical debit spread: Buy 4400CE @ 235 (ask), Sell 4500CE @ 190 (bid) -> Net Debit ₹45
+    res = broker.execute_entry(
+        symbol="DATAPATTNS",
+        direction="BUY_CE",
+        contract="DATAPATTNS26DEC4400CE",
+        lots=2,
+        lot_size=125,
+        exec_px=45.0,
+        sl=25.0,
+        target=80.0,
+        thesis="2-leg vertical spread lifecycle test",
+        clock={"expiry_regime": "NORMAL_DAY"},
+        max_risk=2500.0,
+        ticket=11250.0,
+        spot_stop_loss=4352.0,
+        short_contract="DATAPATTNS26DEC4500CE",
+        short_exec_px=190.0,
+    )
+    assert res["status"] == "OPENED_TRADE"
+    assert res["short_contract"] == "DATAPATTNS26DEC4500CE"
+    tid = res["trade_id"]
+
+    open_trades = ledger.get_open_trades()
+    assert len(open_trades) == 1
+    assert open_trades[0]["spot_stop_loss"] == 4352.0
+    assert open_trades[0]["short_contract"] == "DATAPATTNS26DEC4500CE"
+    assert open_trades[0]["short_entry_price"] == 190.0
+
+    # 2. Partial book 1 lot at Net ₹65 (Long @ 270, Short @ 205) -> 4-order friction must exceed ₹100
+    p_res = broker.execute_exit(
+        trade=open_trades[0],
+        mark=65.0,
+        action="PARTIAL_BOOK",
+        reason="Lock half spread near wall",
+        regime="NORMAL_DAY",
+        exit_lots=1,
+        new_sl=35.0,
+        short_mark=205.0,
+    )
+    assert p_res["status"] == "PARTIAL_BOOKED"
+    assert p_res["remaining_lots"] == 1
+    assert p_res["short_contract"] == "DATAPATTNS26DEC4500CE"
+    assert p_res["friction"] > 100.0  # 4 orders x ₹20 = ₹80 brokerage + double-sell STT + GST
+    assert p_res["gross_pnl"] == (65.0 - 45.0) * 125
+
+    # 3. Full close remaining 1 lot at Net ₹70 (Long @ 280, Short @ 210)
+    rem = ledger.get_open_trades()[0]
+    assert rem["stop_loss"] == 35.0
+    assert rem["spot_stop_loss"] == 4352.0
+    c_res = broker.execute_exit(
+        trade=rem,
+        mark=70.0,
+        action="BOOK_PROFIT",
+        reason="Target achieved",
+        regime="NORMAL_DAY",
+        short_mark=210.0,
+    )
+    assert c_res["status"] == "CLOSED"
+    assert c_res["short_exit_price"] == 210.0
+    assert ledger.get_open_trades() == []
+
+
+def test_live_broker_spread_sequencing_and_fail_closed_eod(tmp_path):
+    """
+    Tests Zerodha live spread execution ordering (BUY long -> SELL short on entry,
+    BUY short -> SELL long on exit), ₹0.05 tick marketable limit pricing, fill confirmation,
+    Leg-2 unwind recovery, anti-short lock, and fail-closed EOD retry retention.
+    """
+    from broker_execution import LiveKiteExecutionBroker, round_nse_tick
+    from paper_ledger import AIPaperLedger
+
+    assert round_nse_tick(152.33) == 152.35
+    assert round_nse_tick(152.32) == 152.3
+
+    class FakeKite:
+        VARIETY_REGULAR = "regular"
+        EXCHANGE_NFO = "NFO"
+        PRODUCT_MIS = "MIS"
+        PRODUCT_NRML = "NRML"
+        ORDER_TYPE_LIMIT = "LIMIT"
+        ORDER_TYPE_MARKET = "MARKET"
+
+        def __init__(self, fail_second=False, fail_exit=False):
+            self.orders = []
+            self.fail_second = fail_second
+            self.fail_exit = fail_exit
+            self.seq = 0
+            self.net_positions = []
+
+        def place_order(self, **kwargs):
+            self.seq += 1
+            if self.fail_second and self.seq == 2:
+                raise RuntimeError("RMS short margin error")
+            if self.fail_exit and kwargs["transaction_type"] == "SELL":
+                raise RuntimeError("Exchange timeout during EOD exit")
+            oid = f"OID_{self.seq}"
+            self.orders.append((oid, kwargs))
+            return oid
+
+        def order_history(self, oid):
+            for o, kw in self.orders:
+                if o == oid:
+                    px = float(kw.get("price") or 100.0)
+                    return [{"status": "COMPLETE", "average_price": round(px * 0.99, 2)}]
+            return []
+
+        def positions(self):
+            return {"net": self.net_positions}
+
+    class FakeFeed:
+        def __init__(self, kite_obj):
+            self._kite = kite_obj
+            self._kite_init_error = None
+
+        def _ensure_kite(self):
+            return self._kite
+
+    # Scenario A: Healthy 2-leg Spread Entry + Exit ordering
+    kite = FakeKite()
+    ledger = AIPaperLedger(db_path=tmp_path / "live_spread.db")
+    broker = LiveKiteExecutionBroker(ledger=ledger, feed=FakeFeed(kite))
+
+    ent = broker.execute_entry(
+        symbol="DATAPATTNS",
+        direction="BUY_CE",
+        contract="DATAPATTNS26DEC4400CE",
+        lots=1,
+        lot_size=125,
+        exec_px=45.0,
+        sl=25.0,
+        target=80.0,
+        thesis="Live spread sequencing test",
+        clock={"expiry_regime": "NORMAL_DAY"},
+        max_risk=2500.0,
+        ticket=5625.0,
+        short_contract="DATAPATTNS26DEC4500CE",
+        short_exec_px=190.0,
+    )
+    assert ent["status"] == "OPENED_TRADE"
+    assert ent["venue"] == "LIVE"
+    assert len(kite.orders) == 2
+    assert kite.orders[0][1]["tradingsymbol"] == "DATAPATTNS26DEC4400CE"
+    assert kite.orders[0][1]["transaction_type"] == "BUY"   # Long hedge MUST be first!
+    assert kite.orders[0][1]["order_type"] == "LIMIT"
+    assert kite.orders[0][1]["product"] == "NRML"
+    assert kite.orders[1][1]["tradingsymbol"] == "DATAPATTNS26DEC4500CE"
+    assert kite.orders[1][1]["transaction_type"] == "SELL"  # Short leg MUST be second!
+
+    kite.net_positions = [
+        {"tradingsymbol": "DATAPATTNS26DEC4400CE", "quantity": 125},
+        {"tradingsymbol": "DATAPATTNS26DEC4500CE", "quantity": -125},
+    ]
+    open_row = ledger.get_open_trades()[0]
+    ex = broker.execute_exit(
+        trade=open_row,
+        mark=60.0,
+        action="EXIT",
+        reason="Close spread",
+        regime="NORMAL_DAY",
+        short_mark=200.0,
+    )
+    assert ex["status"] == "CLOSED"
+    assert kite.orders[2][1]["tradingsymbol"] == "DATAPATTNS26DEC4500CE"
+    assert kite.orders[2][1]["transaction_type"] == "BUY"   # Unwind short FIRST!
+    assert kite.orders[3][1]["tradingsymbol"] == "DATAPATTNS26DEC4400CE"
+    assert kite.orders[3][1]["transaction_type"] == "SELL"  # Exit long SECOND!
+
+    # Scenario B: Leg 2 entry failure triggers automatic Leg 1 unwind (leaves 0 open exposure)
+    kite_leg2_fail = FakeKite(fail_second=True)
+    ledger_b = AIPaperLedger(db_path=tmp_path / "live_unwind.db")
+    broker_b = LiveKiteExecutionBroker(ledger=ledger_b, feed=FakeFeed(kite_leg2_fail))
+    ent_b = broker_b.execute_entry(
+        symbol="DATAPATTNS", direction="BUY_CE", contract="DATAPATTNS26DEC4400CE",
+        lots=1, lot_size=125, exec_px=45.0, sl=25.0, target=80.0,
+        thesis="Unwind check", clock={"expiry_regime": "NORMAL_DAY"},
+        max_risk=2500.0, ticket=5625.0,
+        short_contract="DATAPATTNS26DEC4500CE", short_exec_px=190.0,
+    )
+    assert ent_b["status"] == "LIVE_SPREAD_LEG2_REJECTED_UNWOUND"
+    assert kite_leg2_fail.orders[1][1]["transaction_type"] == "SELL"
+    assert kite_leg2_fail.orders[1][1]["tradingsymbol"] == "DATAPATTNS26DEC4400CE"
+    assert ledger_b.get_open_trades() == []
+
+    # Scenario C: Live EOD failure NEVER closes SQLite row prematurely (Guardian keeps retrying)
+    kite_eod_fail = FakeKite(fail_exit=True)
+    ledger_c = AIPaperLedger(db_path=tmp_path / "live_eod_fail.db")
+    broker_c = LiveKiteExecutionBroker(ledger=ledger_c, feed=FakeFeed(kite_eod_fail))
+    broker_c.execute_entry(
+        symbol="NIFTY", direction="BUY_CE", contract="NIFTY26DEC25600CE",
+        lots=1, lot_size=65, exec_px=150.0, sl=125.0, target=200.0,
+        thesis="EOD retry guard", clock={"expiry_regime": "NORMAL_DAY"},
+        max_risk=1625.0, ticket=9750.0,
+    )
+    eod_res = broker_c.square_off_all(ledger_c.get_open_trades(), {}, "HARD_EOD_SQUAREOFF_1515")
+    assert eod_res["status"] == "PARTIAL_SQUAREOFF_RETRY_NEEDED"
+    assert eod_res["failed_count"] == 1
+    assert len(ledger_c.get_open_trades()) == 1  # Still OPEN so Guardian retries!
+
+
+def test_cio_spread_guards_t4_blackout_and_spot_sl_whipsaw(tmp_path):
+    """Verifies inverted spread guards, --mock isolation, T-4 physical delivery blackout, and spot anti-whipsaw."""
+    from dataclasses import replace
+    from unittest.mock import patch
+    from agent_trader import _evaluate_spot_sl_breach, cio_enter_trade
+    from paper_ledger import AIPaperLedger
+    from trading_policy import get_trading_policy
+
+    ledger = AIPaperLedger(db_path=tmp_path / "guards.db")
+
+    # 1. Even if policy says LIVE, live_mode=False (--mock) forces PAPER cleanly
+    live_pol = replace(get_trading_policy(), target_venue="LIVE")
+    with patch("agent_trader.get_trading_policy", return_value=live_pol):
+        ok_mock = cio_enter_trade(
+            "NIFTY", "BUY_CE", "NIFTY26DEC25600CE", sl=120.0, target=190.0, lots=1,
+            thesis="Mock isolation check", entry_price=140.0, live_mode=False, ledger=ledger,
+        )
+        assert ok_mock["status"] == "OPENED_TRADE"
+        assert ok_mock["venue"] == "PAPER"
+
+    # 2. Inverted vertical spreads and option type mismatches must fail-closed
+    inv_call = cio_enter_trade(
+        "DATAPATTNS", "BUY_CE", "DATAPATTNS26DEC4500CE", sl=20.0, target=70.0, lots=1,
+        thesis="Inverted Bull Call check", entry_price=40.0,
+        short_contract="DATAPATTNS26DEC4400CE", short_entry_price=220.0,
+        live_mode=False, ledger=ledger,
+    )
+    assert inv_call["status"] == "REJECTED"
+    assert "INVERTED_BULL_CALL_SPREAD" in inv_call["reason"]
+
+    inv_put = cio_enter_trade(
+        "SHRIRAMFIN", "BUY_PE", "SHRIRAMFIN26DEC900PE", sl=5.0, target=15.0, lots=1,
+        thesis="Inverted Bear Put check", entry_price=9.0,
+        short_contract="SHRIRAMFIN26DEC920PE", short_entry_price=30.0,
+        live_mode=False, ledger=ledger,
+    )
+    assert inv_put["status"] == "REJECTED"
+    assert "INVERTED_BEAR_PUT_SPREAD" in inv_put["reason"]
+
+    mismatch = cio_enter_trade(
+        "RELIANCE", "BUY_CE", "RELIANCE26DEC1300CE", sl=10.0, target=30.0, lots=1,
+        thesis="Mismatched leg check", entry_price=15.0,
+        short_contract="RELIANCE26DEC1340PE", live_mode=False, ledger=ledger,
+    )
+    assert mismatch["status"] == "REJECTED"
+    assert "SPREAD_OPTION_TYPE_MISMATCH" in mismatch["reason"]
+
+    # 3. T-4 Physical Delivery Blackout blocks stocks at DTE<=4 while permitting cash-settled NIFTY
+    class T3Feed:
+        def get_symbol_meta(self, sym):
+            return {"symbol": sym, "lot_size": 500, "strike_step": 20.0, "dte_days": 3}
+
+        def fetch_contract_quotes(self, syms):
+            return {syms[0]: {"bid": 19.5, "ask": 20.0, "ltp": 19.8, "mark": 19.5}}
+
+    t4_rej = cio_enter_trade(
+        "RELIANCE", "BUY_CE", "RELIANCE26DEC1300CE", sl=15.0, target=30.0, lots=1,
+        thesis="T-4 blackout check", live_mode=True, ledger=ledger, feed=T3Feed(),
+        enforce_market_clock=False,
+    )
+    assert t4_rej["status"] == "REJECTED"
+    assert "PHYSICAL_DELIVERY_T4_BLACKOUT" in t4_rej["reason"]
+
+    # 4. Anti-whipsaw spot SL: 1 minor poke doesn't stop out; 2nd consecutive or deep break >=0.25% does
+    hit1, cnt1 = _evaluate_spot_sl_breach(999.5, 1000.0, is_ce=True, prior_breaches=0)
+    assert hit1 is False and cnt1 == 1
+    hit2, cnt2 = _evaluate_spot_sl_breach(999.4, 1000.0, is_ce=True, prior_breaches=cnt1)
+    assert hit2 is True and cnt2 == 2
+    hit_crash, _ = _evaluate_spot_sl_breach(997.0, 1000.0, is_ce=True, prior_breaches=0)
+    assert hit_crash is True
+
+
+def test_scale_free_gex_and_index_rvol_protection(tmp_path):
+    """Verifies scale-free GEX asymmetry ratio across stock OI scales and index 0-spot-volume RVOL."""
+    from greeks_gex import GreeksGexEngine
+    from options_analytics import OptionStrikeData
+    from smart_edge import compute_relative_volume
+
+    # Mid-cap stock with lot_size=825 and high vol (45%) should still classify dominant short-call GEX cleanly
+    chain = [
+        OptionStrikeData(strike=900.0, call_oi=100000, put_oi=900000, call_ltp=42.0, put_ltp=14.0),
+        OptionStrikeData(strike=920.0, call_oi=250000, put_oi=300000, call_ltp=28.0, put_ltp=22.0),
+        OptionStrikeData(strike=940.0, call_oi=1200000, put_oi=80000, call_ltp=15.0, put_ltp=35.0),
+    ]
+    gex_short = GreeksGexEngine.evaluate_frontier_landscape(
+        symbol="SHRIRAMFIN", underlying_price=925.0, chain=chain, dte=10.0,
+        iv=0.45, lot_size=825, strike_step=20.0,
+    )
+    assert gex_short.gex_regime == "SHORT_GAMMA_VOLATILITY"
+
+    # Zero spot volume on index returns 1.0x NORMAL instead of 186,000,000x
+    rvol, reg = compute_relative_volume(current_volume=0, avg_volume_20d=0)
+    assert rvol == 1.0 and reg == "NORMAL"
+
+

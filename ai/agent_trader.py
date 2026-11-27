@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import re
 import sqlite3
 import sys
 import time
@@ -614,52 +615,47 @@ def square_off_all_positions(
     reason: str = "HARD_EOD_SQUAREOFF_0315PM",
     live_mode: bool = True,
     feed: Optional[LiveKiteFeed] = None,
+    ledger: Optional[AIPaperLedger] = None,
 ):
     """
-    Executes mandatory 03:15 PM EOD square-off across all open positions.
-    Uses genuine live Zerodha NFO quotes for LIVE_KITE trades; voids orphaned synthetic rows cleanly.
+    Executes mandatory EOD square-off across all open positions via the configured execution broker.
+    Quotes both legs for vertical spreads and prevents marking SQLite closed if live exchange exit fails.
     """
-    ledger = AIPaperLedger()
-    ledger.void_synthetic_open_trades()
-    open_trades = ledger.get_open_trades()
+    active_ledger = ledger or AIPaperLedger()
+    active_ledger.void_synthetic_open_trades()
+    open_trades = active_ledger.get_open_trades()
     if not open_trades:
         print("\n⚖️ [AI Agent CIO] No open live positions to square off. Portfolio is 100% in cash.")
         return
 
     print("\n" + "=" * 80)
-    print("      MANDATORY 03:15 PM EOD SQUARE-OFF (FIDUCIARY ZERO-OVERNIGHT RULE)")
+    print("      MANDATORY EOD SQUARE-OFF (FIDUCIARY ZERO-OVERNIGHT RULE)")
     print("=" * 80)
-    print(f" Squaring off {len(open_trades)} active positions at genuine live market mark...")
+    print(f" Squaring off {len(open_trades)} active positions...")
     print("-" * 80)
 
-    active_feed = feed or LiveKiteFeed()
-    live_quotes = active_feed.fetch_contract_quotes([t["symbol"] for t in open_trades]) if live_mode else {}
+    active_feed = feed or (LiveKiteFeed() if live_mode else None)
+    quote_syms = list(dict.fromkeys(
+        sym for t in open_trades for sym in (t["symbol"], t.get("short_contract")) if sym
+    ))
+    live_quotes = active_feed.fetch_contract_quotes(quote_syms) if (live_mode and active_feed) else {}
 
-    total_realized_net = 0.0
-    total_friction = 0.0
+    policy = get_trading_policy()
+    from broker_execution import get_execution_broker
 
-    for t in open_trades:
-        tid = t["trade_id"]
-        sym = t["symbol"]
-        entry_p = t["entry_price"]
-
-        q = live_quotes.get(sym)
-        if q and q.get("mark", 0.0) > 0:
-            mark = float(q["mark"])
-        else:
-            print(f" ⚠️ [FAIL-CLOSED] Could not fetch live quote for #{tid} ({sym}); skipping synthetic fallback close.")
-            continue
-
-        res = ledger.close_trade(tid, mark, reason)
-        total_friction += res.get("friction", 0.0)
-        total_realized_net += res.get("net_pnl", 0.0)
-
-        sign = "+" if res.get("net_pnl", 0.0) >= 0 else ""
-        print(f" 🔒 SQUARED OFF #{tid} ({sym}): Entry ₹{entry_p:.2f} ──► Live Exit ₹{mark:.2f} | Net: {sign}₹{res.get('net_pnl', 0.0):,.2f} (Friction: ₹{res.get('friction', 0.0):.2f})")
-
-    print("-" * 80)
-    net_sign = "+" if total_realized_net >= 0 else ""
-    print(f" 🏁 EOD Live Net Realized PnL: {net_sign}₹{total_realized_net:,.2f} | Statutory Friction: ₹{total_friction:,.2f}")
+    broker = get_execution_broker(
+        policy=policy, ledger=active_ledger, feed=active_feed, force_paper=not live_mode,
+    )
+    res = broker.square_off_all(open_trades, live_quotes, reason)
+    net_val = float(res.get("total_realized_net") or 0.0)
+    fric_val = float(res.get("total_friction") or 0.0)
+    failed = int(res.get("failed_count") or 0)
+    closed = int(res.get("closed_count") or 0)
+    net_sign = "+" if net_val >= 0 else ""
+    print(
+        f" 🏁 [{res.get('venue', 'PAPER')}] Squared Off={closed} Failed={failed} | "
+        f"Net Realized PnL: {net_sign}₹{net_val:,.2f} | Statutory Friction: ₹{fric_val:,.2f}"
+    )
     print("=" * 80 + "\n")
 
 
@@ -1051,6 +1047,51 @@ def _format_inr(val: float) -> str:
     return f"-₹{abs(val):,.2f}" if val < 0 else f"₹{val:,.2f}"
 
 
+def _parse_option_contract(contract: str, symbol: str) -> Tuple[Optional[float], Optional[str]]:
+    """Extracts (strike, 'CE'|'PE') from NSE weekly/monthly NFO option symbols when parseable."""
+    up_c = contract.strip().upper()
+    up_s = symbol.strip().upper()
+    opt_tag = "CE" if up_c.endswith("CE") else ("PE" if up_c.endswith("PE") else None)
+    if not opt_tag or not up_c.startswith(up_s):
+        return None, opt_tag
+    m_monthly = re.match(
+        rf"^{re.escape(up_s)}\d{{2}}(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)([0-9]+(?:\.[0-9]+)?)(CE|PE)$",
+        up_c,
+    )
+    if m_monthly:
+        return float(m_monthly.group(1)), m_monthly.group(2)
+    m_weekly = re.match(
+        rf"^{re.escape(up_s)}\d{{2}}[1-9OND]\d{{2}}([0-9]+(?:\.[0-9]+)?)(CE|PE)$",
+        up_c,
+    )
+    if m_weekly:
+        return float(m_weekly.group(1)), m_weekly.group(2)
+    return None, opt_tag
+
+
+def _evaluate_spot_sl_breach(
+    spot_price: float,
+    spot_sl: float,
+    is_ce: bool,
+    prior_breaches: int,
+) -> Tuple[bool, int]:
+    """
+    Anti-whipsaw spot invalidation filter:
+    - Immediate exit on a decisive break (>= 0.25% past spot_sl).
+    - Requires 2 consecutive Guardian polls past spot_sl to ignore single-tick fat-finger wicks.
+    """
+    if spot_price <= 0 or spot_sl <= 0:
+        return False, 0
+    breached = (spot_price <= spot_sl) if is_ce else (spot_price >= spot_sl)
+    if not breached:
+        return False, 0
+    new_count = prior_breaches + 1
+    break_pct = abs(spot_sl - spot_price) / spot_sl
+    if break_pct >= 0.0025 or new_count >= 2:
+        return True, new_count
+    return False, new_count
+
+
 def cio_enter_trade(
     symbol: str,
     direction: str,
@@ -1060,6 +1101,9 @@ def cio_enter_trade(
     lots: int = 1,
     thesis: str = "",
     entry_price: Optional[float] = None,
+    spot_stop_loss: Optional[float] = None,
+    short_contract: Optional[str] = None,
+    short_entry_price: Optional[float] = None,
     live_mode: bool = True,
     ledger: Optional[AIPaperLedger] = None,
     feed: Optional[LiveKiteFeed] = None,
@@ -1067,10 +1111,12 @@ def cio_enter_trade(
     enforce_market_clock: bool = True,
 ) -> Dict:
     """
-    Executes an explicit external-CIO paper-trade decision (never auto-triggered).
-    Enforces the repository policy, fail-closed live quotes, spread, Desk Collision
-    Mutex, F&O ban, cash, and risk caps; then journals the CIO's written thesis.
+    Executes an explicit external-CIO trade decision (naked option or 2-leg vertical debit spread).
+    Enforces policy, SEBI T-4 physical delivery blackout, live spread quotes, sequential Buy-First
+    margin feasibility, Desk Collision Mutex, F&O ban, cash, and risk caps; then journals thesis.
     """
+    from cockpit import CASH_SETTLED_INDICES
+
     policy = get_trading_policy()
     active_ledger = ledger or AIPaperLedger()
     active_bridge = bridge or SmartTradingBridge()
@@ -1078,11 +1124,28 @@ def cio_enter_trade(
     up_sym = symbol.upper()
     up_dir = direction.upper()
     up_contract = contract.upper()
+    up_short = short_contract.strip().upper() if short_contract else None
 
     if up_dir not in ("BUY_CE", "BUY_PE"):
         return {"status": "REJECTED", "reason": "INVALID_DIRECTION"}
     if policy.require_written_thesis and not thesis.strip():
         return {"status": "REJECTED", "reason": "MISSING_CIO_THESIS"}
+
+    expected_tag = "CE" if up_dir == "BUY_CE" else "PE"
+    long_strike, long_tag = _parse_option_contract(up_contract, up_sym)
+    if up_short:
+        if not policy.vertical_spreads_enabled:
+            return {"status": "REJECTED", "reason": "VERTICAL_SPREADS_DISABLED_BY_POLICY"}
+        if up_short == up_contract or not up_short.startswith(up_sym):
+            return {"status": "REJECTED", "reason": f"INVALID_SHORT_CONTRACT:{up_short}"}
+        short_strike, short_tag = _parse_option_contract(up_short, up_sym)
+        if short_tag != expected_tag or (long_tag and long_tag != expected_tag):
+            return {"status": "REJECTED", "reason": f"SPREAD_OPTION_TYPE_MISMATCH:{up_contract}/{up_short}"}
+        if long_strike is not None and short_strike is not None:
+            if up_dir == "BUY_CE" and short_strike <= long_strike:
+                return {"status": "REJECTED", "reason": f"INVERTED_BULL_CALL_SPREAD:{long_strike}/{short_strike}"}
+            if up_dir == "BUY_PE" and short_strike >= long_strike:
+                return {"status": "REJECTED", "reason": f"INVERTED_BEAR_PUT_SPREAD:{long_strike}/{short_strike}"}
 
     clock = evaluate_session_clock()
     if live_mode and enforce_market_clock and not clock["entries_permitted"]:
@@ -1114,12 +1177,28 @@ def cio_enter_trade(
         meta = active_feed.get_symbol_meta(up_sym)
         if meta:
             lot_size = int(meta["lot_size"])
+            if (
+                live_mode
+                and policy.physical_delivery_t4_blackout
+                and up_sym not in CASH_SETTLED_INDICES
+                and "dte_days" in meta
+                and int(meta["dte_days"]) <= 4
+            ):
+                return {"status": "REJECTED", "reason": f"PHYSICAL_DELIVERY_T4_BLACKOUT:{up_sym}(DTE={meta['dte_days']})"}
+
+    qty = lots * lot_size
+    deployed = sum(float(t["entry_price"]) * int(t["quantity"]) for t in open_trades)
+    avail = max(0.0, policy.demat_budget_inr - deployed)
 
     exec_px = float(entry_price or 0.0)
+    short_px = float(short_entry_price) if short_entry_price is not None else None
+    long_leg_px = exec_px
+
     if live_mode:
         if active_feed is None:
             return {"status": "REJECTED", "reason": "NO_LIVE_FEED"}
-        quotes = active_feed.fetch_contract_quotes([up_contract])
+        quote_syms = [up_contract, up_short] if up_short else [up_contract]
+        quotes = active_feed.fetch_contract_quotes(quote_syms)
         q = quotes.get(up_contract)
         if not q:
             return {"status": "REJECTED", "reason": f"NO_LIVE_QUOTE:{up_contract}"}
@@ -1128,64 +1207,64 @@ def cio_enter_trade(
             spread_pct = ((ask - bid) / ((bid + ask) / 2.0)) * 100.0
             if spread_pct > 2.5:
                 return {"status": "REJECTED", "reason": f"WIDE_SPREAD:{spread_pct:.2f}%"}
-        exec_px = ask if ask > 0 else ltp
+        long_leg_px = ask if ask > 0 else ltp
+
+        if up_short:
+            sq = quotes.get(up_short)
+            if not sq:
+                return {"status": "REJECTED", "reason": f"NO_LIVE_QUOTE:{up_short}"}
+            s_bid, s_ask, s_ltp = float(sq.get("bid", 0.0)), float(sq.get("ask", 0.0)), float(sq.get("ltp", 0.0))
+            if s_bid > 0 and s_ask > 0:
+                s_spread_pct = ((s_ask - s_bid) / ((s_bid + s_ask) / 2.0)) * 100.0
+                if s_spread_pct > 4.0:
+                    return {"status": "REJECTED", "reason": f"WIDE_SHORT_SPREAD:{s_spread_pct:.2f}%"}
+            short_px = s_bid if s_bid > 0 else s_ltp
+            if short_px <= 0 or long_leg_px <= short_px:
+                return {"status": "REJECTED", "reason": f"INVALID_SPREAD_DEBIT:long={long_leg_px},short={short_px}"}
+            if (long_leg_px * qty) > avail:
+                return {"status": "REJECTED", "reason": f"SPREAD_LONG_LEG_EXCEEDS_CASH:₹{long_leg_px * qty:,.0f} > ₹{avail:,.0f}"}
+            exec_px = round(long_leg_px - short_px, 2)
+        else:
+            exec_px = long_leg_px
 
     if exec_px <= 0.0 or sl <= 0.0 or sl >= exec_px:
         return {"status": "REJECTED", "reason": f"INVALID_PRICE_OR_SL (entry={exec_px}, sl={sl})"}
 
-    qty = lots * lot_size
     ticket = exec_px * qty
-    deployed = sum(float(t["entry_price"]) * int(t["quantity"]) for t in open_trades)
-    avail = max(0.0, policy.demat_budget_inr - deployed)
     if ticket > avail:
         return {"status": "REJECTED", "reason": f"INSUFFICIENT_DEMAT_CASH: needs ₹{ticket:,.0f}, avail ₹{avail:,.0f}"}
-    if ticket > policy.max_position_deployment_inr:
+    max_deploy_cap = policy.max_spread_net_debit_inr if up_short else policy.max_position_deployment_inr
+    if ticket > max_deploy_cap:
         return {
             "status": "REJECTED",
-            "reason": (
-                f"POSITION_DEPLOYMENT_TOO_HIGH: ₹{ticket:,.0f} > "
-                f"₹{policy.max_position_deployment_inr:,.0f}"
-            ),
+            "reason": f"POSITION_DEPLOYMENT_TOO_HIGH: ₹{ticket:,.0f} > ₹{max_deploy_cap:,.0f}",
         }
 
     max_risk = (exec_px - sl) * qty
     if max_risk > policy.max_single_trade_risk_inr:
         return {"status": "REJECTED", "reason": f"SINGLE_TRADE_RISK_TOO_HIGH: ₹{max_risk:,.0f} > ₹{policy.max_single_trade_risk_inr:,.0f}"}
 
-    tag = "LIVE_KITE" if live_mode else "CIO_MOCK"
-    tid = active_ledger.open_trade(
-        underlying=up_sym,
-        symbol=up_contract,
+    from broker_execution import get_execution_broker
+    broker = get_execution_broker(
+        policy=policy, ledger=active_ledger, feed=active_feed, force_paper=not live_mode,
+    )
+    return broker.execute_entry(
+        symbol=up_sym,
         direction=up_dir,
-        entry_price=round(exec_px, 2),
-        stop_loss=round(sl, 2),
-        target=round(target, 2),
+        contract=up_contract,
         lots=lots,
         lot_size=lot_size,
+        exec_px=exec_px,
+        sl=sl,
+        target=target,
         thesis=thesis,
-        source_tag=tag,
+        clock=clock,
+        max_risk=max_risk,
+        ticket=ticket,
+        spot_stop_loss=spot_stop_loss,
+        short_contract=up_short,
+        short_exec_px=short_px,
     )
-    active_ledger.log_cio_decision(
-        action="ENTER",
-        trade_id=tid,
-        underlying=up_sym,
-        contract=up_contract,
-        regime=clock["expiry_regime"],
-        reasoning=thesis,
-        context={"entry": exec_px, "sl": sl, "target": target, "lots": lots, "qty": qty, "risk_inr": round(max_risk, 2)},
-    )
-    return {
-        "status": "OPENED_TRADE",
-        "trade_id": tid,
-        "contract": up_contract,
-        "entry_price": round(exec_px, 2),
-        "sl": round(sl, 2),
-        "target": round(target, 2),
-        "lots": lots,
-        "quantity": qty,
-        "ticket_inr": round(ticket, 2),
-        "max_risk_inr": round(max_risk, 2),
-    }
 
 
 def cio_manage_trade(
@@ -1195,6 +1274,7 @@ def cio_manage_trade(
     sl: Optional[float] = None,
     exit_lots: Optional[int] = None,
     exit_price: Optional[float] = None,
+    short_exit_price: Optional[float] = None,
     live_mode: bool = True,
     ledger: Optional[AIPaperLedger] = None,
     feed: Optional[LiveKiteFeed] = None,
@@ -1202,8 +1282,8 @@ def cio_manage_trade(
     """
     Executes explicit AI CIO management action on an active trade:
     - `TRAIL_SL`: Stay & Ride Rally by raising stop-loss to `sl`.
-    - `PARTIAL_BOOK`: Book profit on `exit_lots` at live Bid mark while leaving runner open (and optionally raise SL).
-    - `BOOK_PROFIT` / `EXIT`: Close full trade at live Bid mark with explicit reason.
+    - `PARTIAL_BOOK`: Book profit on `exit_lots` at live mark while leaving runner open (and optionally raise SL).
+    - `BOOK_PROFIT` / `EXIT`: Close full trade at live mark with explicit reason.
     """
     active_ledger = ledger or AIPaperLedger()
     act = action.upper()
@@ -1215,56 +1295,50 @@ def cio_manage_trade(
         return {"status": "ERROR", "reason": f"OPEN_TRADE_NOT_FOUND:{trade_id}"}
 
     contract = trade["symbol"]
+    short_contract = trade.get("short_contract")
     clock = evaluate_session_clock()
 
-    if act == "TRAIL_SL":
-        if sl is None or sl <= 0:
-            return {"status": "ERROR", "reason": "INVALID_NEW_SL"}
-        ok = active_ledger.update_stop_loss(trade_id, round(float(sl), 2))
-        if ok:
-            active_ledger.log_cio_decision(
-                action="TRAIL_SL", trade_id=trade_id, underlying=trade["underlying"],
-                contract=contract, regime=clock["expiry_regime"], reasoning=reason,
-                context={"old_sl": trade["stop_loss"], "new_sl": round(float(sl), 2)},
-            )
-            return {"status": "SL_UPDATED", "trade_id": trade_id, "new_sl": round(float(sl), 2)}
-        return {"status": "ERROR", "reason": "SL_UPDATE_FAILED"}
-
     mark = float(exit_price or 0.0)
-    if live_mode:
-        active_feed = feed or LiveKiteFeed()
-        quotes = active_feed.fetch_contract_quotes([contract])
+    short_mark = float(short_exit_price) if short_exit_price is not None else None
+    active_feed = feed or (LiveKiteFeed() if live_mode else None)
+    if act != "TRAIL_SL" and live_mode:
+        if active_feed is None:
+            return {"status": "FAIL_CLOSED", "reason": "NO_LIVE_FEED"}
+        quote_syms = [contract, short_contract] if short_contract else [contract]
+        quotes = active_feed.fetch_contract_quotes(quote_syms)
         q = quotes.get(contract)
         if not q or float(q.get("mark", 0.0)) <= 0:
             return {"status": "FAIL_CLOSED", "reason": f"NO_LIVE_EXIT_MARK:{contract}"}
-        mark = float(q["mark"])
-    if mark <= 0:
+        if short_contract:
+            sq = quotes.get(short_contract)
+            if not sq:
+                return {"status": "FAIL_CLOSED", "reason": f"NO_LIVE_SHORT_MARK:{short_contract}"}
+            from broker_execution import _spread_net_mark_from_quotes
+            mark, short_mark = _spread_net_mark_from_quotes(
+                q, sq,
+                fallback_net=float(trade["entry_price"]),
+                fallback_short=float(trade.get("short_entry_price") or 0.0),
+            )
+        else:
+            mark = float(q["mark"])
+    if act != "TRAIL_SL" and mark <= 0:
         return {"status": "ERROR", "reason": "INVALID_EXIT_PRICE"}
 
-    if act == "PARTIAL_BOOK":
-        book_lots = int(exit_lots or max(1, int(trade["lots"]) // 2))
-        res = active_ledger.partial_close_trade(trade_id, book_lots, mark, exit_reason=f"CIO_PARTIAL_BOOK:{reason[:40]}")
-        if res and sl is not None and sl > float(trade["stop_loss"]):
-            active_ledger.update_stop_loss(trade_id, round(float(sl), 2))
-            res["runner_new_sl"] = round(float(sl), 2)
-        if res:
-            active_ledger.log_cio_decision(
-                action="PARTIAL_BOOK", trade_id=trade_id, underlying=trade["underlying"],
-                contract=contract, regime=clock["expiry_regime"], reasoning=reason, context=res,
-            )
-        return {"status": "PARTIAL_BOOKED", **res} if res else {"status": "ERROR", "reason": "PARTIAL_BOOK_FAILED"}
-
-    if act in ("BOOK_PROFIT", "EXIT"):
-        reason_tag = f"CIO_{act}"
-        res = active_ledger.close_trade(trade_id, mark, exit_reason=reason_tag)
-        if res:
-            active_ledger.log_cio_decision(
-                action=act, trade_id=trade_id, underlying=trade["underlying"],
-                contract=contract, regime=clock["expiry_regime"], reasoning=reason, context=res,
-            )
-        return {"status": "CLOSED", **res} if res else {"status": "ERROR", "reason": "CLOSE_FAILED"}
-
-    return {"status": "ERROR", "reason": f"UNSUPPORTED_ACTION:{act}"}
+    policy = get_trading_policy()
+    from broker_execution import get_execution_broker
+    broker = get_execution_broker(
+        policy=policy, ledger=active_ledger, feed=active_feed, force_paper=not live_mode,
+    )
+    return broker.execute_exit(
+        trade=trade,
+        mark=mark,
+        action=act,
+        reason=reason,
+        regime=clock["expiry_regime"],
+        exit_lots=exit_lots,
+        new_sl=sl,
+        short_mark=short_mark,
+    )
 
 
 def run_guardian_loop(
@@ -1275,15 +1349,15 @@ def run_guardian_loop(
 ):
     """
     Honest Reflex Guardian + Algo Cockpit Refresh Daemon (ZERO autonomous auto-buying).
-    1. Continuously keeps `ai/runtime/cockpit_briefing.json` fresh every `cockpit_refresh_sec`
-       so Antigravity always sees a sub-second lightweight briefing.
-    2. Monitors active open trades every `poll_interval_sec` strictly to enforce:
-       - Hard emergency Stop-Loss (`live Bid mark <= sl`)
-       - Mandatory `15:15 IST` End-of-Day Cash Square-Off.
-    3. Never opens trades or takes profit on its own — entry, SL trails, rally holds, and exits
-       stay strictly in the hands of the AI CIO (`cio-enter` / `cio-manage`).
+    1. Continuously keeps `ai/runtime/cockpit_briefing.json` fresh every `cockpit_refresh_sec`.
+    2. Monitors active open trades (both single-leg and 2-leg vertical spreads) every `poll_interval_sec`:
+       - Hard emergency Stop-Loss (`mark <= sl`) and anti-whipsaw Spot-Anchored SL (`spot_stop_loss`).
+       - Routes ALL exits cleanly through `get_execution_broker` so PAPER and LIVE stay 100% unified.
+       - Mandatory EOD Cash Square-Off.
     """
     from zoneinfo import ZoneInfo
+    from broker_execution import _spread_net_mark_from_quotes, get_execution_broker
+
     policy = get_trading_policy()
     log_dir = AI_DIR / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
@@ -1295,6 +1369,9 @@ def run_guardian_loop(
     bridge = SmartTradingBridge()
     shared_feed = LiveKiteFeed(bridge=bridge) if live_mode else None
     cockpit_builder = CockpitBuilder(feed=shared_feed, bridge=bridge, ledger=ledger)
+    broker = get_execution_broker(
+        policy=policy, ledger=ledger, feed=shared_feed, force_paper=not live_mode,
+    )
 
     if live_mode:
         voided = ledger.void_synthetic_open_trades()
@@ -1302,47 +1379,98 @@ def run_guardian_loop(
             print(f"🧹 [GUARDIAN] Voided {voided} legacy synthetic open position(s).")
 
     print("\n" + "═" * 80)
-    print(" 🛡️ STARTING REFLEX GUARDIAN + ALGO COCKPIT ENGINE (AI-PILOT MODE)")
-    print("    Authority Split: Machine refreshes Cockpit + guards Emergency SL / 15:15 EOD")
+    print(f" 🛡️ STARTING REFLEX GUARDIAN + ALGO COCKPIT ENGINE ({broker.get_mode()} VENUE)")
+    print("    Authority Split: Machine refreshes Cockpit + guards Emergency SL / EOD Cutoff")
     print("    Entry / Trail / Profit-Book / Exit Decisions: STRICTLY ANTIGRAVITY CIO")
     print("═" * 80 + "\n")
 
     cycle = 0
     last_brief_ts = 0.0
+    spot_breach_counts: Dict[int, int] = {}
     try:
         while True:
             cycle += 1
-            now_ist = datetime.datetime.now(ZoneInfo("Asia/Kolkata"))
             try:
-                if live_mode and (now_ist.hour > policy.eod_square_off[0] or (now_ist.hour == policy.eod_square_off[0] and now_ist.minute >= policy.eod_square_off[1])):
-                    print(f"🏁 [GUARDIAN] {policy.eod_square_off[0]:02d}:{policy.eod_square_off[1]:02d} IST reached! Executing mandatory EOD cash square-off...")
-                    square_off_all_positions(reason="HARD_EOD_SQUAREOFF_0315PM", live_mode=live_mode, feed=shared_feed)
+                now_ist = datetime.datetime.now(ZoneInfo("Asia/Kolkata"))
+                eod_cutoff = policy.get_eod_square_off(now_ist.date())
+                clock_reg = "EXPIRY_GAMMA_DAY" if policy.is_expiry_day(now_ist.date()) else "NORMAL_DAY"
+                if live_mode and (now_ist.hour > eod_cutoff[0] or (now_ist.hour == eod_cutoff[0] and now_ist.minute >= eod_cutoff[1])):
+                    print(f"🏁 [GUARDIAN] {eod_cutoff[0]:02d}:{eod_cutoff[1]:02d} IST reached! Executing mandatory EOD cash square-off...")
+                    square_off_all_positions(
+                        reason=f"HARD_EOD_SQUAREOFF_{eod_cutoff[0]:02d}{eod_cutoff[1]:02d}",
+                        live_mode=live_mode,
+                        feed=shared_feed,
+                        ledger=ledger,
+                    )
                     cockpit_builder.build_briefing(save_json=True)
-                    break
+                    remaining = ledger.get_open_trades()
+                    if remaining:
+                        print(f"⚠️ [GUARDIAN WARNING] {len(remaining)} position(s) still open; will retry square-off in next cycle...")
+                    else:
+                        print("✅ [GUARDIAN] 100% Cash verified. Clean EOD shutdown.")
+                        break
 
-                # 1. Hard Emergency Stop-Loss Guard ONLY on already-open positions
+                # 1. Hard Emergency Stop-Loss & Spot-Anchored SL Guard on open positions
                 open_trades = ledger.get_open_trades()
                 if open_trades and live_mode and shared_feed:
-                    quotes = shared_feed.fetch_contract_quotes([t["symbol"] for t in open_trades])
+                    contract_syms = list(dict.fromkeys(
+                        s for t in open_trades for s in (t["symbol"], t.get("short_contract")) if s
+                    ))
+                    quotes = shared_feed.fetch_contract_quotes(contract_syms)
+                    spot_underlyings = list(dict.fromkeys(
+                        t["underlying"] for t in open_trades if float(t.get("spot_stop_loss") or 0.0) > 0
+                    ))
+                    spot_ltps = shared_feed.fetch_spot_ltps(spot_underlyings) if spot_underlyings else {}
+
                     for t in open_trades:
                         tid = int(t["trade_id"])
                         sym = t["symbol"]
+                        short_sym = t.get("short_contract")
                         sl = float(t["stop_loss"])
                         entry_p = float(t["entry_price"])
                         q = quotes.get(sym)
                         if not q or float(q.get("mark", 0.0)) <= 0:
                             print(f"⚠️ [GUARDIAN FAIL-CLOSED] Missing live quote for #{tid} ({sym}); holding safely.")
                             continue
-                        mark = float(q["mark"])
-                        if mark <= sl:
-                            reason = "GUARDIAN_TRAILING_SL_HIT" if sl > entry_p else "GUARDIAN_HARD_SL_HIT"
-                            res = ledger.close_trade(tid, mark, reason)
-                            ledger.log_cio_decision(
-                                action="EXIT", trade_id=tid, underlying=t["underlying"], contract=sym,
-                                reasoning=f"Automatic guardian stop-loss trigger at ₹{mark:.2f} <= SL ₹{sl:.2f}",
-                                context=res,
+
+                        short_mark: Optional[float] = None
+                        if short_sym:
+                            sq = quotes.get(short_sym)
+                            if not sq:
+                                print(f"⚠️ [GUARDIAN FAIL-CLOSED] Missing spread short quote for #{tid} ({short_sym}); holding safely.")
+                                continue
+                            mark, short_mark = _spread_net_mark_from_quotes(
+                                q, sq,
+                                fallback_net=entry_p,
+                                fallback_short=float(t.get("short_entry_price") or 0.0),
                             )
-                            print(f"🛑 [GUARDIAN SL] Closed #{tid} ({sym}) @ ₹{mark:.2f} (SL ₹{sl:.2f}) | Net {_format_inr(float(res.get('net_pnl', 0.0)))}")
+                        else:
+                            mark = float(q["mark"])
+
+                        spot_sl = float(t.get("spot_stop_loss") or 0.0)
+                        u_sym = str(t.get("underlying") or "").upper()
+                        is_ce = t.get("direction") == "BUY_CE"
+                        spot_px = float(spot_ltps.get(u_sym) or 0.0)
+                        spot_hit, new_breaches = _evaluate_spot_sl_breach(
+                            spot_px, spot_sl, is_ce, spot_breach_counts.get(tid, 0),
+                        )
+                        spot_breach_counts[tid] = new_breaches
+
+                        if mark <= sl or spot_hit:
+                            reason = "GUARDIAN_SPOT_SL_HIT" if spot_hit else ("GUARDIAN_TRAILING_SL_HIT" if sl > entry_p else "GUARDIAN_HARD_SL_HIT")
+                            res = broker.execute_exit(
+                                trade=t,
+                                mark=mark,
+                                action="EXIT",
+                                reason=f"{reason} (mark ₹{mark:.2f}, SL ₹{sl:.2f}, spot ₹{spot_px:.2f}, spot_sl ₹{spot_sl:.2f})",
+                                regime=clock_reg,
+                                short_mark=short_mark,
+                            )
+                            if res.get("status") == "CLOSED":
+                                spot_breach_counts.pop(tid, None)
+                                print(f"🛑 [GUARDIAN SL] Closed #{tid} ({sym}) @ ₹{res.get('exit_price', mark):.2f} ({reason}) | Net {_format_inr(float(res.get('net_pnl', 0.0)))}")
+                            else:
+                                print(f"⚠️ [GUARDIAN EXIT RETRY] Close failed for #{tid} ({sym}): {res}")
                         else:
                             unr = (mark - entry_p) * int(t["quantity"])
                             pct = ((mark - entry_p) / entry_p * 100.0) if entry_p > 0 else 0.0
@@ -1439,12 +1567,16 @@ def main():
     parser.add_argument("--days", type=int, default=25, help="Historical days for logic-test validation")
     # CIO entry / management args
     parser.add_argument("--contract", type=str, default="", help="Exact NFO option contract symbol")
+    parser.add_argument("--short-contract", type=str, default=None, help="Optional OTM short NFO option contract for vertical spreads")
     parser.add_argument("--direction", type=str, default="BUY_CE", help="BUY_CE or BUY_PE")
     parser.add_argument("--lots", type=int, default=1, help="Number of lots")
-    parser.add_argument("--sl", type=float, default=None, help="Stop-loss option price")
-    parser.add_argument("--target", type=float, default=0.0, help="Target option price")
+    parser.add_argument("--sl", type=float, default=None, help="Stop-loss option/spread price")
+    parser.add_argument("--spot-sl", type=float, default=None, help="Optional underlying spot invalidation stop price")
+    parser.add_argument("--target", type=float, default=0.0, help="Target option/spread price")
     parser.add_argument("--entry-price", type=float, default=None, help="Explicit mock entry price (ignored in live mode)")
+    parser.add_argument("--short-entry-price", type=float, default=None, help="Explicit mock short leg price for spread (ignored in live mode)")
     parser.add_argument("--exit-price", type=float, default=None, help="Explicit mock exit price (ignored in live mode)")
+    parser.add_argument("--short-exit-price", type=float, default=None, help="Explicit mock short exit price for spread (ignored in live mode)")
     parser.add_argument("--thesis", type=str, default="", help="Written AI CIO thesis")
     parser.add_argument("--trade-id", type=int, default=0, help="Target open trade ID for cio-manage")
     parser.add_argument("--action", type=str, default="", help="TRAIL_SL | PARTIAL_BOOK | BOOK_PROFIT | EXIT")
@@ -1474,6 +1606,9 @@ def main():
             lots=args.lots,
             thesis=args.thesis,
             entry_price=args.entry_price,
+            spot_stop_loss=args.spot_sl,
+            short_contract=args.short_contract,
+            short_entry_price=args.short_entry_price,
             live_mode=live_mode,
         )
         print(json.dumps(res, indent=2))
@@ -1487,6 +1622,7 @@ def main():
             sl=args.sl,
             exit_lots=args.exit_lots,
             exit_price=args.exit_price,
+            short_exit_price=args.short_exit_price,
             live_mode=live_mode,
         )
         print(json.dumps(res, indent=2))

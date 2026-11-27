@@ -6,6 +6,8 @@ __pycache__/
 .ruff_cache/
 *.db
 *.sqlite3
+*.db-shm
+*.db-wal
 
 # Logs & Runtime coordination
 ai/logs/*
@@ -18,3 +20,4 @@ extension/screener/data/*/*.json
 !extension/screener/data/.gitkeep
 database/
 project backup/
+.understand-anything/

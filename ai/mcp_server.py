@@ -521,10 +521,13 @@ def cio_authorize_entry(
     target: float,
     lots: int = 1,
     thesis: str = "",
+    spot_stop_loss: Optional[float] = None,
+    short_contract: Optional[str] = None,
 ) -> Dict:
     """
     Executes an explicit AI CIO trade decision (validates live Ask spread, Demat ₹50k budget,
-    Desk Collision Mutex, NSE F&O ban, clock window, and risk cap).
+    optional 2-leg vertical spread, T-4 physical delivery blackout, Desk Collision Mutex,
+    NSE F&O ban, clock window, spot-anchored stop, and risk cap).
     """
     from agent_trader import cio_enter_trade
     return cio_enter_trade(
@@ -535,6 +538,8 @@ def cio_authorize_entry(
         target=target,
         lots=lots,
         thesis=thesis,
+        spot_stop_loss=spot_stop_loss,
+        short_contract=short_contract,
         live_mode=True,
     )
 

@@ -60,6 +60,14 @@ class AIPaperLedger:
             cols = [c[1] for c in conn.execute("PRAGMA table_info(ai_paper_trades)").fetchall()]
             if "source_tag" not in cols:
                 conn.execute("ALTER TABLE ai_paper_trades ADD COLUMN source_tag TEXT DEFAULT 'REPLAY'")
+            if "spot_stop_loss" not in cols:
+                conn.execute("ALTER TABLE ai_paper_trades ADD COLUMN spot_stop_loss REAL")
+            if "short_contract" not in cols:
+                conn.execute("ALTER TABLE ai_paper_trades ADD COLUMN short_contract TEXT")
+            if "short_entry_price" not in cols:
+                conn.execute("ALTER TABLE ai_paper_trades ADD COLUMN short_entry_price REAL")
+            if "short_exit_price" not in cols:
+                conn.execute("ALTER TABLE ai_paper_trades ADD COLUMN short_exit_price REAL")
             conn.execute(
                 """
                 CREATE TABLE IF NOT EXISTS ai_cio_decisions (
@@ -78,51 +86,63 @@ class AIPaperLedger:
             conn.commit()
 
     @staticmethod
+    def _compute_statutory_fees(
+        buy_turnover: float,
+        sell_turnover: float,
+        order_count: int = 2,
+    ) -> float:
+        """Single source of truth for Indian NSE NFO option statutory fees & taxes."""
+        total_turnover = max(0.0, buy_turnover) + max(0.0, sell_turnover)
+        stt = float(round(0.0015 * max(0.0, sell_turnover)))
+        exch_turnover_fee = 0.0003553 * total_turnover
+        stamp_duty = 0.00003 * max(0.0, buy_turnover)
+        sebi_fee = 0.000001 * total_turnover
+        brokerage = 20.0 * max(1, order_count)
+        gst = 0.18 * (brokerage + exch_turnover_fee)
+        return round(stt + exch_turnover_fee + stamp_duty + sebi_fee + brokerage + gst, 2)
+
+    @staticmethod
     def calculate_indian_friction(
         entry_price: float,
         exit_price: float,
         quantity: int,
         direction: str = "BUY",
     ) -> float:
-        """
-        Calculates exact Indian F&O Option transaction charges:
-        1. STT: 0.15% on SELL turnover (premium * qty)
-        2. Exchange Turnover: ~0.05% of turnover (NSE)
-        3. Stamp Duty: 0.003% on BUY turnover
-        4. SEBI Fees: ₹10 per crore (0.0001%)
-        5. Brokerage: ₹20 per executed order (₹40 round-trip)
-        6. GST: 18% on (Brokerage + Exchange turnover fees)
-        """
+        """Calculates exact Indian F&O Option round-trip transaction charges (2 orders)."""
         if quantity <= 0:
             return 0.0
 
         buy_price = max(0.0, entry_price if direction.startswith("BUY") else exit_price)
         sell_price = max(0.0, exit_price if direction.startswith("BUY") else entry_price)
+        return AIPaperLedger._compute_statutory_fees(
+            buy_turnover=buy_price * quantity,
+            sell_turnover=sell_price * quantity,
+            order_count=2,
+        )
 
-        buy_turnover = buy_price * quantity
-        sell_turnover = sell_price * quantity
-        total_turnover = buy_turnover + sell_turnover
-
-        # 1. STT: 0.15% on sell turnover (rounded to nearest integer rupee per Indian tax law)
-        stt = float(round(0.0015 * sell_turnover))
-
-        # 2. Exchange turnover charge: 0.03503% (NSE options rate, post-Oct 2024 per statutory_rates.json)
-        exch_turnover_fee = 0.0003503 * total_turnover
-
-        # 3. Stamp duty: 0.003% on buy
-        stamp_duty = 0.00003 * buy_turnover
-
-        # 4. SEBI charge: ₹10 / crore
-        sebi_fee = 0.000001 * total_turnover
-
-        # 5. Brokerage: ₹20 per executed order (₹40 round-trip)
-        brokerage = 40.0
-
-        # 6. GST: 18% on brokerage and exchange fee
-        gst = 0.18 * (brokerage + exch_turnover_fee)
-
-        total_friction = round(stt + exch_turnover_fee + stamp_duty + sebi_fee + brokerage + gst, 2)
-        return total_friction
+    @staticmethod
+    def calculate_vertical_spread_friction(
+        long_entry: float,
+        long_exit: float,
+        short_entry: float,
+        short_exit: float,
+        quantity: int,
+    ) -> float:
+        """
+        Calculates exact 4-order statutory friction for a vertical debit spread:
+        - Buy Long entry + Buy Short exit -> Stamp duty applies to both buy turnovers.
+        - Sell Short entry + Sell Long exit -> 0.15% STT applies to BOTH sell turnovers.
+        - 4 orders x ₹20 = ₹80 brokerage + 18% GST + NSE turnover on full 4-leg value.
+        """
+        if quantity <= 0:
+            return 0.0
+        buy_turnover = (max(0.0, long_entry) + max(0.0, short_exit)) * quantity
+        sell_turnover = (max(0.0, short_entry) + max(0.0, long_exit)) * quantity
+        return AIPaperLedger._compute_statutory_fees(
+            buy_turnover=buy_turnover,
+            sell_turnover=sell_turnover,
+            order_count=4,
+        )
 
     def open_trade(
         self,
@@ -136,6 +156,9 @@ class AIPaperLedger:
         lot_size: int = 25,
         thesis: str = "",
         source_tag: str = "SHADOW",
+        spot_stop_loss: Optional[float] = None,
+        short_contract: Optional[str] = None,
+        short_entry_price: Optional[float] = None,
     ) -> int:
         quantity = lots * lot_size
         now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
@@ -146,8 +169,9 @@ class AIPaperLedger:
                 """
                 INSERT INTO ai_paper_trades (
                     entry_timestamp, underlying, symbol, direction, entry_price,
-                    stop_loss, target, lots, quantity, status, thesis, source_tag
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'OPEN', ?, ?)
+                    stop_loss, target, lots, quantity, status, thesis, source_tag,
+                    spot_stop_loss, short_contract, short_entry_price
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'OPEN', ?, ?, ?, ?, ?)
                 """,
                 (
                     now_iso,
@@ -161,6 +185,9 @@ class AIPaperLedger:
                     quantity,
                     thesis,
                     source_tag,
+                    spot_stop_loss,
+                    short_contract,
+                    short_entry_price,
                 ),
             )
             conn.commit()
@@ -177,11 +204,42 @@ class AIPaperLedger:
             conn.commit()
             return cursor.rowcount > 0
 
+    def detach_short_leg(
+        self,
+        trade_id: int,
+        new_entry_price: float,
+        new_stop_loss: Optional[float] = None,
+    ) -> bool:
+        """Converts an open spread row to single-leg long after short hedge leg was bought back separately."""
+        with self._get_conn() as conn:
+            cursor = conn.cursor()
+            if new_stop_loss is not None:
+                cursor.execute(
+                    """
+                    UPDATE ai_paper_trades
+                    SET short_contract = NULL, short_entry_price = NULL, entry_price = ?, stop_loss = ?
+                    WHERE trade_id = ? AND status = 'OPEN'
+                    """,
+                    (new_entry_price, new_stop_loss, trade_id),
+                )
+            else:
+                cursor.execute(
+                    """
+                    UPDATE ai_paper_trades
+                    SET short_contract = NULL, short_entry_price = NULL, entry_price = ?
+                    WHERE trade_id = ? AND status = 'OPEN'
+                    """,
+                    (new_entry_price, trade_id),
+                )
+            conn.commit()
+            return cursor.rowcount > 0
+
     def close_trade(
         self,
         trade_id: int,
         exit_price: float,
         exit_reason: str,
+        short_exit_price: Optional[float] = None,
     ) -> Dict:
         now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
@@ -192,31 +250,49 @@ class AIPaperLedger:
             if not row or row["status"] != "OPEN":
                 return {}
 
-            entry_price = row["entry_price"]
-            quantity = row["quantity"]
+            entry_price = float(row["entry_price"])
+            quantity = int(row["quantity"])
             direction = row["direction"]
+            short_contract = row["short_contract"] if "short_contract" in row.keys() else None
+            short_entry = float(row["short_entry_price"] or 0.0) if "short_entry_price" in row.keys() else 0.0
 
-            # Gross PnL (for option buying)
             gross_pnl = round((exit_price - entry_price) * quantity, 2)
-            friction = self.calculate_indian_friction(entry_price, exit_price, quantity, direction)
+            recorded_short_exit = None
+            if short_contract:
+                short_ex = float(short_exit_price) if short_exit_price is not None else short_entry
+                long_entry = entry_price + short_entry
+                long_exit = exit_price + short_ex
+                friction = self.calculate_vertical_spread_friction(
+                    long_entry=long_entry,
+                    long_exit=long_exit,
+                    short_entry=short_entry,
+                    short_exit=short_ex,
+                    quantity=quantity,
+                )
+                recorded_short_exit = round(short_ex, 2)
+            else:
+                friction = self.calculate_indian_friction(entry_price, exit_price, quantity, direction)
             net_pnl = round(gross_pnl - friction, 2)
 
             cursor.execute(
                 """
                 UPDATE ai_paper_trades
                 SET exit_timestamp = ?, exit_price = ?, gross_pnl = ?,
-                    statutory_friction = ?, net_pnl = ?, exit_reason = ?, status = 'CLOSED'
+                    statutory_friction = ?, net_pnl = ?, exit_reason = ?, status = 'CLOSED',
+                    short_exit_price = ?
                 WHERE trade_id = ?
                 """,
-                (now_iso, exit_price, gross_pnl, friction, net_pnl, exit_reason, trade_id),
+                (now_iso, exit_price, gross_pnl, friction, net_pnl, exit_reason, recorded_short_exit, trade_id),
             )
             conn.commit()
 
             return {
                 "trade_id": trade_id,
                 "symbol": row["symbol"],
+                "short_contract": short_contract,
                 "entry_price": entry_price,
                 "exit_price": exit_price,
+                "short_exit_price": recorded_short_exit,
                 "gross_pnl": gross_pnl,
                 "friction": friction,
                 "net_pnl": net_pnl,
@@ -356,7 +432,7 @@ class AIPaperLedger:
                     statutory_friction = 0.0,
                     net_pnl = 0.0,
                     exit_reason = 'VOIDED_SYNTHETIC_NO_LIVE_FEED'
-                WHERE status = 'OPEN' AND (source_tag != 'LIVE_KITE' OR symbol LIKE '%_CURRENT_%')
+                WHERE status = 'OPEN' AND (source_tag NOT LIKE 'LIVE_%' OR symbol LIKE '%_CURRENT_%')
                 """,
                 (now_iso,),
             )
@@ -370,6 +446,7 @@ class AIPaperLedger:
         exit_lots: int,
         exit_price: float,
         exit_reason: str = "PARTIAL_PROFIT_BOOK_CIO",
+        short_exit_price: Optional[float] = None,
     ) -> Dict:
         """
         Books profit/loss on `exit_lots` while leaving remaining runner lots OPEN.
@@ -387,7 +464,7 @@ class AIPaperLedger:
             if exit_lots <= 0 or open_lots <= 0:
                 return {}
             if exit_lots >= open_lots:
-                return self.close_trade(trade_id, exit_price, exit_reason)
+                return self.close_trade(trade_id, exit_price, exit_reason, short_exit_price=short_exit_price)
 
             lot_size = max(1, open_qty // open_lots)
             close_qty = exit_lots * lot_size
@@ -395,9 +472,25 @@ class AIPaperLedger:
             rem_qty = open_qty - close_qty
             entry_price = float(row["entry_price"])
             direction = row["direction"]
+            row_keys = set(row.keys())
+            short_contract = row["short_contract"] if "short_contract" in row_keys else None
+            short_entry = float(row["short_entry_price"] or 0.0) if "short_entry_price" in row_keys else 0.0
+            spot_sl = row["spot_stop_loss"] if "spot_stop_loss" in row_keys else None
 
             gross_pnl = round((exit_price - entry_price) * close_qty, 2)
-            friction = self.calculate_indian_friction(entry_price, exit_price, close_qty, direction)
+            recorded_short_exit = None
+            if short_contract:
+                short_ex = float(short_exit_price) if short_exit_price is not None else short_entry
+                friction = self.calculate_vertical_spread_friction(
+                    long_entry=entry_price + short_entry,
+                    long_exit=exit_price + short_ex,
+                    short_entry=short_entry,
+                    short_exit=short_ex,
+                    quantity=close_qty,
+                )
+                recorded_short_exit = round(short_ex, 2)
+            else:
+                friction = self.calculate_indian_friction(entry_price, exit_price, close_qty, direction)
             net_pnl = round(gross_pnl - friction, 2)
 
             # Reduce active open runner size in place
@@ -411,8 +504,9 @@ class AIPaperLedger:
                 INSERT INTO ai_paper_trades (
                     entry_timestamp, exit_timestamp, underlying, symbol, direction,
                     entry_price, stop_loss, target, lots, quantity, status,
-                    exit_price, gross_pnl, statutory_friction, net_pnl, exit_reason, thesis, source_tag
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'CLOSED', ?, ?, ?, ?, ?, ?, ?)
+                    exit_price, gross_pnl, statutory_friction, net_pnl, exit_reason,
+                    thesis, source_tag, spot_stop_loss, short_contract, short_entry_price, short_exit_price
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'CLOSED', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     row["entry_timestamp"],
@@ -432,6 +526,10 @@ class AIPaperLedger:
                     exit_reason,
                     row["thesis"],
                     row["source_tag"],
+                    spot_sl,
+                    short_contract,
+                    short_entry if short_contract else None,
+                    recorded_short_exit,
                 ),
             )
             booked_id = cursor.lastrowid
@@ -441,10 +539,12 @@ class AIPaperLedger:
                 "trade_id": trade_id,
                 "booked_trade_id": booked_id,
                 "symbol": row["symbol"],
+                "short_contract": short_contract,
                 "closed_lots": exit_lots,
                 "remaining_lots": rem_lots,
                 "entry_price": entry_price,
                 "exit_price": exit_price,
+                "short_exit_price": recorded_short_exit,
                 "gross_pnl": gross_pnl,
                 "friction": friction,
                 "net_pnl": net_pnl,

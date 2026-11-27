@@ -607,3 +607,31 @@ class LiveKiteFeed:
                 "prev_ask_depth": prev_ad,
             }
         return parsed
+
+    def fetch_spot_ltps(self, underlyings: List[str]) -> Dict[str, float]:
+        """Fetches lightweight spot LTPs for multiple underlyings in a single batched call."""
+        kite = self._ensure_kite()
+        if kite is None or not underlyings:
+            return {}
+
+        sym_to_spot: Dict[str, str] = {}
+        for u in underlyings:
+            up = str(u).strip().upper()
+            if not up or up in sym_to_spot:
+                continue
+            sym_to_spot[up] = INDEX_SPOT_MAP[up][0] if up in INDEX_SPOT_MAP else f"NSE:{up}"
+
+        spot_keys = list(dict.fromkeys(sym_to_spot.values()))
+        try:
+            raw = kite.ltp(spot_keys) if hasattr(kite, "ltp") else kite.quote(spot_keys)
+        except Exception:
+            return {}
+
+        out: Dict[str, float] = {}
+        for sym, spot_key in sym_to_spot.items():
+            row = raw.get(spot_key) or {}
+            px = float(row.get("last_price") or 0.0)
+            if px > 0:
+                out[sym] = px
+        return out
+

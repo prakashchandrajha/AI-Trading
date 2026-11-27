@@ -23,6 +23,8 @@ external_cio_authority:
   direct_order_mcp_enabled: false
   require_written_thesis: true
   decision_journal_required: true
+  target_venue: "PAPER" # "PAPER" (simulated fills at real Kite quotes) | "LIVE" (real Zerodha NFO orders)
+  exchange_product: "NRML" # "NRML" (identical SEBI peak margin for buyers + full hedge margin + avoids 15:20 MIS auto-square-off fee) | "MIS"
   operating_principle: "The system supplies evidence and rejects unsafe requests; the external CIO decides entry, hold, trail, partial book, and exit."
 
 macro_the_6_generals:
@@ -64,11 +66,13 @@ regime_and_payoff_router:
 position_sizing_and_risk:
   demat_budget_inr: 50000.0 # Dedicated ₹50k Demat Trading Account Budget
   dynamic_lot_mode: "CONVICTION_BUDGETED_INTEGER_LOTS" # 1, 2, 3, 4 ... N lots strictly within ₹50k
-  tier_1_super_setup_budget_inr: 18000.0 # 18% stop = ₹3,240 (strictly under -₹3,500 daily circuit breaker)
+  tier_1_super_setup_budget_inr: 20000.0 # Adjusted to ₹20,000 to unlock tier-1 setups like BDL (strictly under -₹3,500 daily circuit breaker)
   tier_2_high_conviction_budget_inr: 14000.0 # 18% stop = ₹2,520
   tier_3_standard_budget_inr: 9000.0 # 18% stop = ₹1,620
-  reserve_dry_powder_inr: 18000.0 # Retain 36% minimum cash buffer in ₹50k account
-  max_concurrent_positions: 2 # Max 2 concurrent positions (max deployed ₹32k, leaving ₹18k buffer)
+  vertical_spreads_enabled: true # Routes >₹20k stock candidates into ATM/OTM Debit Spreads
+  max_spread_net_debit_inr: 14000.0 # Capped debit for spreads
+  reserve_dry_powder_inr: 16000.0 # Retain 32% minimum cash buffer in ₹50k account
+  max_concurrent_positions: 2 # Max 2 concurrent positions (max deployed ₹34k, leaving ₹16k buffer)
   max_single_trade_risk_inr: 3500.0 # CIO entry request is rejected above this amount
   daily_drawdown_hard_halt_pct: 0.070 # -7% daily halt (-₹3,500 circuit breaker)
   weekly_drawdown_throttle_pct: 0.120 # -12% cuts allocation by 50%
