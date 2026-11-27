@@ -21,3 +21,7 @@ extension/screener/data/*/*.json
 database/
 project backup/
 .understand-anything/
+tools/
+Tools/
+.codegraph/
+graphify-out/
